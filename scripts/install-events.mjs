@@ -12,7 +12,9 @@ const SUBJ = { 语文: "chinese", 数学: "math", 英语: "english", 物理: "ph
 const DIM = { 品德: "moral", 学业: "academic", 健康: "health", 艺术: "art", 劳动: "labor" };
 const errs = [];
 
-const text = fs.readFileSync(file, "utf8").replace(/```[\s\S]*?```/g, "");
+const rawFile = fs.readFileSync(file, "utf8");
+const zone = rawFile.match(/<!--\s*安装区:开始\s*-->([\s\S]*?)<!--\s*安装区:结束\s*-->/);
+const text = (zone ? zone[1] : rawFile).replace(/```[\s\S]*?```/g, "");
 const blocks = text.split(/^## 事件：/m).slice(1);
 if (!blocks.length) {
   console.log("这份文件里没有需要安装的事件（代码块内的示例不算）。");

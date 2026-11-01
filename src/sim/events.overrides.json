@@ -1,6 +1,7 @@
 {
-  "added": [
-    {
+  "added": [],
+  "overrides": {
+    "main-opening": {
       "id": "main-opening",
       "kind": "main",
       "group": "main",
@@ -15,24 +16,44 @@
         {
           "text": "散会后第一个回教室",
           "result": "教室里空无一人，黑板上写着欢迎，角落里堆着还没发的新书。你替全班把电扇打开了。",
-          "effects": "{ stats: {\"stress\":-1,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": -1,
+              "mood": 2
+            }
+          }
         },
         {
           "text": "跟前后的人互相报名字",
           "result": "一圈名字记了一半。你们约好谁先记住全班谁请冰棍。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "数清楚校长讲了几点",
           "result": "五点。你数得很认真，因为实在不知道还能干什么。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 1
+            }
+          }
         }
       ],
       "stages": [
         1
       ]
     },
-    {
+    "main-military": {
       "id": "main-military",
       "kind": "main",
       "group": "main",
@@ -47,24 +68,44 @@
         {
           "text": "咬牙把正步踢标准",
           "result": "会操那天你们班拿了名次。教官第一次笑，说还行。",
-          "effects": "{ stats: {\"energy\":-8,\"health\":2}, evidence: {\"dim\":\"health\",\"label\":\"军训会操\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -8,
+              "health": 2
+            },
+            "evidence": {
+              "dim": "health",
+              "label": "军训会操",
+              "value": 1
+            }
+          }
         },
         {
           "text": "保存体力，会操再拼",
           "result": "彩排你收了三分力。会操那天你拼尽了全力，腿抖了两天。",
-          "effects": "{ stats: {\"energy\":-5,\"health\":1,\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "energy": -5,
+              "health": 1,
+              "mood": 3
+            }
+          }
         },
         {
           "text": "祈祷下雨",
           "result": "没下。云都没有。",
-          "effects": "{ stats: {\"mood\":-1} }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            }
+          }
         }
       ],
       "stages": [
         1
       ]
     },
-    {
+    "main-first-exam": {
       "id": "main-first-exam",
       "kind": "main",
       "group": "main",
@@ -79,24 +120,49 @@
         {
           "text": "把各科的错题标出来",
           "result": "标完发现错得很有规律。也算收获。",
-          "effects": "{ stats: {\"stress\":2}, mastery: [{\"subject\":\"math\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "找班主任聊十分钟",
           "result": "对方把你的卷子从头翻到尾，说了三个问题，都很准。",
-          "effects": "{ stats: {\"stress\":-3}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "把成绩单塞进书包最底层",
           "result": "眼不见为净。但书包变沉了。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":-2} }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": -2
+            }
+          }
         }
       ],
       "stages": [
         1
       ]
     },
-    {
+    "main-parents-meeting": {
       "id": "main-parents-meeting",
       "kind": "main",
       "group": "main",
@@ -111,17 +177,37 @@
         {
           "text": "会后主动问老师说了什么",
           "result": "她转述得很简单：老师说你稳。你猜原话不止这些。",
-          "effects": "{ stats: {\"stress\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "装作不关心",
           "result": "她也没提。饭桌上比平时安静。",
-          "effects": "{ stats: {\"stress\":1,\"mood\":-2} }"
+          "effects": {
+            "stats": {
+              "stress": 1,
+              "mood": -2
+            }
+          }
         },
         {
           "text": "提前把桌肚收拾干净",
           "result": "你松了口气。桌肚里那封信差点就被翻到了。",
-          "effects": "{ stats: {\"stress\":-3,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": -3,
+              "mood": 2
+            }
+          }
         }
       ],
       "stages": [
@@ -132,7 +218,7 @@
       ],
       "perStage": true
     },
-    {
+    "main-nye": {
       "id": "main-nye",
       "kind": "main",
       "group": "main",
@@ -147,17 +233,41 @@
         {
           "text": "上台出个节目",
           "result": "你唱跑了两个音，掌声照样很响。下台时有人喊再来一个。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":5}, evidence: {\"dim\":\"art\",\"label\":\"元旦联欢演出\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 5
+            },
+            "evidence": {
+              "dim": "art",
+              "label": "元旦联欢演出",
+              "value": 1
+            }
+          }
         },
         {
           "text": "负责后勤和拍照",
           "result": "你拍了一百多张，挑出来能用的十二张。每一张里都有人在笑。",
-          "effects": "{ stats: {\"energy\":-4,\"mood\":3}, evidence: {\"dim\":\"labor\",\"label\":\"联欢会后勤\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -4,
+              "mood": 3
+            },
+            "evidence": {
+              "dim": "labor",
+              "label": "联欢会后勤",
+              "value": 1
+            }
+          }
         },
         {
           "text": "坐角落当观众",
           "result": "你看完了全场。有人往你手里塞了一把糖。",
-          "effects": "{ stats: {\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            }
+          }
         }
       ],
       "stages": [
@@ -167,7 +277,7 @@
       ],
       "perStage": true
     },
-    {
+    "main-new-class": {
       "id": "main-new-class",
       "kind": "main",
       "group": "main",
@@ -182,24 +292,49 @@
         {
           "text": "主动跟新面孔打招呼",
           "result": "半天下来你记住了五个名字。晚饭时突然全部想起来了。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "先找原来班的人坐一块儿",
           "result": "熟悉的几个人凑在一角。新班级显得没那么新了。",
-          "effects": "{ stats: {\"stress\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "安静观察一周再说",
           "result": "你记住了所有人的名字，但没人记住你的。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":-1} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": -1
+            }
+          }
         }
       ],
       "stages": [
         3
       ]
     },
-    {
+    "main-lab-first": {
       "id": "main-lab-first",
       "kind": "main",
       "group": "main",
@@ -214,24 +349,57 @@
         {
           "text": "严格按步骤来",
           "result": "你的数据全组最稳。老师说这组可以当示范。",
-          "effects": "{ mastery: [{\"subject\":\"chemistry\",\"amount\":2}], evidence: {\"dim\":\"academic\",\"label\":\"实验课示范\",\"value\":1} }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "chemistry",
+                "amount": 2
+              }
+            ],
+            "evidence": {
+              "dim": "academic",
+              "label": "实验课示范",
+              "value": 1
+            }
+          }
         },
         {
           "text": "试着多滴了一滴试剂",
           "result": "颜色变了，变得很漂亮，变得不在标准答案里。你如实记了下来。",
-          "effects": "{ stats: {\"mood\":2}, mastery: [{\"subject\":\"chemistry\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "mastery": [
+              {
+                "subject": "chemistry",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "跟搭档分工摸鱼",
           "result": "你们一人记数据一人看窗外，报告交得最晚。",
-          "effects": "{ stats: {\"energy\":2,\"stress\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "energy": 2,
+              "stress": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
         3
       ]
     },
-    {
+    "main-contest-board": {
       "id": "main-contest-board",
       "kind": "main",
       "group": "main",
@@ -246,24 +414,43 @@
         {
           "text": "挤进去看清楚",
           "result": "你从头到尾看了两遍。有人在名单上，有人不在。你记住了两种表情。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":-1} }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": -1
+            }
+          }
         },
         {
           "text": "等人群散了再看",
           "result": "公告栏前只剩你一个人。玻璃有点反光。",
-          "effects": "{ stats: {\"stress\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 1
+            }
+          }
         },
         {
           "text": "不关心，回教室",
           "result": "你走开了。晚自习时还是向别人打听了一遍。",
-          "effects": "{ stats: {\"mood\":-1}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         }
       ],
       "stages": [
         5
       ]
     },
-    {
+    "main-farm": {
       "id": "main-farm",
       "kind": "main",
       "group": "main",
@@ -278,24 +465,61 @@
         {
           "text": "抢着干重活",
           "result": "第一天你就磨出了水泡。班长给你贴创可贴的时候说你傻。",
-          "effects": "{ stats: {\"energy\":-10,\"health\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":3}], evidence: {\"dim\":\"labor\",\"label\":\"学农劳动\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -10,
+              "health": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ],
+            "evidence": {
+              "dim": "labor",
+              "label": "学农劳动",
+              "value": 1
+            }
+          }
         },
         {
           "text": "负责炊事帮厨",
           "result": "你学会了用大锅灶炒四十人份的白菜。居然没糊。",
-          "effects": "{ stats: {\"energy\":-6,\"mood\":4}, evidence: {\"dim\":\"labor\",\"label\":\"学农帮厨\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -6,
+              "mood": 4
+            },
+            "evidence": {
+              "dim": "labor",
+              "label": "学农帮厨",
+              "value": 1
+            }
+          }
         },
         {
           "text": "晚上带头看星星",
           "result": "农场没有路灯，星星密得吓人。你们聊到被巡查老师赶走。",
-          "effects": "{ stats: {\"energy\":-4,\"mood\":6}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -4,
+              "mood": 6
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "stages": [
         5
       ]
     },
-    {
+    "main-art-show": {
       "id": "main-art-show",
       "kind": "main",
       "group": "main",
@@ -310,17 +534,46 @@
         {
           "text": "在台下带头鼓掌",
           "result": "你们班上台时，你的掌声最响。台上的人朝这边看了一眼。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "在后台盯流程",
           "result": "话筒出了两次状况，你都接住了。没人知道，除了文艺委员。",
-          "effects": "{ stats: {\"energy\":-5}, relation: [{\"who\":\"deskmate\",\"amount\":2}], evidence: {\"dim\":\"labor\",\"label\":\"艺术节后台统筹\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ],
+            "evidence": {
+              "dim": "labor",
+              "label": "艺术节后台统筹",
+              "value": 1
+            }
+          }
         },
         {
           "text": "录像留念",
           "result": "你录了全程。很多年后这段视频还在群里被翻出来。",
-          "effects": "{ stats: {\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            }
+          }
         }
       ],
       "stages": [
@@ -329,7 +582,7 @@
       ],
       "perStage": true
     },
-    {
+    "main-qualify": {
       "id": "main-qualify",
       "kind": "main",
       "group": "main",
@@ -344,24 +597,39 @@
         {
           "text": "稳稳考完，提前交卷",
           "result": "走出考场时阳光很好。你知道这科过了。",
-          "effects": "{ stats: {\"stress\":-4,\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "stress": -4,
+              "mood": 3
+            }
+          }
         },
         {
           "text": "检查到最后一分钟",
           "result": "你改回了一道改错的题。悬。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 1
+            }
+          }
         },
         {
           "text": "考完立刻对答案",
           "result": "对到第三题你就后悔了。还好后面都对。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":-1} }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": -1
+            }
+          }
         }
       ],
       "stages": [
         7
       ]
     },
-    {
+    "main-round-one": {
       "id": "main-round-one",
       "kind": "main",
       "group": "main",
@@ -376,24 +644,44 @@
         {
           "text": "把资料按科目码好贴标签",
           "result": "码完你拍了张照。这道墙要啃一整年。",
-          "effects": "{ stats: {\"stress\":2}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "先写一份全年计划",
           "result": "计划写了两页。能完成多少另说，写完心里有了底。",
-          "effects": "{ stats: {\"stress\":-3,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": -3,
+              "mood": 2
+            }
+          }
         },
         {
           "text": "数一遍总共有多少本",
           "result": "三十七本。你数完就后悔了。",
-          "effects": "{ stats: {\"stress\":4,\"mood\":-2} }"
+          "effects": {
+            "stats": {
+              "stress": 4,
+              "mood": -2
+            }
+          }
         }
       ],
       "stages": [
         7
       ]
     },
-    {
+    "main-move-floor": {
       "id": "main-move-floor",
       "kind": "main",
       "group": "main",
@@ -408,24 +696,45 @@
         {
           "text": "把自己的箱子一趟搬完",
           "result": "五楼，两趟。你坐在新教室里喘气，看走廊里人来人往。",
-          "effects": "{ stats: {\"energy\":-6,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "energy": -6,
+              "mood": 2
+            }
+          }
         },
         {
           "text": "帮力气小的同学搭把手",
           "result": "你多跑了两趟。对方在你桌上放了一瓶冰可乐。",
-          "effects": "{ stats: {\"energy\":-8,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -8,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "慢慢搬，跟旧教室告别",
           "result": "你在旧黑板上写了一行字：后会有期。擦了一半，留了一半。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 2
+            }
+          }
         }
       ],
       "stages": [
         7
       ]
     },
-    {
+    "main-gaosan-open": {
       "id": "main-gaosan-open",
       "kind": "main",
       "group": "main",
@@ -440,24 +749,38 @@
         {
           "text": "把这句话抄在笔记本第一页",
           "result": "之后每次翻开都会看到。看到后来有点烦，又不敢撕。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 2
+            }
+          }
         },
         {
           "text": "当场定下这一年的目标",
           "result": "你把目标写在便签上，贴在笔袋内侧。没人看得见。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 3
+            }
+          }
         },
         {
           "text": "看看周围人的反应",
           "result": "没人说话。你听见有人在转笔，转了两圈，放下了。",
-          "effects": "{ stats: {\"stress\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 1
+            }
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-mock1": {
       "id": "main-mock1",
       "kind": "main",
       "group": "main",
@@ -472,24 +795,45 @@
         {
           "text": "逐科做试卷分析",
           "result": "你列了一张表：会而错的、半会的、不会的。第一类比你想的多。",
-          "effects": "{ stats: {\"stress\":3}, mastery: [{\"subject\":\"math\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "找班主任要去年的一分一段表",
           "result": "对方给了你，还说了一句：别拿它算命。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 1
+            }
+          }
         },
         {
           "text": "去操场跑了三圈",
           "result": "跑完回来，卷子还在桌上，但你看得下去了。",
-          "effects": "{ stats: {\"energy\":-6,\"stress\":-5,\"health\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -6,
+              "stress": -5,
+              "health": 1
+            }
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-100days": {
       "id": "main-100days",
       "kind": "main",
       "group": "main",
@@ -504,24 +848,45 @@
         {
           "text": "认真把誓词喊完",
           "result": "喊到嗓子哑。奇怪的是，喊完真的有点用。",
-          "effects": "{ stats: {\"energy\":-3,\"stress\":-3,\"mood\":4} }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "stress": -3,
+              "mood": 4
+            }
+          }
         },
         {
           "text": "小声跟着念",
           "result": "你没喊。你在心里把这三年过了一遍。",
-          "effects": "{ stats: {\"stress\":1,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 1,
+              "mood": 1
+            }
+          }
         },
         {
           "text": "观察台上老师们的表情",
           "result": "班主任站得笔直。你突然觉得这个中年人也挺不容易的。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-adult-day": {
       "id": "main-adult-day",
       "kind": "main",
       "group": "main",
@@ -536,24 +901,50 @@
         {
           "text": "当场拆开那封信",
           "result": "你看到第三行就看不下去了。信纸被你捏出了印子。",
-          "effects": "{ stats: {\"stress\":-3,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "stress": -3,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "收起来回家再看",
           "result": "你把信夹进语文书。那一页你后来一直没舍得翻过去。",
-          "effects": "{ stats: {\"stress\":-1,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": -1,
+              "mood": 2
+            }
+          }
         },
         {
           "text": "跟同学交换领带系法",
           "result": "你们互相系得乱七八糟，合影时全笑场了。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-mock2": {
       "id": "main-mock2",
       "kind": "main",
       "group": "main",
@@ -568,24 +959,58 @@
         {
           "text": "稳住节奏，按原计划复习",
           "result": "你把计划表翻到新的一页，什么都没改。这是最难的一种选择。",
-          "effects": "{ stats: {\"stress\":-2}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "针对弱科加练",
           "result": "你砍掉了一段娱乐时间，换成弱科的专项。",
-          "effects": "{ stats: {\"energy\":-5,\"stress\":3}, mastery: [{\"subject\":\"physics\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "energy": -5,
+              "stress": 3
+            },
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "跟考得好的人取经",
           "result": "对方倾囊相授。你记了两页纸，能用上的有三条。",
-          "effects": "{ mastery: [{\"subject\":\"english\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "english",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-health-check": {
       "id": "main-health-check",
       "kind": "main",
       "group": "main",
@@ -600,24 +1025,54 @@
         {
           "text": "晕血，抽血时盯着窗外数车",
           "result": "数到第十一辆，针就拔了。护士说你可以啊，没喊。",
-          "effects": "{ stats: {\"health\":1,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "health": 1,
+              "mood": 1
+            }
+          }
         },
         {
           "text": "视力检查前疯狂做眼保健操",
           "result": "临时抱佛脚没用，但同队的人被你的认真逗笑了。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "帮全班收齐体检表",
           "result": "你对着名单一个个勾。少了两张，最后在垃圾桶旁边找到一张。",
-          "effects": "{ stats: {\"energy\":-3}, relation: [{\"who\":\"deskmate\",\"amount\":1}], evidence: {\"dim\":\"labor\",\"label\":\"体检事务\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ],
+            "evidence": {
+              "dim": "labor",
+              "label": "体检事务",
+              "value": 1
+            }
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-mock3": {
       "id": "main-mock3",
       "kind": "main",
       "group": "main",
@@ -632,24 +1087,50 @@
         {
           "text": "把错题最后过一遍",
           "result": "你发现真正不会的，其实就那么几处。",
-          "effects": "{ stats: {\"stress\":-2}, mastery: [{\"subject\":\"math\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "不分析，就当攒信心",
           "result": "你难得地睡了个好觉。",
-          "effects": "{ stats: {\"energy\":6,\"stress\":-4,\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "energy": 6,
+              "stress": -4,
+              "mood": 3
+            }
+          }
         },
         {
           "text": "提醒大家别飘",
           "result": "你说完自己都笑了：什么时候开始轮到你提醒别人了。",
-          "effects": "{ stats: {\"stress\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-last-class": {
       "id": "main-last-class",
       "kind": "main",
       "group": "main",
@@ -664,24 +1145,44 @@
         {
           "text": "把每位老师的最后一句话记下来",
           "result": "你记了九句。本子合上前，你又看了一遍。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 2
+            }
+          }
         },
         {
           "text": "带头鼓掌",
           "result": "掌声响了很久。周老师摘下眼镜，擦了擦。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "假装只是普通的一天",
           "result": "你低着头收拾卷子。收拾得很慢，很慢。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":-2} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": -2
+            }
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-exam-eve": {
       "id": "main-exam-eve",
       "kind": "main",
       "group": "main",
@@ -696,24 +1197,45 @@
         {
           "text": "把东西检查三遍，十一点前睡",
           "result": "你睡得意外地好。梦里没有考试。",
-          "effects": "{ stats: {\"energy\":8,\"stress\":-4} }"
+          "effects": {
+            "stats": {
+              "energy": 8,
+              "stress": -4
+            }
+          }
         },
         {
           "text": "再把公式过一遍",
           "result": "过到一半你合上书：到此为止，会的已经会了。",
-          "effects": "{ stats: {\"stress\":2}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "失眠就起来看星星",
           "result": "你看到一点才睡。星星没告诉你答案，但你平静了。",
-          "effects": "{ stats: {\"energy\":-3,\"stress\":-5,\"mood\":2} }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "stress": -5,
+              "mood": 2
+            }
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-gaokao": {
       "id": "main-gaokao",
       "kind": "main",
       "group": "main",
@@ -728,24 +1250,51 @@
         {
           "text": "考完一科扔一科",
           "result": "你谁都没对答案。出考场时你只看天，不看人。",
-          "effects": "{ stats: {\"stress\":-5,\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "stress": -5,
+              "mood": 3
+            }
+          }
         },
         {
           "text": "中午抓紧背下一科",
           "result": "你找了个树荫，把笔记翻了最后一遍。",
-          "effects": "{ stats: {\"energy\":-3,\"stress\":3}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "stress": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "跟同考场的人互相打气",
           "result": "进场前你们击了个掌。掌心是汗，心是定的。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-after-exam": {
       "id": "main-after-exam",
       "kind": "main",
       "group": "main",
@@ -760,24 +1309,45 @@
         {
           "text": "冲出考场大喊一声",
           "result": "你喊了。喊完有点不好意思，但真的很爽。",
-          "effects": "{ stats: {\"stress\":-8,\"mood\":8} }"
+          "effects": {
+            "stats": {
+              "stress": -8,
+              "mood": 8
+            }
+          }
         },
         {
           "text": "慢慢收拾文具，最后离开",
           "result": "你把两支笔并排摆好，拍了一张照。三年的句号。",
-          "effects": "{ stats: {\"stress\":-6,\"mood\":5} }"
+          "effects": {
+            "stats": {
+              "stress": -6,
+              "mood": 5
+            }
+          }
         },
         {
           "text": "在校门口找到等你的家人",
           "result": "你妈什么都没问，递过来一瓶冰汽水。你一口气喝了半瓶。",
-          "effects": "{ stats: {\"stress\":-6,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "stress": -6,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-farewell": {
       "id": "main-farewell",
       "kind": "main",
       "group": "main",
@@ -792,24 +1362,43 @@
         {
           "text": "认真听完那句话",
           "result": "班主任说：以后的路，老师陪不了了，你们自己走稳。全桌安静了三秒，然后掌声。",
-          "effects": "{ stats: {\"stress\":-3,\"mood\":3} }"
+          "effects": {
+            "stats": {
+              "stress": -3,
+              "mood": 3
+            }
+          }
         },
         {
           "text": "跟每个人都碰了杯",
           "result": "你说了三十几遍\"常联系\"。你知道有一些真的会，有一些不会。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "把校服外套拿去签名",
           "result": "签到最后一个名字时，袖子已经没地方下笔了。",
-          "effects": "{ stats: {\"mood\":5} }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            }
+          }
         }
       ],
       "stages": [
         9
       ]
     },
-    {
+    "main-holiday-hw": {
       "id": "main-holiday-hw",
       "kind": "main",
       "group": "main",
@@ -824,24 +1413,55 @@
         {
           "text": "按计划年前写完",
           "result": "你真的在除夕前写完了。最后一个字落下时，窗外在放烟花。",
-          "effects": "{ stats: {\"energy\":-8,\"mood\":4}, mastery: [{\"subject\":\"math\",\"amount\":2},{\"subject\":\"english\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "energy": -8,
+              "mood": 4
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              },
+              {
+                "subject": "english",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "每天写一点，细水长流",
           "result": "写到正月十五还剩半本。你在开学前夜创造了奇迹。",
-          "effects": "{ stats: {\"energy\":-4,\"stress\":3}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "energy": -4,
+              "stress": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "先玩一周再说",
           "result": "一周后你看着崭新的六本作业，陷入沉思。",
-          "effects": "{ stats: {\"stress\":4,\"mood\":5} }"
+          "effects": {
+            "stats": {
+              "stress": 4,
+              "mood": 5
+            }
+          }
         }
       ],
       "stages": [
         2
       ]
     },
-    {
+    "main-summer-plan": {
       "id": "main-summer-plan",
       "kind": "main",
       "group": "main",
@@ -856,24 +1476,50 @@
         {
           "text": "列精确到小时的计划表",
           "result": "表做得很好。执行率百分之六十，但你原谅了自己。",
-          "effects": "{ stats: {\"stress\":2}, mastery: [{\"subject\":\"math\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "只定三件事",
           "result": "预习、锻炼、读完那本书。六周后，三件都成了。",
-          "effects": "{ stats: {\"health\":2,\"mood\":3}, mastery: [{\"subject\":\"physics\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "health": 2,
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "先睡三天再定",
           "result": "三天后你把计划简化成了三个字：别荒废。",
-          "effects": "{ stats: {\"energy\":8,\"stress\":-2} }"
+          "effects": {
+            "stats": {
+              "energy": 8,
+              "stress": -2
+            }
+          }
         }
       ],
       "stages": [
         4
       ]
     },
-    {
+    "main-spring-festival": {
       "id": "main-spring-festival",
       "kind": "main",
       "group": "main",
@@ -888,17 +1534,49 @@
         {
           "text": "写完这套再出去看春晚",
           "result": "你写完时正赶上零点倒计时。窗外的烟花和你同时收官。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":3}, mastery: [{\"subject\":\"math\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "合上卷子，陪家人守岁",
           "result": "你妈很高兴，给你剥了一晚上的橘子。",
-          "effects": "{ stats: {\"stress\":-4,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "stress": -4,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "给重要的人挨个发祝福",
           "result": "你编了十几条不一样的。有一条改了二十分钟。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "stages": [
@@ -907,7 +1585,7 @@
       ],
       "perStage": true
     },
-    {
+    "main-last-summer": {
       "id": "main-last-summer",
       "kind": "main",
       "group": "main",
@@ -922,24 +1600,55 @@
         {
           "text": "按一轮复习的节奏自己跑",
           "result": "六周后你翻完了两本。开学摸底，你第一次尝到提前的甜头。",
-          "effects": "{ stats: {\"energy\":-10}, mastery: [{\"subject\":\"math\",\"amount\":3},{\"subject\":\"physics\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "energy": -10
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 3
+              },
+              {
+                "subject": "physics",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "学一半，玩一半",
           "result": "你去了趟外婆家，也把两科新课预习完了。张弛有度。",
-          "effects": "{ stats: {\"energy\":-4,\"mood\":5}, mastery: [{\"subject\":\"math\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "energy": -4,
+              "mood": 5
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "彻底休息",
           "result": "这是你三年来唯一一个没碰书的假期。开学时你有点心虚，但眼睛是亮的。",
-          "effects": "{ stats: {\"energy\":12,\"stress\":-6,\"mood\":4} }"
+          "effects": {
+            "stats": {
+              "energy": 12,
+              "stress": -6,
+              "mood": 4
+            }
+          }
         }
       ],
       "stages": [
         8
       ]
     },
-    {
+    "haze-pe": {
       "id": "haze-pe",
       "kind": "random",
       "group": "daily",
@@ -954,17 +1663,42 @@
         {
           "text": "趁机补觉",
           "result": "你睡得最沉的一次。醒来时天更灰了。",
-          "effects": "{ stats: {\"energy\":8,\"stress\":-2} }"
+          "effects": {
+            "stats": {
+              "energy": 8,
+              "stress": -2
+            }
+          }
         },
         {
           "text": "把物理作业清了",
           "result": "教室里很闷，但你把明天的任务也写掉了一半。",
-          "effects": "{ stats: {\"energy\":-3}, mastery: [{\"subject\":\"physics\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "energy": -3
+            },
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "跟同学趴在窗边看外面",
           "result": "五十米外的教学楼只剩个轮廓。你们说像世界末日，笑了半天。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
@@ -973,7 +1707,7 @@
       ],
       "perStage": true
     },
-    {
+    "uniform-check": {
       "id": "uniform-check",
       "kind": "random",
       "group": "daily",
@@ -988,21 +1722,42 @@
         {
           "text": "全身上下合规，直接进",
           "result": "你排队时帮前面的人拉了拉领子。纪检部朝你点了点头。",
-          "effects": "{ stats: {\"stress\":-1,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "stress": -1,
+              "mood": 1
+            }
+          }
         },
         {
           "text": "裤脚挽着，被拦下登记",
           "result": "你放下裤脚放得很慢。登记本上的名字已经有十几个。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-1}] }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -1
+              }
+            ]
+          }
         },
         {
           "text": "绕到侧门碰碰运气",
           "result": "侧门也有人。你们对视了一眼，你转身回正门排队。",
-          "effects": "{ stats: {\"energy\":-2,\"stress\":2} }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "stress": 2
+            }
+          }
         }
       ]
     },
-    {
+    "exam-seating": {
       "id": "exam-seating",
       "kind": "random",
       "group": "daily",
@@ -1017,17 +1772,37 @@
         {
           "text": "提前去踩点",
           "result": "你试了试那张桌子，垫了两层草稿纸。稳了。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":1} }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 1
+            }
+          }
         },
         {
           "text": "无所谓，到时候再说",
           "result": "考试时那张桌子晃了你两个小时。写完最后一个字你才想起，抖腿的其实是自己。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":-1} }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": -1
+            }
+          }
         },
         {
           "text": "跟同考场的人约好提前到",
           "result": "你们互相检查了文具。陌生人也能成为队友。",
-          "effects": "{ stats: {\"stress\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "stages": [
@@ -1038,7 +1813,7 @@
       ],
       "perStage": true
     },
-    {
+    "npc-lend-pen": {
       "id": "npc-lend-pen",
       "kind": "npc",
       "group": "social",
@@ -1053,22 +1828,52 @@
         {
           "text": "把最好用的那支递过去",
           "result": "放学时笔还回来了，笔帽上缠了一圈防丢的透明胶。你想笑。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "递了支快没水的",
           "result": "对方写两行甩一甩，甩了一节课。还笔的时候你们都觉得有点好笑。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "说自己也只有一支",
           "result": "对方转向另一边借。你握了握手里那支，写得更慢了。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-lunch-trade": {
       "id": "npc-lunch-trade",
       "kind": "npc",
       "group": "social",
@@ -1083,22 +1888,49 @@
         {
           "text": "主动换",
           "result": "鸡腿换青菜。对方过意不去，把汤里的丸子都舀给了你。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "一人一半",
           "result": "你们把菜拼在一起分。餐盘中间像划了条国界，但谁都没守。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "假装没看见",
           "result": "你低头扒饭。对面的筷子在青菜里拨了很久。",
-          "effects": "{ relation: [{\"who\":\"deskmate\",\"amount\":-3}] }"
+          "effects": {
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -3
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-morning-ex": {
       "id": "npc-morning-ex",
       "kind": "npc",
       "group": "social",
@@ -1113,22 +1945,47 @@
         {
           "text": "跟着对方瞎比划",
           "result": "你们第八节跳成了自由发挥，互相看了一眼，差点笑出声。",
-          "effects": "{ stats: {\"mood\":4,\"health\":1}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 4,
+              "health": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "认真带对方跟上节拍",
           "result": "一遍下来对方终于顺了。解散时说，明天还看你跳。",
-          "effects": "{ stats: {\"health\":1}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "health": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "各跳各的",
           "result": "你们的胳膊撞了两次。谁都没道歉，也没生气。",
-          "effects": "{ stats: {\"health\":1} }"
+          "effects": {
+            "stats": {
+              "health": 1
+            }
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-hw-lend": {
       "id": "npc-hw-lend",
       "kind": "npc",
       "group": "social",
@@ -1143,17 +2000,57 @@
         {
           "text": "借",
           "result": "对方三分钟抄完，还卷子时朝你抱了抱拳。你知道这不是第一次，也不会是最后一次。",
-          "effects": "{ relation: [{\"who\":\"deskmate\",\"amount\":4}], evidence: {\"dim\":\"moral\",\"label\":\"借作业给对方抄\",\"value\":-2} }"
+          "effects": {
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "借作业给对方抄",
+              "value": -2
+            }
+          }
         },
         {
           "text": "把解题过程讲一遍",
           "result": "讲到上课铃响。对方说，懂了，比直接借我强。",
-          "effects": "{ stats: {\"energy\":-3}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "energy": -3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "拒绝",
           "result": "对方愣了一下，说行。那天上午你们没再说话。",
-          "effects": "{ relation: [{\"who\":\"deskmate\",\"amount\":-4}], evidence: {\"dim\":\"moral\",\"label\":\"拒绝抄作业\",\"value\":1} }"
+          "effects": {
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -4
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "拒绝抄作业",
+              "value": 1
+            }
+          }
         }
       ],
       "social": true,
@@ -1164,7 +2061,7 @@
         ]
       }
     },
-    {
+    "npc-recess": {
       "id": "npc-recess",
       "kind": "npc",
       "group": "social",
@@ -1179,22 +2076,56 @@
         {
           "text": "站过去一起啃",
           "result": "你们一人一个苹果，看着楼下的梧桐树。十分钟过得很快。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "聊昨晚的球赛",
           "result": "你们为那个越位争了十分钟，上课铃都没救回来。",
-          "effects": "{ stats: {\"energy\":-1,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "energy": -1,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "说还得改错题，先走了",
           "result": "对方说行，咬苹果的声音都轻了。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-water": {
       "id": "npc-water",
       "kind": "npc",
       "group": "social",
@@ -1209,22 +2140,52 @@
         {
           "text": "接",
           "result": "你排队接了水，温度兑得刚好。对方喝了一口，说可以啊。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "说要热水烫嘴的那种",
           "result": "你故意接了全热的。对方被烫得直哈气，追着你打。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "说饮水机人太多，不去",
           "result": "对方自己去了，回来时给你也带了一杯。你有点过意不去。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-1}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -1
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-book-borrow": {
       "id": "npc-book-borrow",
       "kind": "npc",
       "group": "social",
@@ -1239,22 +2200,52 @@
         {
           "text": "借，但要求包书皮",
           "result": "三天后书回来了，包着报纸书皮，比原来还新。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "直接借",
           "result": "一周后书回来了，多了三个折角和一张夹在里面的书签。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "说自己还没看完",
           "result": "对方说好，那你看完叫我。之后每天都问你看到哪了。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-gomoku": {
       "id": "npc-gomoku",
       "kind": "npc",
       "group": "social",
@@ -1269,22 +2260,55 @@
         {
           "text": "认真下，赢了",
           "result": "对方连输两局，第三局下到一半反悔说刚才那步不算。你们笑作一团。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "故意让一局",
           "result": "对方赢了，得意地去擦黑板，擦得格外干净。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说先写作业",
           "result": "对方把棋盘擦了。格子的印子还留在纸上。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-answer-check": {
       "id": "npc-answer-check",
       "kind": "npc",
       "group": "social",
@@ -1299,17 +2323,51 @@
         {
           "text": "对",
           "result": "你们的答案不一样。争了五分钟，结论是都错了。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "拒绝对答案",
           "result": "你说考完就翻篇。对方佩服你的定力，其实你只是不敢。",
-          "effects": "{ stats: {\"stress\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         },
         {
           "text": "只记得解题思路",
           "result": "你把思路讲了一遍。对方听完说，那咱俩应该都对。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1321,7 +2379,7 @@
       ],
       "perStage": true
     },
-    {
+    "npc-office": {
       "id": "npc-office",
       "kind": "npc",
       "group": "social",
@@ -1336,22 +2394,54 @@
         {
           "text": "路上先串好口径",
           "result": "结果是问你们要不要参加学科活动。虚惊一场，出门时你们腿都是软的。",
-          "effects": "{ stats: {\"stress\":4,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "stress": 4,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "一路沉默，各想各的",
           "result": "一路上你们谁都没说话。进门前对方小声说，有事我顶着。",
-          "effects": "{ stats: {\"stress\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "主动坦白最坏的可能",
           "result": "你越想越真，差点在门口就交代了。对方赶紧把你嘴捂上。",
-          "effects": "{ stats: {\"stress\":6,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "stress": 6,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-cheer": {
       "id": "npc-cheer",
       "kind": "npc",
       "group": "social",
@@ -1366,17 +2456,53 @@
         {
           "text": "站起来挥班旗",
           "result": "你挥得胳膊发酸。最后一圈，对方朝这边看了一眼，开始加速。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "到终点等着递水",
           "result": "对方冲线后整个人挂在你身上。水洒了半瓶。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":6}], evidence: {\"dim\":\"labor\",\"label\":\"运动会后勤\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ],
+            "evidence": {
+              "dim": "labor",
+              "label": "运动会后勤",
+              "value": 1
+            }
+          }
         },
         {
           "text": "大声喊名字",
           "result": "你喊破音了。周围都在笑，但你看见对方笑了。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1386,7 +2512,7 @@
       ],
       "perStage": true
     },
-    {
+    "npc-photo": {
       "id": "npc-photo",
       "kind": "npc",
       "group": "social",
@@ -1401,17 +2527,47 @@
         {
           "text": "看向镜头，笑得正式",
           "result": "照片洗出来，你们两个都站得笔直，像两根电线杆。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "快门响时做鬼脸",
           "result": "照片里你们笑得东倒西歪。班主任说这张不能贴墙上，但发到了群里。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "往边上让了让",
           "result": "照片里你们中间隔着半个人的距离。你后来看这张照片，总觉得那个空隙很显眼。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1423,7 +2579,7 @@
       ],
       "perStage": true
     },
-    {
+    "npc-first-hi": {
       "id": "npc-first-hi",
       "kind": "npc",
       "group": "social",
@@ -1438,17 +2594,44 @@
         {
           "text": "自然地打招呼",
           "result": "你们从假期作业聊到新老师。门还没进，话已经说了十分钟。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "点头，说句\"来了\"",
           "result": "对方也点头。有些关系就是这样，一个假期就生了锈。",
-          "effects": "{ relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         },
         {
           "text": "拍一下对方的肩膀",
           "result": "对方吓了一跳，然后笑了：就你手重。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1460,7 +2643,7 @@
       ],
       "perStage": true
     },
-    {
+    "npc-make-up": {
       "id": "npc-make-up",
       "kind": "npc",
       "group": "social",
@@ -1475,22 +2658,52 @@
         {
           "text": "借这个机会开口",
           "result": "对方捡起笔递给你。你说谢谢，对方说客气。冰面裂了条缝。",
-          "effects": "{ stats: {\"stress\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "等对方先动",
           "result": "对方把笔踢回来了。用踢的。但总算是回来了。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "不捡了",
           "result": "那支笔在对方脚边躺了一上午。下午不见了，谁也不知道谁捡的。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-3}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -3
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-gift-return": {
       "id": "npc-gift-return",
       "kind": "npc",
       "group": "social",
@@ -1505,22 +2718,52 @@
         {
           "text": "收下，当面道谢",
           "result": "对方说客气什么。巧克力你们一人一半分掉了。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "回赠一包饼干",
           "result": "礼尚往来没完没了。第二天对方又回了一袋牛奶糖。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "让下次别这样",
           "result": "对方有点窘，说哦。巧克力你自己吃了，甜得有点过意不去。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-study-help": {
       "id": "npc-study-help",
       "kind": "npc",
       "group": "social",
@@ -1535,17 +2778,56 @@
         {
           "text": "从头到尾讲清楚",
           "result": "讲到对方眼睛发亮。你发现讲一遍比自己刷十道题还有用。",
-          "effects": "{ stats: {\"energy\":-3}, mastery: [{\"subject\":\"physics\",\"amount\":2}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -3
+            },
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 2
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "只点一下关键步骤",
           "result": "对方顺着提示自己推出来了，高兴得拍桌子。",
-          "effects": "{ mastery: [{\"subject\":\"physics\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "说自己也不太会",
           "result": "其实你会。你只是怕麻烦，说完就有点后悔。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-3}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1556,7 +2838,7 @@
         ]
       }
     },
-    {
+    "npc-infirmary": {
       "id": "npc-infirmary",
       "kind": "npc",
       "group": "social",
@@ -1571,22 +2853,58 @@
         {
           "text": "一路慢慢扶过去",
           "result": "三层楼你们走了十分钟。对方一直说没事没事，声音越来越小。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "半背半架快送过去",
           "result": "医务室老师说处理得及时。对方事后逢人就讲这段。",
-          "effects": "{ stats: {\"energy\":-5}, relation: [{\"who\":\"deskmate\",\"amount\":7}], evidence: {\"dim\":\"moral\",\"label\":\"护送受伤同学\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "护送受伤同学",
+              "value": 1
+            }
+          }
         },
         {
           "text": "找老师换个人扶",
           "result": "体育老师看了你一眼，叫了别人。你站在原地没动。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-5}] }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -5
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-magazine": {
       "id": "npc-magazine",
       "kind": "npc",
       "group": "social",
@@ -1601,22 +2919,59 @@
         {
           "text": "看完写回复，继续传",
           "result": "便利贴越写越长。一本杂志传了半个学期，便利贴厚成了小册子。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "连夜看完，第二天就还",
           "result": "你熬到一点。第二天把书递过去时，对方说你眼睛都红了。",
-          "effects": "{ stats: {\"energy\":-5,\"mood\":3}, mastery: [{\"subject\":\"chinese\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "energy": -5,
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "chinese",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "在书里夹一张你的便利贴",
           "result": "你写了三行字。对方看完，在背面回了两行。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "npc-night-snack": {
       "id": "npc-night-snack",
       "kind": "npc",
       "group": "social",
@@ -1631,22 +2986,53 @@
         {
           "text": "分",
           "result": "你们站在路灯下吃完那半串年糕。冬天的风都是香的。",
-          "effects": "{ stats: {\"mood\":4,\"health\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 4,
+              "health": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "请对方再来一串",
           "result": "一人一串，你付的钱。对方说下次我来。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说要赶末班车，先走了",
           "result": "你回头看了一眼，对方举着年糕站在灯底下，朝你挥了挥。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true
     },
-    {
+    "friend-birthday": {
       "id": "friend-birthday",
       "kind": "npc",
       "group": "friend",
@@ -1661,17 +3047,47 @@
         {
           "text": "许愿吹蜡烛",
           "result": "你许了个愿，没说出来。蜡烛吹灭的时候，走廊声控灯正好亮了。",
-          "effects": "{ stats: {\"mood\":6}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 6
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "感动但嘴硬",
           "result": "你说幼不幼稚。蛋糕你一口没剩。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "拉着对方分掉",
           "result": "你们蹲在楼梯间吃完了整个蛋糕。路过的老师看了一眼，没管。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1680,7 +3096,7 @@
         "friend": true
       }
     },
-    {
+    "friend-family-dinner": {
       "id": "friend-family-dinner",
       "kind": "npc",
       "group": "friend",
@@ -1695,17 +3111,53 @@
         {
           "text": "去，还带了水果",
           "result": "对方家人很热情，给你盛了三碗。走的时候还塞了一袋冻饺子。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":6}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 6
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "去，负责擀皮",
           "result": "你擀的皮奇形怪状，被笑了整晚。但煮出来一个没破。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}], evidence: {\"dim\":\"labor\",\"label\":\"学包饺子\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ],
+            "evidence": {
+              "dim": "labor",
+              "label": "学包饺子",
+              "value": 1
+            }
+          }
         },
         {
           "text": "说家里管得严，去不了",
           "result": "第二天对方给你带了一保温盒饺子。还是热的。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":-1}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1714,7 +3166,7 @@
         "friend": true
       }
     },
-    {
+    "friend-rooftop": {
       "id": "friend-rooftop",
       "kind": "npc",
       "group": "friend",
@@ -1729,17 +3181,48 @@
         {
           "text": "靠着栏杆聊了一整个午休",
           "result": "你们聊了很多平时不会聊的。下楼时上课铃正好响。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "约定这是秘密基地",
           "result": "你们给天台起了个名字。之后每次经过那扇门，都会相视一笑。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "担心被处分，劝对方下去",
           "result": "你们只待了五分钟。对方说你能活到现在真不容易。",
-          "effects": "{ stats: {\"stress\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1747,7 +3230,7 @@
         "friend": true
       }
     },
-    {
+    "friend-defend": {
       "id": "friend-defend",
       "kind": "npc",
       "group": "friend",
@@ -1762,17 +3245,48 @@
         {
           "text": "赶紧把人拉回来",
           "result": "对方还在气头上：他们凭什么。你说算了。其实你心里很暖。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "事后认真道谢",
           "result": "对方摆摆手：换我你也一样。你没说，其实不一定。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "怪对方多管闲事",
           "result": "对方愣住，说我这不是怕你……话说一半，扭头走了。",
-          "effects": "{ stats: {\"mood\":-3}, relation: [{\"who\":\"deskmate\",\"amount\":-8}] }"
+          "effects": {
+            "stats": {
+              "mood": -3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -8
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1780,7 +3294,7 @@
         "friend": true
       }
     },
-    {
+    "friend-exam-pact": {
       "id": "friend-exam-pact",
       "kind": "npc",
       "group": "friend",
@@ -1795,17 +3309,66 @@
         {
           "text": "应战",
           "result": "接下来一周你们刷题刷得眼冒绿光。赌注是小事，不想输是真的。",
-          "effects": "{ stats: {\"energy\":-5}, mastery: [{\"subject\":\"math\",\"amount\":2},{\"subject\":\"english\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "energy": -5
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              },
+              {
+                "subject": "english",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "改成互相抽查背诵",
           "result": "你们每天放学互相抽十分钟。效果意外地好。",
-          "effects": "{ stats: {\"energy\":-3}, mastery: [{\"subject\":\"english\",\"amount\":2}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -3
+            },
+            "mastery": [
+              {
+                "subject": "english",
+                "amount": 2
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "说幼稚，不赌",
           "result": "对方撇嘴：没劲。但第二天还是把整理好的重点给了你一份。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1820,7 +3383,7 @@
         "friend": true
       }
     },
-    {
+    "friend-fail-comfort": {
       "id": "friend-fail-comfort",
       "kind": "npc",
       "group": "friend",
@@ -1835,17 +3398,49 @@
         {
           "text": "把委屈都说出来",
           "result": "你说了很久。对方一直没插话，最后说：走，请你喝东西。",
-          "effects": "{ stats: {\"stress\":-5,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "stress": -5,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "什么都不说，就坐着",
           "result": "操场上的人走光了。天色很好看。你的卷子好像也没那么难看。",
-          "effects": "{ stats: {\"stress\":-4,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "stress": -4,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "说想一个人静静",
           "result": "对方走了，耳机留给了你。里面是单曲循环的一首慢歌。",
-          "effects": "{ stats: {\"stress\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1860,7 +3455,7 @@
         "friend": true
       }
     },
-    {
+    "friend-transfer": {
       "id": "friend-transfer",
       "kind": "npc",
       "group": "friend",
@@ -1875,17 +3470,47 @@
         {
           "text": "说，别走",
           "result": "话出口你才发现有多直接。对方笑了：就为这句话，我再争取争取。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "帮对方分析利弊",
           "result": "你们列了一张表。列完两人都沉默了：留下那栏理由很少，但很重。",
-          "effects": "{ stats: {\"stress\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "表现得无所谓",
           "result": "对方盯着你看了两秒，说哦。那个下午之后，这件事你们谁都没再提。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-5}] }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -5
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1894,7 +3519,7 @@
         "friend": true
       }
     },
-    {
+    "friend-money": {
       "id": "friend-money",
       "kind": "npc",
       "group": "friend",
@@ -1909,17 +3534,53 @@
         {
           "text": "不问理由，借",
           "result": "下周对方准时还了，多给了一瓶汽水。理由至今没说，你也至今没问。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "问清楚再借",
           "result": "是为了给流浪猫做绝育。你出了五十，又搭进去一个周末。",
-          "effects": "{ stats: {\"energy\":-4,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}], evidence: {\"dim\":\"moral\",\"label\":\"救助流浪猫\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -4,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "救助流浪猫",
+              "value": 1
+            }
+          }
         },
         {
           "text": "说自己也没钱",
           "result": "对方说没事。后来你从别人那听说了理由，心里咯噔一下。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-4}] }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1927,7 +3588,7 @@
         "friend": true
       }
     },
-    {
+    "friend-letter": {
       "id": "friend-letter",
       "kind": "npc",
       "group": "friend",
@@ -1942,17 +3603,53 @@
         {
           "text": "认真回信",
           "result": "你们在同一个班，却通了一学期的信。有些话确实只有写得出来。",
-          "effects": "{ stats: {\"mood\":3}, mastery: [{\"subject\":\"chinese\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "chinese",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "当面聊",
           "result": "你说别写了，当面说。对方憋了半天，说出来一半。但比信里实在。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "收好，没回",
           "result": "你把信夹进了最重要的那本书。对方没再写第二封。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-1}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1961,7 +3658,7 @@
         "friend": true
       }
     },
-    {
+    "friend-photo-wall": {
       "id": "friend-photo-wall",
       "kind": "npc",
       "group": "friend",
@@ -1976,17 +3673,48 @@
         {
           "text": "认真挑了一下午",
           "result": "你们翻照片翻了一下午，每张都能讲出一件事。最后挑了九张。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "要求把丑照都销毁",
           "result": "对方把丑照单独建了个相册，命名\"黑历史\"，加密了。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "说都行",
           "result": "对方最后贴出来的照片里，你的每张都闭着眼。你怀疑是故意的。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -1994,7 +3722,7 @@
         "friend": true
       }
     },
-    {
+    "friend-sick-visit": {
       "id": "friend-sick-visit",
       "kind": "npc",
       "group": "friend",
@@ -2009,17 +3737,54 @@
         {
           "text": "请进来坐",
           "result": "对方坐了半小时，把这两天的八卦讲了个遍。你的病好了一半。",
-          "effects": "{ stats: {\"health\":2,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "health": 2,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "隔着门接过笔记",
           "result": "你怕传染。笔记很全，连老师的口误都记了。",
-          "effects": "{ stats: {\"mood\":3}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "让对方赶紧回去学习",
           "result": "对方把东西挂在门把手上就走了。纸条上写：快点好，没人陪我吃饭了。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2027,7 +3792,7 @@
         "friend": true
       }
     },
-    {
+    "friend-bike": {
       "id": "friend-bike",
       "kind": "npc",
       "group": "friend",
@@ -2042,17 +3807,49 @@
         {
           "text": "上车",
           "result": "你们一把伞两个人，骑得很慢。到你家路口时，对方后背全湿了。",
-          "effects": "{ stats: {\"mood\":4,\"health\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4,
+              "health": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "说等雨小再走",
           "result": "你们在车棚等了四十分钟，把未来十年的天都聊完了。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "说不用，跑回去就行",
           "result": "你跑进雨里。第二天感冒了，对方说你活该，然后给你带了姜茶。",
-          "effects": "{ stats: {\"health\":-3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "health": -3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2060,7 +3857,7 @@
         "friend": true
       }
     },
-    {
+    "friend-dumpling": {
       "id": "friend-dumpling",
       "kind": "npc",
       "group": "friend",
@@ -2075,17 +3872,48 @@
         {
           "text": "不客气，吃",
           "result": "你没客气。糖醋排骨的味道，你记了很久。",
-          "effects": "{ stats: {\"health\":1,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "health": 1,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "过意不去，明天回请",
           "result": "第二天你带了家里做的卤蛋。对方说成交，这个买卖做得。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "吃了，但只敢吃一层",
           "result": "对方把三层都推给你：装什么矜持。你脸红着吃完了。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2093,7 +3921,7 @@
         "friend": true
       }
     },
-    {
+    "friend-triangle": {
       "id": "friend-triangle",
       "kind": "npc",
       "group": "friend",
@@ -2108,17 +3936,49 @@
         {
           "text": "两边都听，不站队",
           "result": "你成了传声筒兼灭火器。一周后两人和好了，都说多亏了你。",
-          "effects": "{ stats: {\"stress\":4,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": 4,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "直接站{npc}这边",
           "result": "对方很感动。另一个人一个月没理你。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "拒绝掺和",
           "result": "你说你们的事自己解决。两人果然自己解决了，比你想的快。",
-          "effects": "{ stats: {\"stress\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "stress": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2126,7 +3986,7 @@
         "friend": true
       }
     },
-    {
+    "friend-keep-secret": {
       "id": "friend-keep-secret",
       "kind": "npc",
       "group": "friend",
@@ -2141,17 +4001,54 @@
         {
           "text": "守口如瓶",
           "result": "你说不知道。对方悻悻走了。晚上{npc}发来消息：谢了，我都知道。",
-          "effects": "{ relation: [{\"who\":\"deskmate\",\"amount\":7}], evidence: {\"dim\":\"moral\",\"label\":\"守口如瓶\",\"value\":1} }"
+          "effects": {
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "守口如瓶",
+              "value": 1
+            }
+          }
         },
         {
           "text": "交换",
           "result": "秘密很劲爆，你听完就后悔了。第三天全班都在传。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-8}], evidence: {\"dim\":\"moral\",\"label\":\"出卖朋友\",\"value\":-2} }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -8
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "出卖朋友",
+              "value": -2
+            }
+          }
         },
         {
           "text": "打太极糊弄过去",
           "result": "你装傻装得很成功。对方说跟你聊天真没意思。",
-          "effects": "{ stats: {\"stress\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2159,7 +4056,7 @@
         "friend": true
       }
     },
-    {
+    "friend-witness": {
       "id": "friend-witness",
       "kind": "npc",
       "group": "friend",
@@ -2174,17 +4071,57 @@
         {
           "text": "主动去找老师说明",
           "result": "你去办公室说了全过程。误会解除了，老师让{npc}下次举手上报。",
-          "effects": "{ stats: {\"stress\":4}, relation: [{\"who\":\"deskmate\",\"amount\":8}], evidence: {\"dim\":\"moral\",\"label\":\"为同学作证\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "stress": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 8
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "为同学作证",
+              "value": 1
+            }
+          }
         },
         {
           "text": "鼓励对方自己去解释",
           "result": "对方去了，说得很乱，但老师说会看监控。三天后还了清白。",
-          "effects": "{ stats: {\"stress\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "怕惹事，没吭声",
           "result": "通报贴在公告栏，你每次经过都加快脚步。两个月后撤了，但你没忘。",
-          "effects": "{ stats: {\"stress\":3}, relation: [{\"who\":\"deskmate\",\"amount\":-10}], evidence: {\"dim\":\"moral\",\"label\":\"沉默旁观\",\"value\":-2} }"
+          "effects": {
+            "stats": {
+              "stress": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -10
+              }
+            ],
+            "evidence": {
+              "dim": "moral",
+              "label": "沉默旁观",
+              "value": -2
+            }
+          }
         }
       ],
       "social": true,
@@ -2192,7 +4129,7 @@
         "friend": true
       }
     },
-    {
+    "friend-movie": {
       "id": "friend-movie",
       "kind": "npc",
       "group": "friend",
@@ -2207,17 +4144,54 @@
         {
           "text": "去",
           "result": "电影一般，但爆米花很好吃。散场后你们在海报前拍了张傻照。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":6}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 6
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "去，但带上了作业",
           "result": "你在电影院门口把作业塞进对方包里：你也别想跑。对方认命叹气。",
-          "effects": "{ stats: {\"mood\":3}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "说要补课",
           "result": "对方说行，那我看两场。晚上给你发了十七条剧透。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2225,7 +4199,7 @@
         "friend": true
       }
     },
-    {
+    "friend-newyear": {
       "id": "friend-newyear",
       "kind": "npc",
       "group": "friend",
@@ -2240,17 +4214,47 @@
         {
           "text": "一起倒数",
           "result": "零点的时候你们同时喊了新年快乐。新年的第一分钟，没浪费。",
-          "effects": "{ stats: {\"mood\":6}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 6
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "嫌肉麻，但还是没挂",
           "result": "你说幼稚。然后安安静静听对方数完了十秒。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "已经睡了，没接到",
           "result": "第二天你看到一条零点整的消息：新年快乐。你回的时候，已经是新年了。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2265,7 +4269,7 @@
         "friend": true
       }
     },
-    {
+    "friend-yearbook": {
       "id": "friend-yearbook",
       "kind": "npc",
       "group": "friend",
@@ -2280,17 +4284,52 @@
         {
           "text": "认认真真写满一页",
           "result": "你写了四十分钟。对方看完说，这页我留给我孩子看。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "画一幅对方的小像",
           "result": "画得很丑。对方说像，太像了，然后拍照设成了头像。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}], evidence: {\"dim\":\"art\",\"label\":\"同学录画像\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ],
+            "evidence": {
+              "dim": "art",
+              "label": "同学录画像",
+              "value": 1
+            }
+          }
         },
         {
           "text": "还是写了\"前程似锦\"",
           "result": "对方瞪你。你补了三个字：必须的。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2305,7 +4344,7 @@
         "friend": true
       }
     },
-    {
+    "friend-uniform-sign": {
       "id": "friend-uniform-sign",
       "kind": "npc",
       "group": "friend",
@@ -2320,17 +4359,47 @@
         {
           "text": "签名，再加一句话",
           "result": "你写：心脏这块归我了，别弄丢。对方看完把校服叠得很整齐。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "设计一个花哨签名",
           "result": "你练了五遍才下笔。对方说，这是全校最值钱的校服。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说洗了就没",
           "result": "对方说那就不洗。你们看着那件校服，都没再说话。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2341,7 +4410,7 @@
         "friend": true
       }
     },
-    {
+    "friend-promise": {
       "id": "friend-promise",
       "kind": "npc",
       "group": "friend",
@@ -2356,17 +4425,48 @@
         {
           "text": "拉钩",
           "result": "你们在路灯底下拉了个钩。这个城市名，你们谁都没再提，但谁都没忘。",
-          "effects": "{ stats: {\"stress\":-3,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "stress": -3,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "说先考完再说",
           "result": "对方说也是，然后在本子上写了个地名，又飞快地划掉了。",
-          "effects": "{ stats: {\"stress\":1}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "stress": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "笑对方想太远",
           "result": "对方踹了你一脚，说滚。路灯把两个人的影子拉得很长。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2377,7 +4477,7 @@
         "friend": true
       }
     },
-    {
+    "friend-hw-alarm": {
       "id": "friend-hw-alarm",
       "kind": "npc",
       "group": "friend",
@@ -2392,17 +4492,56 @@
         {
           "text": "写了，拍给对方参考",
           "result": "对方回了六个磕头表情。第二天请你喝了酸奶。",
-          "effects": "{ mastery: [{\"subject\":\"physics\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "没写，爬起来补",
           "result": "你们开着语音各写各的，写到十二点。第二天一起顶着黑眼圈。",
-          "effects": "{ stats: {\"energy\":-5}, mastery: [{\"subject\":\"physics\",\"amount\":2}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -5
+            },
+            "mastery": [
+              {
+                "subject": "physics",
+                "amount": 2
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "假装没看见",
           "result": "第二天对方被罚站。看向你时，眼神很复杂。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-4}] }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2410,7 +4549,7 @@
         "friend": true
       }
     },
-    {
+    "friend-seat-save": {
       "id": "friend-seat-save",
       "kind": "npc",
       "group": "friend",
@@ -2425,17 +4564,66 @@
         {
           "text": "带早餐去接班",
           "result": "你到的时候对方手都冻僵了。你们一人一半分掉了那份煎饼。",
-          "effects": "{ stats: {\"mood\":3}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "学到闭馆",
           "result": "出门时天全黑了。你们都觉得这一天没白过。",
-          "effects": "{ stats: {\"energy\":-7}, mastery: [{\"subject\":\"math\",\"amount\":2},{\"subject\":\"english\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -7
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              },
+              {
+                "subject": "english",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "睡过头，十点半才到",
           "result": "座位早没了。对方在人堆里给你挤了半个椅子。你很惭愧。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2447,7 +4635,7 @@
         ]
       }
     },
-    {
+    "friend-rain-pickup": {
       "id": "friend-rain-pickup",
       "kind": "npc",
       "group": "friend",
@@ -2462,17 +4650,50 @@
         {
           "text": "上车",
           "result": "车里很暖和。对方跟司机介绍：这是我同学，绕一下先送。你记了一路。",
-          "effects": "{ stats: {\"mood\":4,\"health\":1}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "mood": 4,
+              "health": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "说太麻烦，自己想办法",
           "result": "对方回了个翻白眼的表情。半小时后你还是上了车，因为雨更大了。",
-          "effects": "{ stats: {\"mood\":2,\"health\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2,
+              "health": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "谢绝，冲进雨里",
           "result": "你到家时像从水里捞出来的。对方发来消息：逞能。后面跟着一杯姜茶的外卖截图。",
-          "effects": "{ stats: {\"health\":-3,\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "health": -3,
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2480,7 +4701,7 @@
         "friend": true
       }
     },
-    {
+    "friend-arcade": {
       "id": "friend-arcade",
       "kind": "npc",
       "group": "friend",
@@ -2495,17 +4716,48 @@
         {
           "text": "战",
           "result": "你连输三局。对方笑得直不起腰，可乐最后还是对方请的。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "观战助威",
           "result": "你不会玩，但喊得最响。老板都认识你们了。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "拒绝，怕被家长发现",
           "result": "对方说怂货，然后陪你走到了车站。",
-          "effects": "{ stats: {\"stress\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2513,7 +4765,7 @@
         "friend": true
       }
     },
-    {
+    "friend-midnight-call": {
       "id": "friend-midnight-call",
       "kind": "npc",
       "group": "friend",
@@ -2528,17 +4780,55 @@
         {
           "text": "陪着聊到天亮",
           "result": "对方说了很多家里的事。挂电话时天蒙蒙亮，对方说：好多了，睡吧。",
-          "effects": "{ stats: {\"energy\":-6,\"stress\":2}, relation: [{\"who\":\"deskmate\",\"amount\":8}] }"
+          "effects": {
+            "stats": {
+              "energy": -6,
+              "stress": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 8
+              }
+            ]
+          }
         },
         {
           "text": "开免提，边听边做题",
           "result": "你题目没做几道，话倒是听全了。两边都没耽误。",
-          "effects": "{ stats: {\"energy\":-4}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -4
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说明天还要早起，挂了",
           "result": "电话挂了。你躺着没睡着，后悔到两点。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -5
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2547,7 +4837,7 @@
         "minStress": 45
       }
     },
-    {
+    "friend-run-pace": {
       "id": "friend-run-pace",
       "kind": "npc",
       "group": "friend",
@@ -2562,17 +4852,54 @@
         {
           "text": "让对方陪",
           "result": "最后两百米，你听见跑道外一声接一声的\"跟住我\"。你居然真的没走路。",
-          "effects": "{ stats: {\"energy\":-8,\"health\":2}, relation: [{\"who\":\"deskmate\",\"amount\":6}], evidence: {\"dim\":\"health\",\"label\":\"运动会 800 米\",\"value\":1} }"
+          "effects": {
+            "stats": {
+              "energy": -8,
+              "health": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ],
+            "evidence": {
+              "dim": "health",
+              "label": "运动会 800 米",
+              "value": 1
+            }
+          }
         },
         {
           "text": "不陪，自己跑",
           "result": "你跑完了，名次一般。冲线时看见对方在终点拎着水等你。",
-          "effects": "{ stats: {\"energy\":-8,\"health\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -8,
+              "health": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "临阵换将，推荐对方上",
           "result": "对方一边骂你一边换了号码布。最后拿了小组第三。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2585,7 +4912,7 @@
         "friend": true
       }
     },
-    {
+    "friend-notebook-gift": {
       "id": "friend-notebook-gift",
       "kind": "npc",
       "group": "friend",
@@ -2600,17 +4927,63 @@
         {
           "text": "复印一份，原件还回去",
           "result": "对方说你傻啊，给你就是给你的。你把本子供在了书桌左上角。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":2},{\"subject\":\"english\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              },
+              {
+                "subject": "english",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "用完请对方吃饭",
           "result": "那顿饭你们吃了两小时，把一学期吐槽了个遍。",
-          "effects": "{ stats: {\"mood\":3}, mastery: [{\"subject\":\"math\",\"amount\":2}], relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "没好意思要",
           "result": "对方硬塞给你：客气就是不拿我当朋友。你只好收了。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2618,7 +4991,7 @@
         "friend": true
       }
     },
-    {
+    "crush-slip": {
       "id": "crush-slip",
       "kind": "npc",
       "group": "crush",
@@ -2633,17 +5006,49 @@
         {
           "text": "将错就错，再叫一遍",
           "result": "你装作理直气壮。对方耳朵红了，但应了一声。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "疯狂解释",
           "result": "你越描越黑。对方低下头，肩膀在抖，分不清是笑还是别的。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "装死",
           "result": "你趴下装睡。你听见对方轻轻笑了一声。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":1}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2653,7 +5058,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-bottle": {
       "id": "crush-bottle",
       "kind": "npc",
       "group": "crush",
@@ -2668,17 +5073,47 @@
         {
           "text": "接过来拧开",
           "result": "瓶盖应声而开。对方说谢谢，你摆摆手，掌心发麻，不知道是因为用力还是别的。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "拧开前先逗一下",
           "result": "你说求我。对方说爱拧不拧，伸手来抢。瓶子在你们手里多待了五秒。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说自己也拧不开",
           "result": "你们对着那瓶水研究了半节课。最后是体育老师帮忙的。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2688,7 +5123,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-same-book": {
       "id": "crush-same-book",
       "kind": "npc",
       "group": "crush",
@@ -2703,17 +5138,50 @@
         {
           "text": "让对方先看",
           "result": "对方说那一起？你们站在书架前，一人捧着半边，看完了第一章。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "抽回手",
           "result": "你说你先。对方拿了书，走出两步又回头：你看完借我。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "抢着借走",
           "result": "你先借了。第二天对方用一本同作者的书跟你换。",
-          "effects": "{ mastery: [{\"subject\":\"chinese\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "chinese",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2723,7 +5191,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-exam-room": {
       "id": "crush-exam-room",
       "kind": "npc",
       "group": "crush",
@@ -2738,17 +5206,49 @@
         {
           "text": "回一句\"你也是\"",
           "result": "你们互道了加油。考那几场，你格外稳。",
-          "effects": "{ stats: {\"stress\":-3,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "stress": -3,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "说谁紧张谁小狗",
           "result": "对方笑了。开考铃响前，你们隔着过道碰了碰拳头。",
-          "effects": "{ stats: {\"stress\":-2,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": -2,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "假装没听见",
           "result": "考试时你总忍不住往那个方向看。收卷后对方说：看得我都没法专心。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2765,7 +5265,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-medicine": {
       "id": "crush-medicine",
       "kind": "npc",
       "group": "crush",
@@ -2780,17 +5280,49 @@
         {
           "text": "喝了",
           "result": "药很苦，杯子很烫。你捧着杯子睡了一节自习，出了一身汗，好了大半。",
-          "effects": "{ stats: {\"health\":3,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "health": 3,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "说声谢谢，放学请对方喝东西",
           "result": "对方说就一袋药。但还是跟你去了小卖部。",
-          "effects": "{ stats: {\"health\":2,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "health": 2,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "趴着没动",
           "result": "药凉了。放学时你一口闷掉，苦得皱眉。对方回头看见，笑了。",
-          "effects": "{ stats: {\"health\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "health": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2800,7 +5332,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-contact": {
       "id": "crush-contact",
       "kind": "npc",
       "group": "crush",
@@ -2815,17 +5347,48 @@
         {
           "text": "秒过",
           "result": "通过后对方发来一个表情。你们从作业聊到熄灯。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "过了，但没说话",
           "result": "对方的头像安安静静躺在列表里。你们谁都没先开口，但你会多看两眼。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "拖到第二天才通过",
           "result": "你打了三行字又删了。最后只发了一个字：嗯。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-1}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -1
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2835,7 +5398,7 @@
         "minRelation": 58
       }
     },
-    {
+    "crush-schedule": {
       "id": "crush-schedule",
       "kind": "npc",
       "group": "crush",
@@ -2850,17 +5413,44 @@
         {
           "text": "给，顺便帮忙画重点",
           "result": "你把自习课都标了出来。对方发现你们的空课一模一样。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "让对方自己拍一张",
           "result": "对方拍了，拍完顺手把你的课本也摆正了。",
-          "effects": "{ relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "说课代表那里有电子档",
           "result": "对方哦了一声。第二天还是来找你借：电子的看着费劲。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2877,7 +5467,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-run-side": {
       "id": "crush-run-side",
       "kind": "npc",
       "group": "crush",
@@ -2892,17 +5482,50 @@
         {
           "text": "保持这个节奏",
           "result": "两圈下来，你们的脚步声合成一个。散队时对方喘着气朝你笑。",
-          "effects": "{ stats: {\"health\":1,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "health": 1,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "加速超过",
           "result": "你加，对方也加。最后一百米你们较着劲冲线，谁都喘得像头牛。",
-          "effects": "{ stats: {\"energy\":-3,\"health\":1,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "health": 1,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "放慢让开",
           "result": "对方跟着慢了下来。你没办法，只好保持原速。心里有点乱。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2912,7 +5535,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-table": {
       "id": "crush-table",
       "kind": "npc",
       "group": "crush",
@@ -2927,17 +5550,53 @@
         {
           "text": "坐下",
           "result": "你们头一回单独吃饭。筷子碰盘子的声音都很清楚。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "坐下，全程聊题",
           "result": "你用一道大题化解了尴尬。对方说你是不是只会聊题。你说是。",
-          "effects": "{ stats: {\"mood\":2}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "端着盘子去了别处",
           "result": "你站着吃完了那顿饭。回头时，那个位置还是空的。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-3}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2947,7 +5606,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-pen-debt": {
       "id": "crush-pen-debt",
       "kind": "npc",
       "group": "crush",
@@ -2962,17 +5621,48 @@
         {
           "text": "说不用赔",
           "result": "第二天对方还是还了支新的，笔帽上系了根红绳，说这样丢不了。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "让对方赔一支",
           "result": "对方买了一模一样的。你用着新笔，总觉得不如原来那支顺手。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         },
         {
           "text": "说那支笔对我很重要",
           "result": "对方当真了，放学后把教室翻了个底朝天，最后在讲台缝里找到了。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -2982,7 +5672,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-haircut": {
       "id": "crush-haircut",
       "kind": "npc",
       "group": "crush",
@@ -2997,17 +5687,47 @@
         {
           "text": "问好看吗",
           "result": "对方说还行。顿了顿又补一句：比以前精神。你一整天都在摸自己的头发。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说随便剪的",
           "result": "对方说嗯。下课时你发现对方在草稿纸上画了个什么，看见你就合上了。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "反问你怎么才看见",
           "result": "对方说早就看见了，在想要不要说。你赢了这场嘴仗，输了点什么。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3017,7 +5737,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-photo-side": {
       "id": "crush-photo-side",
       "kind": "npc",
       "group": "crush",
@@ -3032,17 +5752,47 @@
         {
           "text": "站着不动",
           "result": "快门响的时候，你们的肩膀隔着一个拳头的距离。照片洗出来，这个距离清晰可见。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "往中间让一点",
           "result": "肩膀碰上了。你们都没动。摄影师喊\"茄子\"的时候，你笑得很真。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "借口换位置",
           "result": "你换到了边上。看照片时，你先找的还是那个人。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3059,7 +5809,7 @@
         "minRelation": 65
       }
     },
-    {
+    "crush-sunset": {
       "id": "crush-sunset",
       "kind": "npc",
       "group": "crush",
@@ -3074,17 +5824,48 @@
         {
           "text": "转头对视",
           "result": "对方没躲，说：晚霞好看。你说：嗯。你说的不是晚霞。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "假装看晚霞",
           "result": "你的心跳快得离谱。晚霞散了，心跳还没散。",
-          "effects": "{ stats: {\"stress\":1,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "stress": 1,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         },
         {
           "text": "低头回座位",
           "result": "你听见背后有人轻轻叹了口气。也可能听错了。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3094,7 +5875,7 @@
         "minRelation": 65
       }
     },
-    {
+    "crush-card": {
       "id": "crush-card",
       "kind": "npc",
       "group": "crush",
@@ -3109,17 +5890,47 @@
         {
           "text": "也回一张不署名的",
           "result": "你把贺卡放进对方抽屉。第二天对方桌上多了一排旺仔牛奶，谁也没提贺卡的事。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "当面问是不是对方写的",
           "result": "对方说不是。顿了两秒又说：写都写了，你就当是吧。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "收好，谁也不说",
           "result": "那张卡片你压在了桌垫底下。每次掀开都看见。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":3}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3136,7 +5947,7 @@
         "minRelation": 64
       }
     },
-    {
+    "crush-bet": {
       "id": "crush-bet",
       "kind": "npc",
       "group": "crush",
@@ -3151,17 +5962,66 @@
         {
           "text": "赌",
           "result": "你拼了命复习。输赢不重要，你已经开始想那个要求了。",
-          "effects": "{ stats: {\"energy\":-5}, mastery: [{\"subject\":\"math\",\"amount\":2},{\"subject\":\"english\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": -5
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 2
+              },
+              {
+                "subject": "english",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "问，你想提什么要求",
           "result": "对方说还没想好，眼神飘了一下。你突然觉得必须赢。",
-          "effects": "{ stats: {\"stress\":2}, mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": 2
+            },
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说没兴趣",
           "result": "对方哦了一声，转过身去。你盯着那道背影，改了主意：赌。",
-          "effects": "{ mastery: [{\"subject\":\"math\",\"amount\":1}], relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "mastery": [
+              {
+                "subject": "math",
+                "amount": 1
+              }
+            ],
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3178,7 +6038,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-rollcall": {
       "id": "crush-rollcall",
       "kind": "npc",
       "group": "crush",
@@ -3193,17 +6053,48 @@
         {
           "text": "帮着答\"马上到\"",
           "result": "话音刚落，对方从后门冲进来。老师看了你们俩一眼，没说什么。对方朝你比了个口型：谢了。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "帮忙打掩护说去医务室",
           "result": "老师没追究。对方回来后听说是你说的，愣了一下：医务室？你就不能说我去问问题了？",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "不吭声",
           "result": "对方被记了迟到。看向你的那一眼，说不上是什么表情。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-4}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3213,7 +6104,7 @@
         "minRelation": 60
       }
     },
-    {
+    "crush-mint": {
       "id": "crush-mint",
       "kind": "npc",
       "group": "crush",
@@ -3228,17 +6119,49 @@
         {
           "text": "吃了",
           "result": "凉得一激灵，困意散了一半。你小声说谢谢，对方目视前方，点了点头。",
-          "effects": "{ stats: {\"energy\":3,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "energy": 3,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "也递回去一颗",
           "result": "第二天你带了一整盒。你们一人一颗，含到放学。",
-          "effects": "{ stats: {\"energy\":2,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": 2,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "没吃，收进了笔袋",
           "result": "那颗糖在笔袋里待了一个月。你没吃，也没扔。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3248,7 +6171,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-absence": {
       "id": "crush-absence",
       "kind": "npc",
       "group": "crush",
@@ -3263,17 +6186,47 @@
         {
           "text": "发消息问一句",
           "result": "对方秒回：就感冒，明天来。后面加了一句：怎么，想我了？你盯着那四个字看了很久。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "帮忙记了一天的笔记",
           "result": "第二天你把笔记递过去。对方翻了翻，说：你字还挺好看。",
-          "effects": "{ stats: {\"energy\":-3}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "忍着没问",
           "result": "第二天对方来了，你装作若无其事。对方说：我昨天请假了你知道吗。你说：哦，不知道。",
-          "effects": "{ stats: {\"mood\":-1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": -1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3283,7 +6236,7 @@
         "minRelation": 64
       }
     },
-    {
+    "crush-badminton": {
       "id": "crush-badminton",
       "kind": "npc",
       "group": "crush",
@@ -3298,17 +6251,51 @@
         {
           "text": "上，认真配合",
           "result": "你们输了两局赢了一局。击掌的时候，对方的手很热。",
-          "effects": "{ stats: {\"energy\":-3,\"health\":1,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "health": 1,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "上，故意坑",
           "result": "你把球打到对方脑门上。追着道歉的三分钟，比打球还累。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说不会打",
           "result": "对方说我教你。一节课下来你没学会发球，但记住了对方握拍的样子。",
-          "effects": "{ stats: {\"health\":1,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "health": 1,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3318,7 +6305,7 @@
         "minRelation": 62
       }
     },
-    {
+    "crush-late-lamp": {
       "id": "crush-late-lamp",
       "kind": "npc",
       "group": "crush",
@@ -3333,17 +6320,48 @@
         {
           "text": "一起走",
           "result": "空无一人的走廊，你们的脚步声和影子都是成双的。到校门口才分开。",
-          "effects": "{ stats: {\"energy\":-2,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "energy": -2,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "问对方怎么还不走",
           "result": "对方说：等你啊，这么晚。说得理直气壮，你反而不知道怎么接。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "关灯先走",
           "result": "你走到楼下，回头看了一眼。那扇窗的灯，还亮着。",
-          "effects": "{ stats: {\"mood\":1}, relation: [{\"who\":\"deskmate\",\"amount\":-2}] }"
+          "effects": {
+            "stats": {
+              "mood": 1
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3353,7 +6371,7 @@
         "minRelation": 65
       }
     },
-    {
+    "crush-birthday": {
       "id": "crush-birthday",
       "kind": "npc",
       "group": "crush",
@@ -3368,17 +6386,47 @@
         {
           "text": "当场打开",
           "result": "是一本你提过一次的绝版书。你只记得自己随口说过一次。",
-          "effects": "{ stats: {\"mood\":6}, relation: [{\"who\":\"deskmate\",\"amount\":8}] }"
+          "effects": {
+            "stats": {
+              "mood": 6
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 8
+              }
+            ]
+          }
         },
         {
           "text": "问对方怎么知道的",
           "result": "对方笑而不语。后来你才知道，对方翻了你三年的朋友圈。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "收下，郑重道谢",
           "result": "你说谢谢。对方说：就这？你说：那，明年换我。",
-          "effects": "{ stats: {\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3389,7 +6437,7 @@
         "minRelation": 70
       }
     },
-    {
+    "crush-playlist": {
       "id": "crush-playlist",
       "kind": "npc",
       "group": "crush",
@@ -3404,17 +6452,49 @@
         {
           "text": "当晚听完",
           "result": "你听到两点。每一首你都在想：这首是想说哪句。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "回赠一个歌单",
           "result": "你选了二十首，排序改了一晚上。对方听完发来一句：第几首？你说：每一首。",
-          "effects": "{ stats: {\"energy\":-3,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":7}] }"
+          "effects": {
+            "stats": {
+              "energy": -3,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 7
+              }
+            ]
+          }
         },
         {
           "text": "收藏了没听",
           "result": "歌单躺在收藏夹里。某天你随机到一首，才发现每首的歌词都像是挑过的。",
-          "effects": "{ stats: {\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":2}] }"
+          "effects": {
+            "stats": {
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 2
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3424,7 +6504,7 @@
         "minRelation": 64
       }
     },
-    {
+    "crush-almost": {
       "id": "crush-almost",
       "kind": "npc",
       "group": "crush",
@@ -3439,17 +6519,49 @@
         {
           "text": "追问",
           "result": "对方摆摆手说没什么。你们继续走，但路突然不够长了。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":2}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         },
         {
           "text": "替对方说出来",
           "result": "你说：我知道。对方猛地转头看你。你们站在原地，公交车开出去很远。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":8}] }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 8
+              }
+            ]
+          }
         },
         {
           "text": "装作没听见",
           "result": "你提高音量聊起了明天的作业。对方配合地接了话，声音有点干。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-3}] }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -3
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3459,7 +6571,7 @@
         "minRelation": 72
       }
     },
-    {
+    "crush-cold-hands": {
       "id": "crush-cold-hands",
       "kind": "npc",
       "group": "crush",
@@ -3474,17 +6586,47 @@
         {
           "text": "接了",
           "result": "暖手宝很烫。你问另一个呢，对方扬了扬自己那只：喏。你们的指尖在桌沿碰了一下。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "轮流用",
           "result": "一节课换一次。传来传去的热乎气，比暖手宝本身还暖和。",
-          "effects": "{ stats: {\"mood\":4}, relation: [{\"who\":\"deskmate\",\"amount\":5}] }"
+          "effects": {
+            "stats": {
+              "mood": 4
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 5
+              }
+            ]
+          }
         },
         {
           "text": "说不冷",
           "result": "对方硬塞过来：逞什么能。你抱着那个暖手宝，耳朵一直红到下课。",
-          "effects": "{ stats: {\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":4}] }"
+          "effects": {
+            "stats": {
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3499,7 +6641,7 @@
         "minRelation": 64
       }
     },
-    {
+    "crush-mutual-ask": {
       "id": "crush-mutual-ask",
       "kind": "npc",
       "group": "crush",
@@ -3514,17 +6656,49 @@
         {
           "text": "反问：你希望我怎么答",
           "result": "对方沉默了很久，说：我希望的，你知道。",
-          "effects": "{ stats: {\"stress\":3,\"mood\":3}, relation: [{\"who\":\"deskmate\",\"amount\":6}] }"
+          "effects": {
+            "stats": {
+              "stress": 3,
+              "mood": 3
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 6
+              }
+            ]
+          }
         },
         {
           "text": "认真回答",
           "result": "你把心里想的说了七分。剩下的三分，从对方的表情看，不需要说了。",
-          "effects": "{ stats: {\"stress\":2,\"mood\":5}, relation: [{\"who\":\"deskmate\",\"amount\":8}] }"
+          "effects": {
+            "stats": {
+              "stress": 2,
+              "mood": 5
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": 8
+              }
+            ]
+          }
         },
         {
           "text": "打岔糊弄过去",
           "result": "你说今天作业真多。对方笑了一下，没再追问。那个笑你记了很久。",
-          "effects": "{ stats: {\"mood\":-2}, relation: [{\"who\":\"deskmate\",\"amount\":-4}] }"
+          "effects": {
+            "stats": {
+              "mood": -2
+            },
+            "relation": [
+              {
+                "who": "deskmate",
+                "amount": -4
+              }
+            ]
+          }
         }
       ],
       "social": true,
@@ -3535,7 +6709,6 @@
         "bonusCount": 2
       }
     }
-  ],
-  "overrides": {},
+  },
   "deleted": []
 }

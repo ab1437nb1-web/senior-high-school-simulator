@@ -1321,8 +1321,9 @@ export function templateNarrative(report: WeekReport, state: GameState): Narrati
 }
 
 // 「跨越朋友」：关系 >60 才启动，未满 100 前关系最高只能到 75
-const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 15, 心动: 30, 暧昧: 50, 确立: 100, 深入: 0, 收束: 0 };
-const CHAIN_GAIN: Record<string, number> = { 初识: 8, 熟悉: 10, 心动: 12, 暧昧: 15, 确立: 20, 深入: 10, 收束: 15 };
+// 暧昧之前的总奖励恰好 50：初识 7×2 + 熟悉 8×2 + 心动 10×2 = 50；暧昧本身不加进度
+const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 14, 心动: 30, 暧昧: 50, 确立: 100, 深入: 0, 收束: 0 };
+const CHAIN_GAIN: Record<string, number> = { 初识: 7, 熟悉: 8, 心动: 10, 暧昧: 0, 确立: 10, 深入: 10, 收束: 10 };
 
 export function beyondOf(state: GameState, id: string) {
   return (state.beyond && state.beyond[id]) || 0;
@@ -1354,7 +1355,7 @@ export function nextChainEvent(state: GameState) {
   if (beyondOf(state, id) < (CHAIN_MIN[ev.stage] || 0)) return null;
   if (state.romance && state.romance.npcId !== id) return null;
   const last = state.flags["chain:" + id];
-  if (typeof last === "number" && state.week - last < 3) return null;
+  if (typeof last === "number" && state.week - last < 5) return null;
   return ev;
 }
 
@@ -1403,7 +1404,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
   };
 
   const fixed = EVENTS.filter((e) => e.kind === "main" && inWindow(e) && seenAt(e) === undefined && fitsPlan(e));
-  const pool = EVENTS.filter((e) => {
+  const pool = EVENTS.filter((e) => { if (e.preRomance && (!state.socialTarget || ((state.chains || {})[state.socialTarget] || 0) < 7)) return false;
     if (e.kind === "main" || !inWindow(e) || !fitsPlan(e)) return false;
     const at = seenAt(e);
     if (at === undefined) return true;
@@ -1432,6 +1433,14 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     );
     while (picks.length < need && fallback.length) picks.push(draw(fallback));
   }
+  // 暧昧事件在链 07 之后解锁：每周保证至少一条，否则会被上百条事件稀释掉
+  if (state.socialTarget && ((state.chains || {})[state.socialTarget] || 0) >= 7 && !state.romance) {
+    const unlocked = EVENTS.filter((e) => e.preRomance && inWindow(e) && fitsPlan(e) && picks.indexOf(e) < 0);
+    if (unlocked.length && !picks.some((x: any) => x.preRomance)) {
+      picks.unshift(draw(unlocked));
+    }
+  }
+
   // 恋爱专属链：轮到这个 NPC 且关系够格时，链上下一条作为当周第一件事
   const chain = nextChainEvent(state);
   const chainEvent: any = chain
@@ -1512,8 +1521,9 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
         const delta = r.amount * closeness;
         const cap = maxRelationFor(s, npc.id);
         npc.relation = delta > 0 ? Math.min(cap, npc.relation + delta) : clamp(npc.relation + delta, 0, 100);
-        if (npc.relation > 60 && !(s.romance && s.romance.npcId === npc.id)) {
-          bumpBeyond(s, npc.id, delta > 0 ? delta * 0.9 : delta * 1.1);
+        if (ev.preRomance && npc.relation > 60 && !(s.romance && s.romance.npcId === npc.id)) {
+          // 通用暧昧事件只给 1–2 点进度，主要靠链事件推进
+          bumpBeyond(s, npc.id, delta > 0 ? 1.5 : -1.5);
         }
       }
       if (ev.preRomance) {

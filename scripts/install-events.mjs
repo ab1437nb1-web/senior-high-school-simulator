@@ -160,13 +160,13 @@ const confirm = async (question) => {
 
 const lit = (v) => JSON.stringify(v);
 const effectsTs = (eff) => {
-  const parts = [];
-  if (Object.keys(eff.stats).length) parts.push("stats: " + lit(eff.stats));
-  if (eff.mastery.length) parts.push("mastery: " + lit(eff.mastery));
-  if (eff.relation.length) parts.push("relation: " + lit(eff.relation));
-  if (eff.evidence.length) parts.push("evidence: " + lit(eff.evidence[0]));
-  for (const k of Object.keys(eff.extra)) parts.push(k + ": true");
-  return "{ " + parts.join(", ") + " }";
+  const out = {};
+  if (Object.keys(eff.stats).length) out.stats = eff.stats;
+  if (eff.mastery.length) out.mastery = eff.mastery;
+  if (eff.relation.length) out.relation = eff.relation;
+  if (eff.evidence.length) out.evidence = eff.evidence[0];
+  for (const k of Object.keys(eff.extra)) out[k] = true;
+  return out;
 };
 const toEvent = (e) => {
   const kindOf = (g) => (g === "daily" ? "random" : g === "main" ? "main" : "npc");

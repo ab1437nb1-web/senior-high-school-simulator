@@ -11,7 +11,7 @@ for (const block of blocks) {
   const idx = Number(m[1]);
   const headVariant = (m[2] || "").toLowerCase();
   const title = m[3].trim();
-  const stage = (m[4] || "").trim();
+  const stage = (m[4] || "").split("·")[0].trim();
   const idM = block.match(/^- 编号: (rom-[a-z]+-\d+[ab]?)$/m);
   if (!idM) { errs.push("缺编号: " + title); continue; }
   const id = idM[1];

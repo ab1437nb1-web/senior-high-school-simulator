@@ -1,0 +1,15 @@
+import { newGame, settleWeek, applyEventChoice, canConfess, planWeekEvents, mulberry32 } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+const choice = { first: "physics", second: ["chemistry", "geography"] };
+let s = newGame(choice, 7, "normal", true, "m", "x", { col: 2, row: 2 });
+s.romance = { npcId: "linxiaoman", since: 10, chance: 1 };
+s.npcs.find((n) => n.id === "linxiaoman").relation = 60;
+const p = PRESETS.find((x) => x.id === "six");
+for (let i = 0; i < 4; i++) s = settleWeek(s, p.build(choice)).state;
+const evs = planWeekEvents(s, 5, mulberry32(1), p.build(choice));
+const de = evs.find((e) => e.id === "love-drift");
+const after = applyEventChoice(s, de, de.choices[2]);
+const g = after.npcs.find((n) => n.id === "linxiaoman");
+console.log("分手后关系:", g.relation.toFixed(1), "| exPartner:", after.flags.exPartner, "| 可表白:", canConfess(after, "linxiaoman"));
+for (let i = 0; i < 10; i++) s = settleWeek(after, p.build(choice)).state;
+console.log("10 周后仍在低位:", s.npcs.find((n) => n.id === "linxiaoman").relation.toFixed(1));

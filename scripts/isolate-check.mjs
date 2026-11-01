@@ -1,0 +1,10 @@
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { PRESETS, NPC_MAP } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "relax");
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 33, "normal", true, "m", "x", { col: 2, row: 2 });
+for (let i = 0; i < 60; i++) s = settleWeek(s, p.build(s.choice)).state;
+const rows = s.npcs.filter((n) => n.kind === "classmate").map((n) => ({ name: NPC_MAP[n.id].name, social: NPC_MAP[n.id].traits.social, rel: n.relation })).sort((a, b) => b.rel - a.rel);
+console.log("完全不社交 60 周后与玩家的关系：");
+console.log(rows.map((r) => r.name + "(外向" + r.social.toFixed(1) + ") " + r.rel.toFixed(0)).join(" | "));
+const avg = rows.reduce((a, r) => a + r.rel, 0) / rows.length;
+console.log("平均", avg.toFixed(1), "最高", rows[0].rel.toFixed(0), "最低", rows[rows.length - 1].rel.toFixed(0));

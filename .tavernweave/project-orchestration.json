@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "authoritySchema": "tavernweave/project-orchestration/v1",
+  "projectId": "hs-life-sim",
+  "title": "高中生活模拟器",
+  "profile": "blueprint-set",
+  "state": "implementation-candidate",
+  "authorityFile": "总设计案.md",
+  "nextFile": "NEXT.md",
+  "blueprintPolicy": {
+    "masterFile": "蓝图集/BLUEPRINT_INDEX.md",
+    "maxDepth": 2,
+    "maxChildren": 5,
+    "runtimePersistentBlueprintBudget": 0,
+    "blueprints": [
+      {
+        "id": "BP-ROOT",
+        "path": "蓝图集/BLUEPRINT_INDEX.md",
+        "parentId": null,
+        "depth": 1,
+        "status": "candidate"
+      }
+    ]
+  },
+  "runtimeRefinementPolicy": {
+    "trigger": "observed-problem-or-failed-exit-condition",
+    "maxDepth": 1,
+    "maxOpenBranches": 1,
+    "persistent": false,
+    "mayExpandProductScope": false,
+    "mustReturnToParent": true
+  },
+  "runtimeRefinements": [],
+  "discussionDirections": [
+    {
+      "id": "d1-载体与宿主",
+      "topic": "网页独立前端 vs 嵌入宿主",
+      "level": "foundational",
+      "roundLimit": 4,
+      "roundsUsed": 1,
+      "status": "closed",
+      "decisionIds": [
+        "C1",
+        "P10"
+      ]
+    },
+    {
+      "id": "d2-学制与选科",
+      "topic": "3+1+2 与赋分博弈",
+      "level": "core",
+      "roundLimit": 3,
+      "roundsUsed": 1,
+      "status": "closed",
+      "decisionIds": [
+        "C2",
+        "P3"
+      ]
+    },
+    {
+      "id": "d3-学科关联性",
+      "topic": "迁移/唤醒/干扰三通道与知识图谱",
+      "level": "core",
+      "roundLimit": 3,
+      "roundsUsed": 1,
+      "status": "closed",
+      "decisionIds": [
+        "C3",
+        "P2"
+      ]
+    },
+    {
+      "id": "d4-时间与精力",
+      "topic": "每周 16 决策点、全天重点、18 周学期",
+      "level": "core",
+      "roundLimit": 3,
+      "roundsUsed": 3,
+      "status": "closed",
+      "decisionIds": [
+        "C4",
+        "C8",
+        "C9",
+        "C15",
+        "P1",
+        "P6"
+      ]
+    },
+    {
+      "id": "d5-五育评价",
+      "topic": "证据链、记录完整度与综评档案",
+      "level": "standard",
+      "roundLimit": 2,
+      "roundsUsed": 1,
+      "status": "closed",
+      "decisionIds": [
+        "C5",
+        "P5"
+      ]
+    },
+    {
+      "id": "d6-剧情与AI",
+      "topic": "事件调度、FactSheet、叙事三道闸、本地 Key",
+      "level": "core",
+      "roundLimit": 3,
+      "roundsUsed": 3,
+      "status": "closed",
+      "decisionIds": [
+        "C6",
+        "C7",
+        "C12",
+        "C14",
+        "P7"
+      ]
+    },
+    {
+      "id": "d7-首版范围",
+      "topic": "高一下 18 周，以选科确认为主轴，恋爱线不进首版",
+      "level": "core",
+      "roundLimit": 3,
+      "roundsUsed": 2,
+      "status": "closed",
+      "decisionIds": [
+        "C10",
+        "C11",
+        "C13",
+        "P8"
+      ]
+    },
+    {
+      "id": "d8-待定项",
+      "topic": "账号/美术/省份",
+      "level": "standard",
+      "roundLimit": 2,
+      "roundsUsed": 1,
+      "status": "active",
+      "decisionIds": [
+        "U1",
+        "U2",
+        "U3",
+        "U4"
+      ]
+    }
+  ],
+  "frontendDecision": {
+    "recommended": "independent-ui",
+    "fit": "suitable",
+    "reason": "核心循环依赖周计划表格、知识星图与成绩单三类高密度可视化，纯文字或对话外壳无法承载",
+    "fallback": "若需进入小程序或嵌入社区宿主，降级为文本+单列卡片的 lightweight-display 版本",
+    "reopenWhen": "确定要做账号/云存档/排行榜，或需要嵌入现有宿主页面",
+    "driverOverride": false,
+    "prototypeGateRequired": false,
+    "realHostGateRequired": false
+  },
+  "acceptance": {
+    "automated": "passed",
+    "staticPreview": "passed",
+    "realHost": "pending",
+    "driver": {
+      "status": "pending",
+      "source": "driver"
+    }
+  }
+}

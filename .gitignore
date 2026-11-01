@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.tmp/
+server/config.json
+*.local
+*.rar
+*.log
+_meta/
+_frames*/
+_inserted.txt
+_edges.json
+.idea/
+.DS_Store
+senior-high-school-simulator/

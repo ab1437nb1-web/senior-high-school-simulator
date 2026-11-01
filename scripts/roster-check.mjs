@@ -1,0 +1,14 @@
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { buildEventPrompt } from "../.tmp/engine.mjs";
+import { PRESETS, NPCS } from "../.tmp/engine.mjs";
+console.log("roster:", NPCS.length, "classmates:", NPCS.filter((n) => n.kind === "classmate").length, "teachers:", NPCS.filter((n) => n.kind === "teacher").length, "parents:", NPCS.filter((n) => n.kind === "parent").length);
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 9, "normal", true, "f");
+const p = PRESETS.find((x) => x.id === "six");
+const t0 = Date.now();
+for (let i = 0; i < 18; i++) s = settleWeek(s, p.build(s.choice)).state;
+console.log("18 weeks with", s.npcs.length, "npc in", Date.now() - t0, "ms");
+const cls = s.npcs.filter((n) => n.kind === "classmate");
+console.log("classmate exams:", cls.map((n) => n.id + "=" + (n.game.exams.length ? n.game.exams[n.game.exams.length - 1].total : "-")).join(" "));
+console.log("adults:", s.npcs.filter((n) => n.kind !== "classmate").map((n) => n.id + " mood=" + Math.round(n.mood)).join(" "));
+const prompt = buildEventPrompt({ id: "x", kind: "npc", title: "同桌的练习册", text: "…", social: true, choices: [] }, { name: "陈屿", history: cls[0].history, recent: [] });
+console.log("prompt has history section:", prompt.includes("互动历史"));

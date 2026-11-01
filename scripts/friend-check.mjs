@@ -1,0 +1,10 @@
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { PRESETS, NPC_MAP } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "social");
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 5, "normal", true, "m", "x", { col: 2, row: 2 });
+s.socialTarget = "linxiaoman";
+for (let i = 0; i < 10; i++) s = settleWeek(s, p.build(s.choice)).state;
+const g = s.npcs.find((n) => n.id === "linxiaoman");
+console.log("林小满 关系", g.relation.toFixed(0), "朋友", !!g.friend);
+const friends = s.npcs.filter((n) => n.friend).map((n) => NPC_MAP[n.id].name);
+console.log("朋友名单:", friends.join(" ") || "none");

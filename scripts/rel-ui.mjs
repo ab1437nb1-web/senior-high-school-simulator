@@ -1,0 +1,21 @@
+import { JSDOM } from "jsdom";
+import fs from "node:fs";
+import path from "node:path";
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 3, "normal", true, "f", "x", { col: 2, row: 2 });
+const p = PRESETS.find((x) => x.id === "social");
+s.socialTarget = "linxiaoman";
+for (let i = 0; i < 3; i++) s = settleWeek(s, p.build(s.choice)).state;
+const dom = new JSDOM("<!doctype html><html><body><div id=\"root\"></div></body></html>", { url: "http://127.0.0.1:5180/", pretendToBeVisual: true });
+const w = dom.window;
+for (const k of ["window","document","HTMLElement","Element","Node","Event","MouseEvent","getComputedStyle","requestAnimationFrame","cancelAnimationFrame","matchMedia","localStorage","MutationObserver","URL","Blob","FormData"]) { if (w[k] !== undefined) { try { Object.defineProperty(global, k, { value: w[k], configurable: true, writable: true }); } catch {} } }
+Object.defineProperty(global, "navigator", { value: w.navigator, configurable: true });
+w.localStorage.setItem("hs-life-sim.save.v2", JSON.stringify({ game: s, plan: p.build(s.choice) }));
+const assets = fs.readdirSync("dist/assets").filter((f) => f.endsWith(".js"));
+await import("file://" + path.resolve("dist/assets", assets[0]).split("\\").join("/"));
+await new Promise((r) => setTimeout(r, 400));
+const txt = (document.getElementById("root").textContent || "").replace(/\s+/g, " ");
+const click = async (label) => { const b = Array.from(document.querySelectorAll("button")).find((x) => (x.textContent || "").includes(label)); if (!b) return false; b.dispatchEvent(new w.MouseEvent("click", { bubbles: true })); await new Promise((r) => setTimeout(r, 150)); return true; };
+const tab = Array.from(document.querySelectorAll("button.tab")).find((b) => b.textContent.includes("档案")); tab.dispatchEvent(new w.MouseEvent("click", { bubbles: true })); await new Promise((r) => setTimeout(r, 250));
+console.log("relation list:", (txt.match(/关系.{0,80}/) || ["(none)"])[0]);

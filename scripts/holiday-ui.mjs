@@ -1,0 +1,21 @@
+import { JSDOM } from "jsdom";
+import fs from "node:fs";
+import path from "node:path";
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 3, "normal");
+const p = PRESETS.find((x) => x.id === "six");
+for (let i = 0; i < 20 && s.stage !== 2; i++) s = settleWeek(s, p.build(s.choice)).state;
+const dom = new JSDOM("<!doctype html><html><head></head><body><div id=\"root\"></div></body></html>", { url: "http://127.0.0.1:5180/", pretendToBeVisual: true });
+const w = dom.window;
+for (const k of ["window","document","HTMLElement","Element","Node","Event","MouseEvent","getComputedStyle","requestAnimationFrame","cancelAnimationFrame","matchMedia","localStorage","MutationObserver","URL","Blob","FormData"]) { if (w[k] !== undefined) { try { Object.defineProperty(global, k, { value: w[k], configurable: true, writable: true }); } catch {} } }
+Object.defineProperty(global, "navigator", { value: w.navigator, configurable: true });
+w.localStorage.setItem("hs-life-sim.save.v2", JSON.stringify({ game: s, plan: p.build(s.choice) }));
+const assets = fs.readdirSync("dist/assets").filter((f) => f.endsWith(".js"));
+await import("file://" + path.resolve("dist/assets", assets[0]).split("\\").join("/"));
+await new Promise((r) => setTimeout(r, 400));
+const t = (document.getElementById("root").textContent || "").replace(/\s+/g, " ");
+console.log("header:", (t.match(/^(.{0,24})/) || [])[1]);
+console.log("hint:", (t.match(/假期：.{0,40}/) || ["(none)"])[0]);
+const opts = Array.from(document.querySelectorAll("select option")).map((o) => o.textContent).filter((x) => x.includes("预习"));
+console.log("preview options:", opts.length ? opts.slice(0, 3).join(" | ") : "(none)");

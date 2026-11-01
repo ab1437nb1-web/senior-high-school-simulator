@@ -1,0 +1,6 @@
+{
+  "provider": "deepseek",
+  "baseUrl": "https://api.deepseek.com",
+  "model": "deepseek-chat",
+  "apiKey": "sk-在这里填，或者改用环境变量 DEEPSEEK_API_KEY"
+}

@@ -256,7 +256,7 @@ export const EVENTS: StoryEvent[] = [
     stages: [1, 3, 5, 7, 9],
     perStage: true,
     cooldown: 10,
-    weeks: [1, 3],
+    weeks: [10, 16],
     choices: [
       {
         text: "去说一声，换个位置",

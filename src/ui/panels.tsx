@@ -203,12 +203,14 @@ export function EventSheet(props: {
 export function SeatMap(props: {
   playerSeat?: { col: number; row: number };
   npcs: any[];
+  seats?: Record<string, { col: number; row: number }>;
   onPick?: (s: { col: number; row: number }) => void;
 }) {
   const occupied = new Map<string, string>();
   for (const n of props.npcs) {
     const def = NPC_MAP[n.id] || n;
-    if (def && def.seatPos) occupied.set(def.seatPos.col + "-" + def.seatPos.row, def.name);
+    const pos = (props.seats && props.seats[n.id]) || (def && def.seatPos);
+    if (pos) occupied.set(pos.col + "-" + pos.row, props.seats && props.seats[n.id] ? def.name : def.name);
   }
   const rows = [1, 2, 3, 4, 5, 6];
   const cols = [1, 2, 3, 4, 5, 6];
@@ -332,7 +334,7 @@ export function NpcPanel(props: { state: GameState; onConfess?: (id: string) => 
       ) : null}
 
       <h2 className="section">教室</h2>
-      <SeatMap playerSeat={state.playerSeat} npcs={state.npcs as any[]} />
+      <SeatMap playerSeat={state.playerSeat} npcs={state.npcs as any[]} seats={state.seats} />
 
       {groups.map((grp) => {
         const list = state.npcs.filter((n) => n.kind === grp.kind);
@@ -351,7 +353,7 @@ export function NpcPanel(props: { state: GameState; onConfess?: (id: string) => 
                 <div className="card" key={n.id}>
                   <div className="row" style={{ justifyContent: "space-between" }}>
                     <strong>
-                      {def.name} <span className="small muted">{relativeSeat(state.playerSeat, def)}</span>
+                      {def.name} <span className="small muted">{relativeSeat(state.playerSeat, def, state.seats && state.seats[n.id])}</span>
                       {isP ? <span className="pill hot" style={{ marginLeft: 6 }}>主要</span> : null}
                       {isS ? <span className="pill" style={{ marginLeft: 6 }}>次要</span> : null}
                       {adj.has(n.id) ? <span className="pill cool" style={{ marginLeft: 6 }}>够得着</span> : null}

@@ -49,9 +49,10 @@ export const NPCS: NpcDef[] = [
 
 const pairOf = (c: number) => Math.ceil(c / 2);
 
-export function relativeSeat(playerSeat: { col: number; row: number } | undefined, def: NpcDef) {
-  if (!playerSeat || !def.seatPos) return def.seat;
-  const { col, row } = def.seatPos;
+export function relativeSeat(playerSeat: { col: number; row: number } | undefined, def: NpcDef, pos?: { col: number; row: number }) {
+  const seatPos = pos || def.seatPos;
+  if (!playerSeat || !seatPos) return def.seat;
+  const { col, row } = seatPos;
   const dc = col - playerSeat.col;
   const dr = row - playerSeat.row;
   if (dr === 0 && dc === 0) return "你自己";

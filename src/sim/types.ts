@@ -161,6 +161,7 @@ export type GameState = {
   playerName?: string;
   choiceLocked?: boolean;
   playerSeat?: { col: number; row: number };
+  seats?: Record<string, { col: number; row: number }>;
   socialTarget?: string;
   socialTarget2?: string;
   romance?: { npcId: string; since: number; chance: number };

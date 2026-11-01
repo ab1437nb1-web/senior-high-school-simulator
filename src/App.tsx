@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Setup from "./ui/Setup";
 import WeekBoard from "./ui/WeekBoard";
 import { Archive, ChoiceWizard, EventSheet, ExamView, NpcPanel, Report, SeatMap, Settings, StarMap } from "./ui/panels";
-import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, relationTrend, settleWeek, stageDef, tryConfess } from "./sim/engine";
+import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, settleWeek, stageDef, tryConfess } from "./sim/engine";
 import { PRESETS } from "./sim/data";
 import { defaultAi, loadAi, proxyHealth, renderEventScene, rewriteReport, saveAi } from "./ai";
 import { buildEventPrompt } from "./sim/events";
@@ -143,6 +143,10 @@ export default function App() {
   const nextEvent = () => {
     if (!pending) return;
     if (pending.chosen && pending.chosen.effects && pending.chosen.effects.resit && !resitOpen) {
+      const base = working || (game as GameState);
+      const g = reshuffleBeforePlayer(JSON.parse(JSON.stringify(base)), mulberry32(base.week * 13 + 7));
+      setGame(g);
+      setWorking(g);
       setResitOpen(true);
       return;
     }
@@ -375,8 +379,12 @@ export default function App() {
             <SeatMap
               npcs={game.npcs as any[]}
               playerSeat={game.playerSeat}
+              seats={game.seats}
               onPick={(s) => {
-                setGame({ ...game, playerSeat: s });
+                const base = { ...(working || game), playerSeat: s } as GameState;
+                const g = reshuffleAfterPlayer(base, mulberry32(base.week * 29 + 11));
+                setGame(g);
+                setWorking(g);
                 setResitOpen(false);
                 setPending(pending ? { ...pending, chosen: { ...pending.chosen, effects: { ...pending.chosen.effects, resit: false } } } : null);
               }}

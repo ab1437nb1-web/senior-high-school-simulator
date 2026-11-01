@@ -107,6 +107,7 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
       : [],
     playerName: name,
     playerSeat: seat,
+    seats: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, c.seatPos || { col: 1, row: 1 }])) : {},
     choiceLocked: false,
     socialTarget: withNpcs ? CLASSMATES[0].id : undefined,
     socialTarget2: withNpcs && CLASSMATES[1] ? CLASSMATES[1].id : undefined,
@@ -132,13 +133,104 @@ export function lockChoice(prev: GameState, choice: Choice): GameState {
   return s;
 }
 
+export function seatOf(state: GameState, id: string) {
+  return (state.seats && state.seats[id]) || (NPC_MAP[id] && NPC_MAP[id].seatPos) || null;
+}
+
+const SEAT_COLS = [1, 2, 3, 4, 5, 6];
+const SEAT_ROWS = [1, 2, 3, 4, 5, 6];
+
+function freeSeats(state: GameState) {
+  const taken = new Set<string>();
+  for (const id of Object.keys(state.seats || {})) {
+    const p = state.seats![id];
+    taken.add(p.col + "-" + p.row);
+  }
+  if (state.playerSeat) taken.add(state.playerSeat.col + "-" + state.playerSeat.row);
+  const out: { col: number; row: number }[] = [];
+  for (const r of SEAT_ROWS) for (const c of SEAT_COLS) if (!taken.has(c + "-" + r)) out.push({ col: c, row: r });
+  return out;
+}
+
+function seatScore(state: GameState, id: string, pos: { col: number; row: number }) {
+  const def = NPC_MAP[id];
+  if (!def) return 0;
+  let s = 0;
+  const couple = (state.npcCouples || []).find(([a, b]) => a === id || b === id);
+  const partnerId = couple ? (couple[0] === id ? couple[1] : couple[0]) : null;
+  if (partnerId) {
+    const pp = seatOf(state, partnerId);
+    if (pp) s += 8 - (Math.abs(pp.col - pos.col) + Math.abs(pp.row - pos.row)) * 1.6;
+  }
+  for (const [k, v] of Object.entries(state.npcPairs || {})) {
+    if (v < 55) continue;
+    const [a, b] = k.split("|");
+    if (a !== id && b !== id) continue;
+    const other = a === id ? b : a;
+    const op = seatOf(state, other);
+    if (!op) continue;
+    const d = Math.abs(op.col - pos.col) + Math.abs(op.row - pos.row);
+    if (d <= 1) s += v / 40;
+  }
+  s += def.traits.diligence * (7 - pos.row) * 0.45;
+  s += (1 - def.traits.diligence) * pos.row * 0.4;
+  s += def.traits.anxiety * (pos.row <= 2 ? 0.9 : 0);
+  s += def.traits.social * (pos.row >= 2 && pos.row <= 4 ? 0.4 : 0);
+  return s;
+}
+
+export function placeOneSeat(state: GameState, id: string, rng: () => number) {
+  const free = freeSeats(state);
+  if (!free.length) return;
+  let best = free[0];
+  let bestScore = -Infinity;
+  for (const pos of free) {
+    const sc = seatScore(state, id, pos) + rng() * 0.9;
+    if (sc > bestScore) { bestScore = sc; best = pos; }
+  }
+  state.seats = state.seats || {};
+  state.seats[id] = best;
+}
+
+export function seatOrder(state: GameState) {
+  const rank = new Map((state.classRanking || []).map((r) => [r.id, r.rank]));
+  const ids = state.npcs.filter((n) => n.kind === "classmate").map((n) => n.id);
+  ids.sort((a, b) => (rank.get(a) || 99) - (rank.get(b) || 99));
+  return ids;
+}
+
+function playerRank(state: GameState) {
+  const row = (state.classRanking || []).find((r) => r.id === "you");
+  return row ? row.rank : 99;
+}
+
+export function reshuffleBeforePlayer(state: GameState, rng: () => number) {
+  state.seats = {};
+  const my = playerRank(state);
+  const rank = new Map((state.classRanking || []).map((r) => [r.id, r.rank]));
+  for (const id of seatOrder(state)) {
+    if ((rank.get(id) || 99) < my) placeOneSeat(state, id, rng);
+  }
+  return state;
+}
+
+export function reshuffleAfterPlayer(state: GameState, rng: () => number) {
+  const my = playerRank(state);
+  const rank = new Map((state.classRanking || []).map((r) => [r.id, r.rank]));
+  for (const id of seatOrder(state)) {
+    if (state.seats && state.seats[id]) continue;
+    if ((rank.get(id) || 99) >= my) placeOneSeat(state, id, rng);
+  }
+  return state;
+}
+
 export function adjacentIds(state: GameState): string[] {
   const seat = state.playerSeat;
   if (!seat) return [];
   const out: string[] = [];
   for (const n of state.npcs) {
     const def = NPC_MAP[n.id];
-    const pos = def && def.seatPos;
+    const pos = seatOf(state, n.id);
     if (!pos) continue;
     const dc = Math.abs(pos.col - seat.col);
     const dr = Math.abs(pos.row - seat.row);

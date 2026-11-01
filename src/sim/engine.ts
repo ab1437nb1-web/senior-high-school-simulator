@@ -913,17 +913,14 @@ export function gradeOf(raw: number, mu: number, sigma: number) {
   return { name, value: clamp(Math.round(x), 30, 100), p };
 }
 
-export function runExam(state: GameState, kind: string, rng: () => number) {
-  const scores = [] as { subject: SubjectId; raw: number; final: number; graded?: number; grade?: string }[];
-  const weakAll: { key: string; label: string; rate: number }[] = [];
-  const subjects = testedSubjects(state);
-  const diffs = [-1.2, 0, 1.2];
-  const acad = academicOf(state);
-  let form = 1;
+type PaperItem = { subject: SubjectId; key: string; b: number };
 
-  for (const s of subjects) {
+function buildPaper(state: GameState, kind: string, seed: number): PaperItem[] {
+  const rng = mulberry32(seed);
+  const acad = academicOf(state);
+  const items: PaperItem[] = [];
+  for (const s of testedSubjects(state)) {
     const meta = SUBJECT_MAP[s];
-    // 只考“已经教过一阵”的单元（留两周消化）；旧学期的单元不硬切，按时间逐渐淡化
     const entered = enteredUnits(state, s);
     let pool = entered.filter((i) => {
       const st = meta.units[i].stage;
@@ -939,9 +936,6 @@ export function runExam(state: GameState, kind: string, rng: () => number) {
       return Math.max(0.15, 0.6 - 0.02 * weeksSince);
     });
     const totalW = weights.reduce((x, y) => x + y, 0);
-    const unitHit: Record<string, { hit: number; total: number }> = {};
-    let hit = 0;
-    let total = 0;
     for (let k = 0; k < 12; k++) {
       let r = rng() * totalW;
       let pick = 0;
@@ -949,32 +943,51 @@ export function runExam(state: GameState, kind: string, rng: () => number) {
         r -= weights[i];
         if (r <= 0) { pick = i; break; }
       }
-      const key = unitKey(s, pool[pick]);
-      const theta = (state.units[key].mastery - 35) / 20;
-      const b = diffs[k % 3];
-      total++;
-      const pCorrect = 1 / (1 + Math.exp(-1.7 * (theta - b)));
-      const ok = rng() < pCorrect;
-      if (ok) hit++;
-      const rec = unitHit[key] || { hit: 0, total: 0 };
-      rec.total++;
-      if (ok) rec.hit++;
-      unitHit[key] = rec;
+      items.push({ subject: s, key: unitKey(s, pool[pick]), b: [-1.2, 0, 1.2][k % 3] });
     }
-    for (const key of Object.keys(unitHit)) {
-      weakAll.push({ key, label: unitLabel(key), rate: Math.round((unitHit[key].hit / unitHit[key].total) * 100) });
-    }
+  }
+  return items;
+}
+
+function paperSeed(state: GameState, kind: string) {
+  const k = kind === "gaokao" ? 97 : kind === "mock1" ? 31 : kind === "mock2" ? 37 : kind === "mock3" ? 41 : kind === "mid" ? 11 : 13;
+  return state.week * 1009 + k;
+}
+
+function evalPaper(cand: GameState, items: PaperItem[], seed: number) {
+  const rng = mulberry32(seed);
+  const acad = academicOf(cand);
+  const form = clamp(
+    1 + (cand.stats.energy - 55) * 0.0008 + cand.stats.mood * 0.0006 - Math.max(0, cand.stats.stress - 55) * 0.0008,
+    0.95,
+    1.05
+  );
+  const bySub = new Map<string, { hit: number; total: number; unitHit: Record<string, { hit: number; total: number }> }>();
+  for (const it of items) {
+    const rec = bySub.get(it.subject) || { hit: 0, total: 0, unitHit: {} as Record<string, { hit: number; total: number }> };
+    const m = cand.units[it.key] ? cand.units[it.key].mastery : 40;
+    const theta = (m - 35) / 20;
+    const pCorrect = 1 / (1 + Math.exp(-1.7 * (theta - it.b)));
+    const ok = rng() < pCorrect;
+    rec.total++;
+    if (ok) rec.hit++;
+    const u = rec.unitHit[it.key] || { hit: 0, total: 0 };
+    u.total++;
+    if (ok) u.hit++;
+    rec.unitHit[it.key] = u;
+    bySub.set(it.subject, rec);
+  }
+  const scores: any[] = [];
+  for (const s of testedSubjects(cand)) {
+    const meta = SUBJECT_MAP[s];
+    const rec = bySub.get(s);
+    if (!rec) continue;
     const noise = (rng() - 0.5) * 6;
-    form = clamp(
-      1 + (state.stats.energy - 55) * 0.0008 + state.stats.mood * 0.0006 - Math.max(0, state.stats.stress - 55) * 0.0008,
-      0.95,
-      1.05
-    );
-    let raw = clamp(((hit / total) * 100 + 5) * form + noise, 0, 100);
+    let raw = clamp(((rec.hit / rec.total) * 100 + 5) * form + noise, 0, 100);
     if (s === "chinese" || s === "english") {
-      const idxs = unitsUpTo(s, state.stage);
+      const idxs = unitsUpTo(s, cand.stage);
       const lastIdx = idxs.length ? idxs[idxs.length - 1] : 0;
-      raw = clamp(raw + (state.units[unitKey(s, lastIdx)].mastery - 40) * 0.12, 0, 100);
+      raw = clamp(raw + (cand.units[unitKey(s, lastIdx)].mastery - 40) * 0.12, 0, 100);
     }
     const final = meta.full === 150 ? Math.round(raw * 1.5) : Math.round(raw);
     const row: any = { subject: s, raw: Math.round(raw), final };
@@ -984,27 +997,78 @@ export function runExam(state: GameState, kind: string, rng: () => number) {
       row.grade = g.name;
       row.final = g.value;
     }
+    row.unitHit = rec.unitHit;
     scores.push(row);
   }
-  const locked = Boolean(state.choiceLocked);
+  const locked = Boolean(cand.choiceLocked);
   const total = scores.reduce((acc, r) => {
     if (locked) {
       if (r.subject === "chinese" || r.subject === "math" || r.subject === "english") return acc + r.final;
-      if (r.subject === state.choice.first || state.choice.second.includes(r.subject)) return acc + r.final;
+      if (r.subject === cand.choice.first || cand.choice.second.includes(r.subject)) return acc + r.final;
       return acc;
     }
     return acc + r.final;
   }, 0);
-  const max = locked ? 750 : 1050;
-  const p = clamp(phi((total - 480) / 75), 0.01, 0.99);
-  const weak = weakAll.sort((a, b) => a.rate - b.rate).slice(0, 3);
+  return { scores, total, form };
+}
+
+export function runExam(state: GameState, kind: string, rng: () => number) {
+  const items = buildPaper(state, kind, paperSeed(state, kind));
+  const mine = evalPaper(state, items, paperSeed(state, kind) + 7);
+  const acad = academicOf(state);
+
+  // 同一次考试、同一张卷子：玩家、12 位同学、35 位匿名同班
+  const ranking: { id: string; name: string; total: number; rank: number }[] = [
+    { id: "you", name: state.playerName || "你", total: mine.total, rank: 0 },
+  ];
+  for (const npc of state.npcs) {
+    if (npc.kind !== "classmate" || !npc.game) continue;
+    const r = evalPaper(npc.game, items, paperSeed(state, kind) + 101 + npc.id.length * 17 + npc.id.charCodeAt(0));
+    const def = NPC_MAP[npc.id];
+    ranking.push({ id: npc.id, name: def ? def.name : npc.id, total: r.total, rank: 0 });
+    npc.lastExam = { kind, total: r.total, rank: 0, week: state.week };
+  }
+  // 其余同班：围绕同学平均水平铺开，让班级规模像 48 人
+  const known = ranking.map((r) => r.total);
+  const mean = known.reduce((a, b) => a + b, 0) / known.length;
+  const spread = 42 + mean * 0.12;
+  for (let i = 0; i < 35; i++) {
+    const z = Math.sqrt(-2 * Math.log(Math.max(1e-6, rng()))) * Math.cos(2 * Math.PI * rng());
+    ranking.push({ id: "anon" + i, name: "", total: Math.round(clamp(mean + z * spread, 120, 750)), rank: 0 });
+  }
+  ranking.sort((a, b) => b.total - a.total);
+  ranking.forEach((r, i) => { r.rank = i + 1; });
+  const me = ranking.find((r) => r.id === "you")!;
+  for (const npc of state.npcs) {
+    if (npc.lastExam && npc.lastExam.week === state.week) {
+      const row = ranking.find((r) => r.id === npc.id);
+      if (row) npc.lastExam.rank = row.rank;
+    }
+  }
+  state.classRanking = ranking.map((r) => ({ id: r.id, name: r.name, total: r.total, rank: r.rank }));
+
+  const weakAll: { key: string; label: string; rate: number }[] = [];
+  for (const row of mine.scores) {
+    for (const key of Object.keys(row.unitHit || {})) {
+      const rec = row.unitHit[key];
+      weakAll.push({ key, label: unitLabel(key), rate: Math.round((rec.hit / rec.total) * 100) });
+    }
+  }
+  const p = clamp(phi((me.total - 480) / 75), 0.01, 0.99);
+  const scores = mine.scores.map((r: any) => {
+    const { unitHit, ...rest } = r;
+    return rest;
+  });
   return {
-    week: state.week, kind, scores, total,
+    week: state.week,
+    kind,
+    scores,
+    total: mine.total,
     percentile: Math.round(p * 100),
-    classRank: clamp(Math.ceil((1 - p) * 48), 1, 48),
-    weak,
-    max,
-    factor: Math.round(form * 1000) / 1000,
+    classRank: me.rank,
+    weak: weakAll.sort((a, b) => a.rate - b.rate).slice(0, 3),
+    max: state.choiceLocked ? 750 : 1050,
+    factor: Math.round(mine.form * 1000) / 1000,
   };
 }
 

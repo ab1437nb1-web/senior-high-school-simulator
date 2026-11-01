@@ -1,0 +1,11 @@
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { PRESETS, NPC_MAP } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "six");
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 55, "normal", true, "m", "x", { col: 2, row: 2 });
+for (let i = 0; i < 17; i++) s = settleWeek(s, p.build(s.choice)).state;
+const last = s.exams[s.exams.length - 1];
+console.log("玩家:", last.kind, "总分", last.total, "班级第", last.classRank, "/48");
+const top = (s.classRanking || []).slice(0, 6).map((r, i) => (i + 1) + ". " + (r.name || "匿名") + " " + r.total).join("  ");
+console.log("前六:", top);
+const npcs = s.npcs.filter((n) => n.lastExam).map((n) => NPC_MAP[n.id].name + " " + n.lastExam.total + " 第" + n.lastExam.rank);
+console.log("同学:", npcs.join(" | "));

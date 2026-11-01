@@ -23,6 +23,7 @@ export type NpcState = {
   friendSince?: number;
   lowFriendWeeks?: number;
   relTrace?: { w: number; v: number }[];
+  lastExam?: { kind: string; total: number; rank: number; week: number };
 };
 
 export type Evaluation = {
@@ -167,5 +168,6 @@ export type GameState = {
   npcPairs?: Record<string, number>;
   npcCouples?: [string, string][];
   npcNews?: { week: number; text: string }[];
+  classRanking?: { id: string; name: string; total: number; rank: number }[];
   gender?: "m" | "f";
 };

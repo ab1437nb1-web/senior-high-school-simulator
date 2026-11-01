@@ -751,6 +751,31 @@ export function ExamView(props: { state: GameState }) {
           <div className="small muted" style={{ marginTop: 8 }}>
             最弱的三处：{ex.weak.map((w) => w.label + " " + w.rate + "%").join(" · ")}
           </div>
+          {state.classRanking && state.exams[state.exams.length - 1].week === ex.week ? (
+            <details style={{ marginTop: 8 }}>
+              <summary className="small muted" style={{ cursor: "pointer" }}>班级排名（48 人）</summary>
+              <div style={{ marginTop: 6 }}>
+                {state.classRanking.slice(0, 10).map((r) => (
+                  <div key={r.id} className="row small" style={{ justifyContent: "space-between", marginTop: 2 }}>
+                    <span style={{ color: r.id === "you" ? "#1c1b18" : "#6f685b", fontWeight: r.id === "you" ? 600 : 400 }}>
+                      {r.rank}. {r.id === "you" ? "你" : r.name || "同学"}
+                    </span>
+                    <span className="mono">{r.total}</span>
+                  </div>
+                ))}
+                {(() => {
+                  const me = state.classRanking!.find((r) => r.id === "you");
+                  if (!me || me.rank <= 10) return null;
+                  return (
+                    <div className="row small" style={{ justifyContent: "space-between", marginTop: 6, borderTop: "1px solid #e6dfd0", paddingTop: 4 }}>
+                      <span style={{ fontWeight: 600 }}>{me.rank}. 你</span>
+                      <span className="mono">{me.total}</span>
+                    </div>
+                  );
+                })()}
+              </div>
+            </details>
+          ) : null}
         </div>
       ))}
     </div>

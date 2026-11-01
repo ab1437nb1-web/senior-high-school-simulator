@@ -384,9 +384,10 @@ export function NpcPanel(props: { state: GameState; onConfess?: (id: string) => 
                   {state.romance && state.romance.npcId === n.id ? (
                     <div className="small" style={{ color: "#a8452c", marginTop: 6 }}>恋爱中 · 第 {state.romance.since} 周起</div>
                   ) : null}
-                  {!state.romance && n.relation >= CRUSH_MIN && def.kind === "classmate" ? (
+                  {!state.romance && n.relation > 60 && def.kind === "classmate" ? (
                     <div className="small" style={{ color: "#8a5a2c", marginTop: 6 }}>
-                      暧昧中 · 表白把握 +{Math.round((((state.romanceBonus || []).filter((b) => state.week - b.week < 4).reduce((x, b) => x + b.amount, 0)) * 12))}%
+                      跨越朋友 {Math.round((state.beyond && state.beyond[n.id]) || 0)}/100
+                      {((state.beyond && state.beyond[n.id]) || 0) < 100 ? " · 关系暂时到 75 为止" : " · 可以表白了"}
                     </div>
                   ) : null}
                   {state.romance && state.romance.npcId === n.id ? null : canConfess(state, n.id) && props.onConfess ? (

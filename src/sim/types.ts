@@ -173,5 +173,6 @@ export type GameState = {
   npcNews?: { week: number; text: string }[];
   classRanking?: { id: string; name: string; total: number; rank: number }[];
   chains?: Record<string, number>;
+  beyond?: Record<string, number>;
   gender?: "m" | "f";
 };

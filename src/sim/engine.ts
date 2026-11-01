@@ -111,6 +111,7 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
     seats: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, c.seatPos || { col: 1, row: 1 }])) : {},
     choiceLocked: false,
     chains: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, 0])) : {},
+    beyond: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, 0])) : {},
     socialTarget: withNpcs ? CLASSMATES[0].id : undefined,
     socialTarget2: withNpcs && CLASSMATES[1] ? CLASSMATES[1].id : undefined,
     gender,
@@ -488,7 +489,7 @@ function tickSocial(state: GameState, rng: () => number) {
     const p = 0.04 + d.traits.social * 0.2;
     if (rng() < p) {
       const gain = (0.15 + d.traits.social * 0.45) * (1 - npc.relation / 120);
-      npc.relation = clamp(npc.relation + gain, 0, 100);
+      npc.relation = Math.min(maxRelationFor(state, npc.id), npc.relation + gain);
       if (rng() < 0.1) {
         const fn = PLAYER_NEWS[Math.floor(rng() * PLAYER_NEWS.length)];
         state.npcNews!.push({ week: state.week, text: fn(d.name) });
@@ -684,6 +685,7 @@ export function canConfess(state: GameState, npcId: string) {
   if (def.kind !== "classmate") return false;
   if ((state.npcCouples || []).some(([a, b]) => a === npcId || b === npcId)) return false;
   if (state.gender && def.gender !== "x" && def.gender === state.gender) return false;
+  if (beyondOf(state, npcId) < 100) return false;
   return npc.relation >= CONFESS_MIN;
 }
 
@@ -817,8 +819,14 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
       const p1 = state.npcs.find((n) => n.id === state.socialTarget);
       const p2 = state.npcs.find((n) => n.id === state.socialTarget2);
       const dim = (r: number) => Math.max(0.08, 1 - r / 120) * (r >= 75 ? 0.45 : 1);
-      if (p1) p1.relation = clamp(p1.relation + (adj.indexOf(p1.id) >= 0 ? 3 : 1.5) * dim(p1.relation), 0, 100);
-      if (p2 && p2 !== p1) p2.relation = clamp(p2.relation + (adj.indexOf(p2.id) >= 0 ? 1.5 : 0.8) * dim(p2.relation), 0, 100);
+      if (p1) {
+        const gain1 = (adj.indexOf(p1.id) >= 0 ? 3 : 1.5) * dim(p1.relation);
+        p1.relation = Math.min(maxRelationFor(state, p1.id), p1.relation + gain1);
+      }
+      if (p2 && p2 !== p1) {
+        const g2 = (adj.indexOf(p2.id) >= 0 ? 1.5 : 0.8) * dim(p2.relation);
+        p2.relation = Math.min(maxRelationFor(state, p2.id), p2.relation + g2);
+      }
     }
     // 只有艺术 / 劳动留下"记录"；运动、休息只改状态，由状态间接影响综评
     if (act.topic === "art" || act.topic === "labor") {
@@ -1312,7 +1320,22 @@ export function templateNarrative(report: WeekReport, state: GameState): Narrati
   return lines;
 }
 
-const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 35, 心动: 55, 暧昧: 70, 确立: 75, 深入: 80, 收束: 85 };
+// 「跨越朋友」：关系 >60 才启动，未满 100 前关系最高只能到 75
+const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 15, 心动: 30, 暧昧: 50, 确立: 80, 深入: 0, 收束: 0 };
+const CHAIN_GAIN: Record<string, number> = { 初识: 8, 熟悉: 10, 心动: 12, 暧昧: 15, 确立: 20, 深入: 10, 收束: 15 };
+
+export function beyondOf(state: GameState, id: string) {
+  return (state.beyond && state.beyond[id]) || 0;
+}
+
+export function maxRelationFor(state: GameState, id: string) {
+  return beyondOf(state, id) >= 100 ? 100 : 75;
+}
+
+export function bumpBeyond(state: GameState, id: string, amount: number) {
+  state.beyond = state.beyond || {};
+  state.beyond[id] = Math.max(0, Math.min(100, (state.beyond[id] || 0) + amount));
+}
 
 export function nextChainEvent(state: GameState) {
   const id = state.socialTarget;
@@ -1322,7 +1345,9 @@ export function nextChainEvent(state: GameState) {
   if (!ev) return null;
   const npc = state.npcs.find((n) => n.id === id);
   if (!npc) return null;
-  if (npc.relation < (CHAIN_MIN[ev.stage] || 0)) return null;
+  if (npc.relation <= 60) return null;
+  if (beyondOf(state, id) < (CHAIN_MIN[ev.stage] || 0)) return null;
+  if (state.romance && state.romance.npcId !== id) return null;
   const last = state.flags["chain:" + id];
   if (typeof last === "number" && state.week - last < 3) return null;
   return ev;
@@ -1414,6 +1439,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
         text: chain.text,
         chainNpc: chain.npc,
         chainIdx: chain.idx,
+        chainStage: chain.stage,
         choices: (chain.choices || []).map((c: any, i: number) => ({
           text: c.text,
           result: c.result,
@@ -1433,6 +1459,7 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     s.chains = s.chains || {};
     s.chains[ev.chainNpc] = Math.max(s.chains[ev.chainNpc] || 0, ev.chainIdx || 0);
     s.flags["chain:" + ev.chainNpc] = s.week;
+    bumpBeyond(s, ev.chainNpc, CHAIN_GAIN[ev.chainStage] || 6);
     const chNpc = s.npcs.find((n) => n.id === ev.chainNpc);
     if (chNpc) {
       chNpc.history.push("第 " + s.week + " 周「" + ev.title + "」：" + (choice.text || ""));
@@ -1473,7 +1500,12 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
       if (npc) {
         // 关系越近，对同一件事的反应越大
         const closeness = 1 + Math.max(0, (npc.relation - 55) / 45);
-        npc.relation = clamp(npc.relation + r.amount * closeness, 0, 100);
+        const delta = r.amount * closeness;
+        const cap = maxRelationFor(s, npc.id);
+        npc.relation = delta > 0 ? Math.min(cap, npc.relation + delta) : clamp(npc.relation + delta, 0, 100);
+        if (npc.relation > 60 && !(s.romance && s.romance.npcId === npc.id)) {
+          bumpBeyond(s, npc.id, delta > 0 ? delta * 0.9 : delta * 1.1);
+        }
       }
       if (ev.preRomance) {
         s.romanceBonus = s.romanceBonus || [];

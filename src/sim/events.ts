@@ -750,21 +750,6 @@ export const EVENTS: StoryEvent[] = [
   ],
 },
 {
-  id: "confess-them",
-  kind: "main",
-    group: "crush",
-  social: true,
-  title: "对方先开口",
-  text: "楼梯口没开灯。{npc}叫住你，说有事想说，说了半天没说出来，最后把校服袖子攥成了一团。",
-  weeks: [2, 18],
-  weight: 3,
-  requires: { noRomance: true, minRelation: 90, bonusCount: 2 },
-  choices: [
-    { text: "说，我也是", result: "对方愣了很久，然后笑了。楼道声控灯灭了，谁也没去跺脚。", effects: { romance: true, stats: { mood: 8, stress: -4 } } },
-    { text: "说，再等等吧", result: "对方说好，然后把袖子松开，先走了。你在楼梯口站到灯灭。", effects: { relation: [{ who: "deskmate", amount: -6 }], stats: { stress: 3, mood: -2 } } },
-  ],
-},
-{
   id: "love-drift",
   kind: "main",
     group: "love",

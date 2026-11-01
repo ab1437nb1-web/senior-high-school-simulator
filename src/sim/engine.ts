@@ -138,7 +138,7 @@ export function seatOf(state: GameState, id: string) {
 }
 
 const SEAT_COLS = [1, 2, 3, 4, 5, 6];
-const SEAT_ROWS = [1, 2, 3, 4, 5, 6];
+const SEAT_ROWS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function freeSeats(state: GameState) {
   const taken = new Set<string>();
@@ -172,8 +172,8 @@ function seatScore(state: GameState, id: string, pos: { col: number; row: number
     const d = Math.abs(op.col - pos.col) + Math.abs(op.row - pos.row);
     if (d <= 1) s += v / 40;
   }
-  s += def.traits.diligence * (7 - pos.row) * 0.45;
-  s += (1 - def.traits.diligence) * pos.row * 0.4;
+  s += def.traits.diligence * (9 - pos.row) * 0.4;
+  s += (1 - def.traits.diligence) * pos.row * 0.35;
   s += def.traits.anxiety * (pos.row <= 2 ? 0.9 : 0);
   s += def.traits.social * (pos.row >= 2 && pos.row <= 4 ? 0.4 : 0);
   return s;

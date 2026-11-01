@@ -212,7 +212,7 @@ export function SeatMap(props: {
     const pos = (props.seats && props.seats[n.id]) || (def && def.seatPos);
     if (pos) occupied.set(pos.col + "-" + pos.row, props.seats && props.seats[n.id] ? def.name : def.name);
   }
-  const rows = [1, 2, 3, 4, 5, 6];
+  const rows = [1, 2, 3, 4, 5, 6, 7, 8];
   const cols = [1, 2, 3, 4, 5, 6];
   return (
     <div className="card" style={{ padding: 8 }}>

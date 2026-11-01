@@ -1,0 +1,12 @@
+import { newGame, settleWeek } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "six");
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 55, "normal", true, "m", "x", { col: 2, row: 2 });
+for (let i = 0; i < 17; i++) s = settleWeek(s, p.build(s.choice)).state;
+const anon = (s.classRanking || []).filter((r) => r.id.startsWith("anon")).map((r) => r.total);
+const known = (s.classRanking || []).filter((r) => !r.id.startsWith("anon")).map((r) => r.total);
+const mean = anon.reduce((a, b) => a + b, 0) / anon.length;
+const sd = Math.sqrt(anon.reduce((a, b) => a + (b - mean) ** 2, 0) / anon.length);
+console.log("匿名 n", anon.length, "范围", Math.min(...anon), "-", Math.max(...anon), "均值", mean.toFixed(0), "sd", sd.toFixed(0));
+console.log("已知 13 人范围", Math.min(...known), "-", Math.max(...known));
+console.log("前五:", (s.classRanking || []).slice(0, 5).map((r) => (r.name || "匿名") + r.total).join(" "));

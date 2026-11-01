@@ -765,11 +765,19 @@ export function ExamView(props: { state: GameState }) {
                 ))}
                 {(() => {
                   const me = state.classRanking!.find((r) => r.id === "you");
-                  if (!me || me.rank <= 10) return null;
+                  const partner = state.romance ? state.classRanking!.find((r) => r.id === state.romance!.npcId) : null;
+                  const rows: any[] = [];
+                  if (me && me.rank > 10) rows.push({ key: "me", rank: me.rank, label: "你", total: me.total });
+                  if (partner && partner.rank > 10) rows.push({ key: "partner", rank: partner.rank, label: partner.name + "（恋人）", total: partner.total });
+                  if (!rows.length) return null;
                   return (
-                    <div className="row small" style={{ justifyContent: "space-between", marginTop: 6, borderTop: "1px solid #e6dfd0", paddingTop: 4 }}>
-                      <span style={{ fontWeight: 600 }}>{me.rank}. 你</span>
-                      <span className="mono">{me.total}</span>
+                    <div style={{ marginTop: 6, borderTop: "1px solid #e6dfd0", paddingTop: 4 }}>
+                      {rows.map((r) => (
+                        <div key={r.key} className="row small" style={{ justifyContent: "space-between", marginTop: 2 }}>
+                          <span style={{ fontWeight: 600 }}>{r.rank}. {r.label}</span>
+                          <span className="mono">{r.total}</span>
+                        </div>
+                      ))}
                     </div>
                   );
                 })()}

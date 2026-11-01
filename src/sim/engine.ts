@@ -1028,13 +1028,30 @@ export function runExam(state: GameState, kind: string, rng: () => number) {
     ranking.push({ id: npc.id, name: def ? def.name : npc.id, total: r.total, rank: 0 });
     npc.lastExam = { kind, total: r.total, rank: 0, week: state.week };
   }
-  // 其余同班：围绕同学平均水平铺开，让班级规模像 48 人
+  // 其余同班：用这 13 个人的分数拟一个 t 分布（df=5，厚尾），再抽 35 个
   const known = ranking.map((r) => r.total);
-  const mean = known.reduce((a, b) => a + b, 0) / known.length;
-  const spread = 42 + mean * 0.12;
+  const n = known.length;
+  const mean = known.reduce((a, b) => a + b, 0) / n;
+  const variance = known.reduce((acc, x) => acc + (x - mean) * (x - mean), 0) / Math.max(1, n - 1);
+  const sd = Math.sqrt(variance) || 40;
+  const df = 5;
+  const scale = sd * Math.sqrt((df - 2) / df); // 让 t 分布的标准差贴近样本 sd
+  const gauss = () => {
+    const u = Math.max(1e-9, rng());
+    const v = rng();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  };
+  const sampleT = () => {
+    let chi = 0;
+    for (let i = 0; i < df; i++) chi += gauss() * gauss();
+    return gauss() / Math.sqrt(chi / df);
+  };
+  const cap = state.choiceLocked ? 750 : 1050;
   for (let i = 0; i < 35; i++) {
-    const z = Math.sqrt(-2 * Math.log(Math.max(1e-6, rng()))) * Math.cos(2 * Math.PI * rng());
-    ranking.push({ id: "anon" + i, name: "", total: Math.round(clamp(mean + z * spread, 120, 750)), rank: 0 });
+    const z = sampleT();
+    let v = mean + (Number.isFinite(z) ? z : 0) * (Number.isFinite(scale) ? scale : 40);
+    if (!Number.isFinite(v)) v = mean;
+    ranking.push({ id: "anon" + i, name: "", total: Math.round(clamp(v, 120, cap)), rank: 0 });
   }
   ranking.sort((a, b) => b.total - a.total);
   ranking.forEach((r, i) => { r.rank = i + 1; });

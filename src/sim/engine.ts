@@ -1355,7 +1355,7 @@ export function nextChainEvent(state: GameState) {
   if (beyondOf(state, id) < (CHAIN_MIN[ev.stage] || 0)) return null;
   if (state.romance && state.romance.npcId !== id) return null;
   const last = state.flags["chain:" + id];
-  if (typeof last === "number" && state.week - last < 5) return null;
+  if (typeof last === "number" && state.week - last < 4) return null;
   return ev;
 }
 
@@ -1522,8 +1522,12 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
         const cap = maxRelationFor(s, npc.id);
         npc.relation = delta > 0 ? Math.min(cap, npc.relation + delta) : clamp(npc.relation + delta, 0, 100);
         if (ev.preRomance && npc.relation > 60 && !(s.romance && s.romance.npcId === npc.id)) {
-          // 通用暧昧事件只给 1–2 点进度，主要靠链事件推进
-          bumpBeyond(s, npc.id, delta > 0 ? 1.5 : -1.5);
+          // 通用暧昧事件按事件不同给 1–3 点，制造随机性
+          let hash = 0;
+          const id = String(ev.id || "");
+          for (let i = 0; i < id.length; i++) hash = (hash + id.charCodeAt(i) * (i + 1)) % 997;
+          const weight = 1 + (hash % 5) * 0.5;
+          bumpBeyond(s, npc.id, delta > 0 ? weight : -1);
         }
       }
       if (ev.preRomance) {

@@ -1,4 +1,5 @@
 import type { StoryEvent } from "./types";
+import { GENERATED_EVENTS } from "./events.generated";
 
 export const EVENTS: StoryEvent[] = [
   {
@@ -851,6 +852,8 @@ export function buildEventPrompt(
     "\n要求：这一场要接得上前面的关系状态与走势；如果还很生疏，不要写成熟稔的口吻。"
   );
 }
+
+EVENTS.push(...GENERATED_EVENTS);
 
 export function eventById(id: string) {
   return EVENTS.find((e) => e.id === id) || null;

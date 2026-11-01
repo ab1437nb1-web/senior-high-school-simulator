@@ -426,7 +426,7 @@ function tickSocial(state: GameState, rng: () => number) {
 
     const pairGenderOk = da.gender !== db.gender;
     const bothSingle = !coupleOf(a.id) && !coupleOf(b.id);
-    if (next >= 72 && pairGenderOk && bothSingle && rng() < 0.12) {
+    if (next >= 68 && pairGenderOk && bothSingle && rng() < 0.15) {
       state.npcCouples!.push([a.id, b.id]);
       state.npcNews!.push({ week: state.week, text: da.name + "和" + db.name + "在一起了。" });
       continue;
@@ -437,12 +437,58 @@ function tickSocial(state: GameState, rng: () => number) {
       state.npcNews!.push({ week: state.week, text: da.name + "和" + db.name + "分开了，谁也没说为什么。" });
       continue;
     }
+    // 越亲密，对某些事越敏感：高关系时一次摩擦就能砸下去
+    if (next > 55) {
+      const incident = 0.03 + (next / 100) * 0.09;
+      if (rng() < incident) {
+        const isCouple = state.npcCouples!.some(([x, y]) => (x === a.id && y === b.id) || (x === b.id && y === a.id));
+        const drop = (4 + next * 0.16) * (isCouple ? 1.6 : 1);
+        state.npcPairs![k2] = clamp(next - drop, 0, 100);
+        state.npcNews!.push({ week: state.week, text: da.name + "和" + db.name + "闹别扭了，好几天没说话。" });
+        const pairNow = state.npcCouples!.find(([x, y]) => (x === a.id && y === b.id) || (x === b.id && y === a.id));
+        if (pairNow && state.npcPairs![k2] < 55) {
+          state.npcCouples = state.npcCouples!.filter((pp) => pp !== pairNow);
+          state.npcNews!.push({ week: state.week, text: da.name + "和" + db.name + "分开了，谁也没说为什么。" });
+        }
+        continue;
+      }
+    }
     // 外向的人更容易制造"被人看见"的场面
     if (rng() < 0.08 + da.traits.social * 0.16) {
       const fn = PAIR_NEWS[Math.floor(rng() * PAIR_NEWS.length)];
       state.npcNews!.push({ week: state.week, text: fn(da.name, db.name) });
     }
   }
+  // 已经在一起的人：每周都可能摩擦，越近越敏感
+  for (const pair of [...state.npcCouples]) {
+    const [x, y] = pair;
+    const k = key(x, y);
+    const rel = state.npcPairs[k] ?? 65;
+    if (rng() < 0.18) {
+      const drop = 6 + rel * 0.14;
+      state.npcPairs[k] = clamp(rel - drop, 0, 100);
+      state.npcNews!.push({ week: state.week, text: NPC_MAP[x].name + "和" + NPC_MAP[y].name + "吵了一架，谁也没先低头。" });
+      if (state.npcPairs[k] < 55) {
+        state.npcCouples = state.npcCouples!.filter((pp) => pp !== pair);
+        state.npcNews!.push({ week: state.week, text: NPC_MAP[x].name + "和" + NPC_MAP[y].name + "分开了，谁也没说为什么。" });
+      }
+    }
+  }
+
+  // 走得最近的一对异性会继续走近（关系有惯性）
+  const closeOnes = Object.entries(state.npcPairs)
+    .filter(([k]) => {
+      const [x, y] = k.split("|");
+      const dx = NPC_MAP[x];
+      const dy = NPC_MAP[y];
+      return dx && dy && dx.gender !== dy.gender;
+    })
+    .sort((a, b) => b[1] - a[1]);
+  if (closeOnes.length && closeOnes[0][1] > 40) {
+    const k = closeOnes[0][0];
+    state.npcPairs[k] = clamp(state.npcPairs[k] + 1.2, 0, 100);
+  }
+
   if (state.npcNews!.length > 40) state.npcNews = state.npcNews!.slice(-40);
 }
 
@@ -676,7 +722,7 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
       const adj = adjacentIds(state);
       const p1 = state.npcs.find((n) => n.id === state.socialTarget);
       const p2 = state.npcs.find((n) => n.id === state.socialTarget2);
-      const dim = (r: number) => Math.max(0.15, 1 - r / 120);
+      const dim = (r: number) => Math.max(0.08, 1 - r / 120) * (r >= 75 ? 0.45 : 1);
       if (p1) p1.relation = clamp(p1.relation + (adj.indexOf(p1.id) >= 0 ? 3 : 1.5) * dim(p1.relation), 0, 100);
       if (p2 && p2 !== p1) p2.relation = clamp(p2.relation + (adj.indexOf(p2.id) >= 0 ? 1.5 : 0.8) * dim(p2.relation), 0, 100);
     }
@@ -1283,7 +1329,11 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
         r.who === "mother" ? "mother" : r.who === "teacher" ? "teacher_chen"
         : ev.romance ? s.romance && s.romance.npcId : s.socialTarget;
       const npc = s.npcs.find((n) => n.id === mapped);
-      if (npc) npc.relation = clamp(npc.relation + r.amount, 0, 100);
+      if (npc) {
+        // 关系越近，对同一件事的反应越大
+        const closeness = 1 + Math.max(0, (npc.relation - 55) / 45);
+        npc.relation = clamp(npc.relation + r.amount * closeness, 0, 100);
+      }
       if (ev.preRomance) {
         s.romanceBonus = s.romanceBonus || [];
         s.romanceBonus.push({ amount: r.amount * 0.5, week: s.week });

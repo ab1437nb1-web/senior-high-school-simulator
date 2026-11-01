@@ -1,5 +1,5 @@
 import type { StoryEvent } from "./types";
-import { GENERATED_EVENTS } from "./events.generated";
+import { EVENT_DELETED, EVENT_OVERRIDES, GENERATED_EVENTS } from "./events.generated";
 
 export const EVENTS: StoryEvent[] = [
   {
@@ -853,7 +853,19 @@ export function buildEventPrompt(
   );
 }
 
-EVENTS.push(...GENERATED_EVENTS);
+// 覆盖 → 删除 → 新增：编辑器改过的事件在这里生效
+for (const id of Object.keys(EVENT_OVERRIDES)) {
+  const i = EVENTS.findIndex((e) => e.id === id);
+  if (i >= 0) EVENTS[i] = EVENT_OVERRIDES[id];
+  else EVENTS.push(EVENT_OVERRIDES[id]);
+}
+for (const id of EVENT_DELETED) {
+  const i = EVENTS.findIndex((e) => e.id === id);
+  if (i >= 0) EVENTS.splice(i, 1);
+}
+for (const e of GENERATED_EVENTS) {
+  if (!EVENTS.some((x) => x.id === e.id)) EVENTS.push(e);
+}
 
 export function eventById(id: string) {
   return EVENTS.find((e) => e.id === id) || null;

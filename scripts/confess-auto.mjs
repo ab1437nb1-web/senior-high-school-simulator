@@ -1,0 +1,12 @@
+import { newGame, settleWeek, planWeekEvents, mulberry32 } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "six");
+let s = newGame({ first: "physics", second: ["chemistry", "geography"] }, 3, "normal", true, "m", "x", { col: 2, row: 2 });
+s.week = 20;
+s.socialTarget = "linxiaoman";
+s.npcs.find((n) => n.id === "linxiaoman").relation = 92;
+s.romanceBonus = [{ amount: 2.5, week: 18 }, { amount: 2.5, week: 19 }];
+const evs = planWeekEvents(s, 5, mulberry32(1), p.build(s.choice)).map((e) => e.id);
+console.log("confess-them in plan:", evs.includes("confess-them"));
+const after = settleWeek(s, p.build(s.choice)).state;
+console.log("romance after settle without choice:", after.romance ? after.romance.npcId : "none");

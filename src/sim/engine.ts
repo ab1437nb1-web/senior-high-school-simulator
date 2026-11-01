@@ -1292,7 +1292,8 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     );
     while (picks.length < need && fallback.length) picks.push(draw(fallback));
   }
-  return [...picks, ...fixed];
+  // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
+  return [...fixed, ...picks];
 }
 
 export function applyEventChoice(prev: GameState, ev: any, choice: any): GameState {

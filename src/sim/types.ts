@@ -90,6 +90,8 @@ export type StoryEvent = {
   prompt?: string;
   social?: boolean;
   group?: "main" | "daily" | "social" | "friend" | "crush" | "love";
+  chainNpc?: string;
+  chainIdx?: number;
   preRomance?: boolean;
   romance?: boolean;
   npcKind?: "parent" | "teacher" | "classmate";
@@ -170,5 +172,6 @@ export type GameState = {
   npcCouples?: [string, string][];
   npcNews?: { week: number; text: string }[];
   classRanking?: { id: string; name: string; total: number; rank: number }[];
+  chains?: Record<string, number>;
   gender?: "m" | "f";
 };

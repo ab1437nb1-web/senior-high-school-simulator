@@ -112,7 +112,8 @@ export default function App() {
   useEffect(() => {
     if (!pending || !aiReady || !game) return;
     const ev: any = pending.events[pending.index];
-    if (!ev || !ev.social) return;
+    // 恋爱专属链是长文本，交给 AI 会被压成两句，直接跳过
+    if (!ev || !ev.social || ev.chainNpc) return;
     const key = ev.id + "@" + pending.index + "@" + game.week;
     if (scene && scene.key === key) return;
     const def = game.socialTarget ? NPC_MAP[game.socialTarget] : null;

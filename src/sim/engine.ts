@@ -7,6 +7,7 @@ import {
 } from "./data";
 import { EVENTS } from "./events";
 import { BEHAVIORS, CLASSMATES, NPCS, NPC_MAP } from "./npcs";
+import ROMANCE from "./romance.json";
 
 export function mulberry32(seed: number) {
   let a = seed >>> 0;
@@ -109,6 +110,7 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
     playerSeat: seat,
     seats: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, c.seatPos || { col: 1, row: 1 }])) : {},
     choiceLocked: false,
+    chains: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, 0])) : {},
     socialTarget: withNpcs ? CLASSMATES[0].id : undefined,
     socialTarget2: withNpcs && CLASSMATES[1] ? CLASSMATES[1].id : undefined,
     gender,
@@ -1310,6 +1312,22 @@ export function templateNarrative(report: WeekReport, state: GameState): Narrati
   return lines;
 }
 
+const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 35, 心动: 55, 暧昧: 70, 确立: 75, 深入: 80, 收束: 85 };
+
+export function nextChainEvent(state: GameState) {
+  const id = state.socialTarget;
+  if (!id || !state.chains) return null;
+  const next = (state.chains[id] || 0) + 1;
+  const ev = (ROMANCE as any[]).find((e) => e.npc === id && e.idx === next);
+  if (!ev) return null;
+  const npc = state.npcs.find((n) => n.id === id);
+  if (!npc) return null;
+  if (npc.relation < (CHAIN_MIN[ev.stage] || 0)) return null;
+  const last = state.flags["chain:" + id];
+  if (typeof last === "number" && state.week - last < 3) return null;
+  return ev;
+}
+
 export function planWeekEvents(state: GameState, weekInStage: number, rng: () => number, plan?: Plan) {
   const keyOf = (e: any) => "seen:" + e.id + (e.perStage ? "@" + state.stage : "");
   const seenAt = (e: any) => state.flags[keyOf(e)] as number | undefined;
@@ -1384,13 +1402,43 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     );
     while (picks.length < need && fallback.length) picks.push(draw(fallback));
   }
+  // 恋爱专属链：轮到这个 NPC 且关系够格时，链上下一条作为当周第一件事
+  const chain = nextChainEvent(state);
+  const chainEvent: any = chain
+    ? {
+        id: chain.id,
+        kind: "npc",
+        group: "love",
+        social: true,
+        title: chain.title,
+        text: chain.text,
+        chainNpc: chain.npc,
+        chainIdx: chain.idx,
+        choices: (chain.choices || []).map((c: any, i: number) => ({
+          text: c.text,
+          result: c.result,
+          effects: { relation: [{ who: "deskmate", amount: i === 0 ? 4 : 1 }], stats: { mood: i === 0 ? 3 : 1 } },
+        })),
+      }
+    : null;
+
   // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
-  return [...fixed, ...picks];
+  return [...(chainEvent ? [chainEvent] : []), ...fixed, ...picks];
 }
 
 export function applyEventChoice(prev: GameState, ev: any, choice: any): GameState {
   const s: GameState = JSON.parse(JSON.stringify(prev));
   s.flags["seen:" + ev.id + (ev.perStage ? "@" + s.stage : "")] = s.week;
+  if (ev.chainNpc) {
+    s.chains = s.chains || {};
+    s.chains[ev.chainNpc] = Math.max(s.chains[ev.chainNpc] || 0, ev.chainIdx || 0);
+    s.flags["chain:" + ev.chainNpc] = s.week;
+    const chNpc = s.npcs.find((n) => n.id === ev.chainNpc);
+    if (chNpc) {
+      chNpc.history.push("第 " + s.week + " 周「" + ev.title + "」：" + (choice.text || ""));
+      if (chNpc.history.length > 40) chNpc.history.shift();
+    }
+  }
   if (ev.kind === "npc") {
     const target = s.npcs.find((n) => n.id === (s.socialTarget || ""));
     if (target) {

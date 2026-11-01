@@ -209,8 +209,9 @@ export function SeatMap(props: {
   const occupied = new Map<string, string>();
   for (const n of props.npcs) {
     const def = NPC_MAP[n.id] || n;
-    const pos = (props.seats && props.seats[n.id]) || (def && def.seatPos);
-    if (pos) occupied.set(pos.col + "-" + pos.row, props.seats && props.seats[n.id] ? def.name : def.name);
+    // 传了 seats 就以它为准：空的表示这个人还没选座，不能回退到静态座位
+    const pos = props.seats ? props.seats[n.id] : def && def.seatPos;
+    if (pos) occupied.set(pos.col + "-" + pos.row, def.name);
   }
   const rows = [1, 2, 3, 4, 5, 6, 7, 8];
   const cols = [1, 2, 3, 4, 5, 6];
@@ -227,7 +228,7 @@ export function SeatMap(props: {
             return (
               <button
                 key={key}
-                disabled={!empty || !props.onPick}
+                disabled={(!empty && !isMe) || !props.onPick}
                 onClick={() => props.onPick && props.onPick({ col: c, row: r })}
                 style={{
                   height: 38,
@@ -236,7 +237,7 @@ export function SeatMap(props: {
                   border: "1px solid " + (isMe ? "#1c1b18" : "#d8cfbc"),
                   background: isMe ? "#f2e14a" : who ? "#efe8d8" : "#fffdf7",
                   color: isMe ? "#1c1b18" : "#6f685b",
-                  cursor: empty && props.onPick ? "pointer" : "default",
+                  cursor: (empty || isMe) && props.onPick ? "pointer" : "default",
                   padding: 0,
                 }}
               >

@@ -101,7 +101,7 @@ for (const block of blocks) {
   const eventId = id || "gen-" + title.replace(/[^\w\u4e00-\u9fa5]+/g, "-").toLowerCase();
   const choices = [];
   const parts = block.split(/^### 选项\s*\d+\s*$/m).slice(1);
-  if (parts.length < 2) errs.push(where + "：至少要有两个选项");
+  if (parts.length < 1) errs.push(where + "：至少要有一个选项");
   for (const [i, part] of parts.entries()) {
     const cw = where + " 选项" + (i + 1);
     const ct = part.match(/^-\s*文本:\s*(.+)$/m);

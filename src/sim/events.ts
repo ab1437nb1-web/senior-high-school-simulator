@@ -263,11 +263,6 @@ export const EVENTS: StoryEvent[] = [
         result: "你把自己的名字从表上挪开，纸被指甲刮出一道白痕。接下来两周，都有人在讨论谁跟谁换了。",
         effects: { resit: true, stats: { mood: 3 } },
       },
-      {
-        text: "算了，不动",
-        result: "你把名字留在原来的格子里。有人来问你要不要换，你说不用。",
-        effects: { stats: { stress: 1 } },
-      },
     ],
   },
 {

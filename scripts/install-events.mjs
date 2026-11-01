@@ -184,6 +184,7 @@ const toEvent = (e) => {
   if (e.group === "crush") out.preRomance = true;
   if (e.group === "love") out.romance = true;
   if (e.stages) out.stages = e.stages;
+  if (e.stages && e.stages.length > 1) out.perStage = true; // 跨学段事件每个学段独立结算（与 sports/resit 一致）
   if (e.cooldown) out.cooldown = e.cooldown;
   if (Object.keys(e.requires).length) out.requires = e.requires;
   return out;

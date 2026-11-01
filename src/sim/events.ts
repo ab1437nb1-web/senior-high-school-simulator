@@ -4,11 +4,11 @@ import { EVENT_DELETED, EVENT_OVERRIDES, GENERATED_EVENTS } from "./events.gener
 export const EVENTS: StoryEvent[] = [
   {
     id: "briefing",
-    stage: 2,
+    stages: [1],
     kind: "main",
     title: "选科宣讲会",
     text: "阶梯教室坐满了。教务主任把一张表投在幕布上：物理 + 化学，可报专业 96%。后排有人小声说，那没选化学的不就完了。",
-    weeks: [3, 3],
+    weeks: [12, 14],
     once: true,
     choices: [
       { text: "把那张表拍下来", result: "你拍完才发现，相册里前二十张全是卷子。", effects: { stats: { stress: -2, mood: 2 } } },
@@ -18,11 +18,11 @@ export const EVENTS: StoryEvent[] = [
   },
   {
     id: "final-choice",
-    stage: 2,
+    stages: [1],
     kind: "main",
     title: "选科确认",
     text: "表发下来了，一式两份。老师说填错自己负责，周五之前交。你盯着“首选科目”那一栏，笔尖悬着。",
-    weeks: [8, 8],
+    weeks: [15, 17],
     once: true,
     choices: [
       { text: "按现在想的填，交上去", result: "你把表对折两次，塞进书包最里面。走出办公室时，走廊的灯正好亮起来。", effects: { stats: { stress: -4, mood: 2 } } },

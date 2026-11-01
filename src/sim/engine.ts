@@ -451,6 +451,7 @@ function tickSocial(state: GameState, rng: () => number) {
   state.npcPairs = state.npcPairs || {};
   state.npcCouples = state.npcCouples || [];
   state.npcNews = state.npcNews || [];
+  state.pairBeyond = state.pairBeyond || {};
   const coupleOf = (id: string) => state.npcCouples!.find(([x, y]) => x === id || y === id);
   const key = (a: string, b: string) => (a < b ? a + "|" + b : b + "|" + a);
   const relOf = (a: string, b: string) => {
@@ -516,13 +517,20 @@ function tickSocial(state: GameState, rng: () => number) {
     const prev = relOf(a.id, b.id);
     // 外向的人推进得快，且越熟越难再涨
     const gain = (0.9 + da.traits.social * 2.4) * (1 - prev / 110) + (da.traits.anxiety < 0.5 ? 0.3 : 0);
-    const next = clamp(prev + gain + (rng() - 0.5) * 1.6, 0, 100);
+    let next = clamp(prev + gain + (rng() - 0.5) * 1.6, 0, 100);
+    // NPC 也要走「跨越朋友」：未满 100 前关系封顶 75
+    const pBeyond = state.pairBeyond![k2] || 0;
+    if (pBeyond < 100) next = Math.min(75, next);
     state.npcPairs![k2] = next;
 
     const pairGenderOk = da.gender !== db.gender;
     const bothSingle = !coupleOf(a.id) && !coupleOf(b.id);
-    if (next >= 68 && pairGenderOk && bothSingle && rng() < 0.15) {
+    if (pairGenderOk && bothSingle && next > 60) {
+      state.pairBeyond![k2] = Math.min(100, (state.pairBeyond![k2] || 0) + 1.6 + rng() * 1.6);
+    }
+    if ((state.pairBeyond![k2] || 0) >= 100 && next >= 75 && pairGenderOk && bothSingle) {
       state.npcCouples!.push([a.id, b.id]);
+      state.pairBeyond![k2] = 0;
       state.npcNews!.push({ week: state.week, text: da.name + "和" + db.name + "在一起了。" });
       continue;
     }
@@ -554,12 +562,24 @@ function tickSocial(state: GameState, rng: () => number) {
       state.npcNews!.push({ week: state.week, text: fn(da.name, db.name) });
     }
   }
+  // 所有关系 >60 的异性组合，每周都在慢慢"跨越朋友"（不依赖抽样）
+  for (const [k, rel] of Object.entries(state.npcPairs)) {
+    if (rel <= 60) continue;
+    const [x, y] = k.split("|");
+    const dx = NPC_MAP[x];
+    const dy = NPC_MAP[y];
+    if (!dx || !dy || dx.gender === dy.gender) continue;
+    const busy = state.npcCouples.some(([a, b]) => (a === x && b === y) || (a === y && b === x));
+    if (busy) continue;
+    state.pairBeyond[k] = Math.min(100, (state.pairBeyond[k] || 0) + 1.2 + (rng() < 0.3 ? 0.8 : 0));
+  }
+
   // 已经在一起的人：每周都可能摩擦，越近越敏感
   for (const pair of [...state.npcCouples]) {
     const [x, y] = pair;
     const k = key(x, y);
     const rel = state.npcPairs[k] ?? 65;
-    if (rng() < 0.18) {
+    if (rng() < 0.06) {
       const drop = 6 + rel * 0.14;
       state.npcPairs[k] = clamp(rel - drop, 0, 100);
       state.npcNews!.push({ week: state.week, text: NPC_MAP[x].name + "和" + NPC_MAP[y].name + "吵了一架，谁也没先低头。" });

@@ -171,6 +171,7 @@ export type GameState = {
   npcPairs?: Record<string, number>;
   npcCouples?: [string, string][];
   npcNews?: { week: number; text: string }[];
+  pairBeyond?: Record<string, number>;
   classRanking?: { id: string; name: string; total: number; rank: number }[];
   chains?: Record<string, number>;
   beyond?: Record<string, number>;

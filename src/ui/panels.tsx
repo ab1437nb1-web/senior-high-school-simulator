@@ -200,6 +200,25 @@ export function EventSheet(props: {
   );
 }
 
+export function ConfessSheet(props: {
+  title: string;
+  text: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="overlay">
+      <div className="sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="ev-kind">表白 · 1/1</div>
+        <h2 className="serif" style={{ fontSize: 20, margin: "8px 0 0" }}>{props.title}</h2>
+        <p className="ev-text">{props.text}</p>
+        <button className="btn" onClick={props.onConfirm}>说出来</button>
+        <button className="choice-btn" onClick={props.onCancel}>再想想</button>
+      </div>
+    </div>
+  );
+}
+
 export function SeatMap(props: {
   playerSeat?: { col: number; row: number };
   npcs: any[];
@@ -387,7 +406,11 @@ export function NpcPanel(props: { state: GameState; onConfess?: (id: string) => 
                   {!state.romance && n.relation > 60 && def.kind === "classmate" ? (
                     <div className="small" style={{ color: "#8a5a2c", marginTop: 6 }}>
                       跨越朋友 {Math.round((state.beyond && state.beyond[n.id]) || 0)}/100
-                      {((state.beyond && state.beyond[n.id]) || 0) < 100 ? " · 关系暂时到 75 为止" : " · 可以表白了"}
+                      {((state.beyond && state.beyond[n.id]) || 0) > 50 && ((state.chains && state.chains[n.id]) || 0) >= 7
+                        ? " · 暧昧中"
+                        : ((state.beyond && state.beyond[n.id]) || 0) < 100
+                        ? " · 关系暂时到 75 为止"
+                        : " · 可以表白了"}
                     </div>
                   ) : null}
                   {state.romance && state.romance.npcId === n.id ? null : canConfess(state, n.id) && props.onConfess ? (

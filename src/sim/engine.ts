@@ -1321,7 +1321,7 @@ export function templateNarrative(report: WeekReport, state: GameState): Narrati
 }
 
 // 「跨越朋友」：关系 >60 才启动，未满 100 前关系最高只能到 75
-const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 15, 心动: 30, 暧昧: 50, 确立: 80, 深入: 0, 收束: 0 };
+const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 15, 心动: 30, 暧昧: 50, 确立: 100, 深入: 0, 收束: 0 };
 const CHAIN_GAIN: Record<string, number> = { 初识: 8, 熟悉: 10, 心动: 12, 暧昧: 15, 确立: 20, 深入: 10, 收束: 15 };
 
 export function beyondOf(state: GameState, id: string) {
@@ -1330,6 +1330,10 @@ export function beyondOf(state: GameState, id: string) {
 
 export function maxRelationFor(state: GameState, id: string) {
   return beyondOf(state, id) >= 100 ? 100 : 75;
+}
+
+export function romanceScene(state: GameState, npcId: string, variant: "a" | "b") {
+  return (ROMANCE as any[]).find((e) => e.npc === npcId && e.idx === 8 && e.variant === variant) || null;
 }
 
 export function bumpBeyond(state: GameState, id: string, amount: number) {
@@ -1341,7 +1345,8 @@ export function nextChainEvent(state: GameState) {
   const id = state.socialTarget;
   if (!id || !state.chains) return null;
   const next = (state.chains[id] || 0) + 1;
-  const ev = (ROMANCE as any[]).find((e) => e.npc === id && e.idx === next);
+  // 第 08 条有 A/B 两个分支：NPC 主动（08a）由链自动触发，玩家主动（08b）只能在按钮里走
+  const ev = (ROMANCE as any[]).find((e) => e.npc === id && e.idx === next && e.variant !== "b");
   if (!ev) return null;
   const npc = state.npcs.find((n) => n.id === id);
   if (!npc) return null;
@@ -1443,7 +1448,11 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
         choices: (chain.choices || []).map((c: any, i: number) => ({
           text: c.text,
           result: c.result,
-          effects: { relation: [{ who: "deskmate", amount: i === 0 ? 4 : 1 }], stats: { mood: i === 0 ? 3 : 1 } },
+          effects: {
+            relation: [{ who: "deskmate", amount: i === 0 ? 4 : 1 }],
+            stats: { mood: i === 0 ? 3 : 1 },
+            ...(chain.idx === 8 ? { romance: true } : {}),
+          },
         })),
       }
     : null;
@@ -1522,6 +1531,7 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
       documented: true,
     });
   }
+  if (ev.chainNpc && ev.chainIdx === 8 && s.chains) s.chains[ev.chainNpc] = 8;
   if (e.romance && !s.romance && s.socialTarget) {
     const npc = s.npcs.find((n) => n.id === s.socialTarget);
     if (npc) {

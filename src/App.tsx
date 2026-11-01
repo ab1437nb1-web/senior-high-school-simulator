@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Setup from "./ui/Setup";
 import WeekBoard from "./ui/WeekBoard";
-import { Archive, ChoiceWizard, EventSheet, ExamView, NpcPanel, Report, SeatMap, Settings, StarMap } from "./ui/panels";
-import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, settleWeek, stageDef, tryConfess } from "./sim/engine";
+import { Archive, ChoiceWizard, ConfessSheet, EventSheet, ExamView, NpcPanel, Report, SeatMap, Settings, StarMap } from "./ui/panels";
+import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, romanceScene, settleWeek, stageDef, tryConfess } from "./sim/engine";
 import { PRESETS } from "./sim/data";
 import { defaultAi, loadAi, proxyHealth, renderEventScene, rewriteReport, saveAi } from "./ai";
 import { buildEventPrompt } from "./sim/events";
@@ -45,6 +45,7 @@ export default function App() {
   const [ended, setEnded] = useState(false);
   const [slots, setSlots] = useState<SlotMeta[]>([]);
   const [confession, setConfession] = useState<null | { text: string; ok: boolean; chance: number }>(null);
+  const [confessScene, setConfessScene] = useState<null | { npcId: string; title: string; text: string }>(null);
   const [resitOpen, setResitOpen] = useState(false);
   const [scene, setScene] = useState<null | { key: string; text: string; ai: boolean }>(null);
   const [pending, setPending] = useState<{ events: any[]; index: number; chosen: any } | null>(null);
@@ -320,6 +321,11 @@ export default function App() {
           <NpcPanel
             state={game}
             onConfess={(id: string) => {
+              const scene = romanceScene(game, id, "b");
+              if (scene) {
+                setConfessScene({ npcId: id, title: scene.title, text: scene.text });
+                return;
+              }
               const next: any = JSON.parse(JSON.stringify(game));
               const r = tryConfess(next, id);
               setGame(next);
@@ -392,6 +398,22 @@ export default function App() {
             />
           </div>
         </div>
+      ) : null}
+
+      {confessScene ? (
+        <ConfessSheet
+          title={confessScene.title}
+          text={confessScene.text}
+          onCancel={() => setConfessScene(null)}
+          onConfirm={() => {
+            const next: any = JSON.parse(JSON.stringify(game));
+            const r = tryConfess(next, confessScene.npcId);
+            if (r.ok) next.chains = { ...(next.chains || {}), [confessScene.npcId]: 8 };
+            setGame(next);
+            setConfessScene(null);
+            setConfession({ text: r.text, ok: r.ok, chance: r.chance });
+          }}
+        />
       ) : null}
 
       {confession ? (

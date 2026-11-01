@@ -1,20 +1,23 @@
 import fs from "node:fs";
 
-const md = fs.readFileSync("恋爱线-NPC专属事件链.md", "utf8");
+const md = fs.readFileSync("恋爱线-NPC专属事件链.md", "utf8").replace(/\r\n?/g, "\n");
 const blocks = md.split(/^## 事件 /m).slice(1);
 const out = [];
 const errs = [];
 for (const block of blocks) {
   const head = block.split("\n")[0];
-  const m = head.match(/^(\d+)：(.+?)(?:（(.+?)）)?$/);
+  const m = head.match(/^(\d+)([AB])?：(.+?)(?:（(.+?)）)?$/);
   if (!m) { errs.push("标题解析失败: " + head); continue; }
   const idx = Number(m[1]);
-  const title = m[2].trim();
-  const stage = (m[3] || "").trim();
-  const idM = block.match(/^- 编号: (rom-[a-z]+-\d+)$/m);
+  const headVariant = (m[2] || "").toLowerCase();
+  const title = m[3].trim();
+  const stage = (m[4] || "").trim();
+  const idM = block.match(/^- 编号: (rom-[a-z]+-\d+[ab]?)$/m);
   if (!idM) { errs.push("缺编号: " + title); continue; }
   const id = idM[1];
   const npc = id.split("-")[1];
+  const suffix = /([ab])$/.exec(id);
+  const variant = headVariant || (suffix ? suffix[1] : "");
   const preM = block.match(/^- 前置: (.+)$/m);
   const pre = preM ? preM[1].trim() : "";
   const bodyStart = block.indexOf("\n", block.indexOf("- 前置:"));
@@ -31,7 +34,7 @@ for (const block of blocks) {
     choices.push({ text, result });
   }
   if (choices.length < 1) errs.push("无选项: " + id);
-  out.push({ id, npc, idx, stage, title, text: body, pre, choices });
+  out.push({ id, npc, idx, variant, stage, title, text: body, pre, choices });
 }
 out.sort((a, b) => (a.npc < b.npc ? -1 : a.npc > b.npc ? 1 : a.idx - b.idx));
 fs.writeFileSync("src/sim/romance.json", JSON.stringify(out, null, 1), "utf8");

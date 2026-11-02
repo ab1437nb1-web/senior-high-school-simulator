@@ -78,6 +78,7 @@ export type EventEffect = {
   penalty?: SubjectId[];
   resit?: boolean;
   competitionBoost?: number;
+  competitionQuit?: boolean;
   romance?: boolean;
   breakup?: boolean;
 };

@@ -873,6 +873,22 @@ export const EVENTS: StoryEvent[] = [
     ],
   },
   {
+    id: "comp-quit",
+    kind: "random",
+    group: "competition",
+    title: "要不要继续",
+    text: "集训队的名单重新排了一次，你的名字没动。回教室的路上，你第一次认真想：如果现在退出，会怎么样。",
+    weeks: [2, 18],
+    weight: 1,
+    stages: [5, 7, 9],
+    requires: { competition: true },
+    choices: [
+      { text: "继续练", result: "你把那张名单折起来放进书里。第二天照常去集训。", effects: { competitionBoost: 0.02, stats: { stress: 4 } } },
+      { text: "减到每周两次", result: "你和教练说了，他沉默了一会，说行。", effects: { competitionBoost: -0.15, stats: { energy: 6, stress: -5 } } },
+      { text: "退出竞赛训练", result: "你把竞赛书搬回教室，摞在桌角。那张名单你没有再看。", effects: { competitionQuit: true, stats: { energy: 10, stress: -10, mood: -2 } } },
+    ],
+  },
+  {
     id: "comp-mock",
     kind: "random",
     group: "competition",

@@ -100,11 +100,17 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
           mood: n.start.mood,
           history: [] as string[],
           relTrace: [] as { w: number; v: number }[],
-          competition:
-            n.id === "zhouyuan" ? { subject: "physics", sessions: 0 }
-            : n.id === "chengyiming" ? { subject: "math", sessions: 0 }
-            : n.id === "wenyining" ? { subject: "biology", sessions: 0 }
-            : undefined,
+          competition: (() => {
+            if (n.id === "zhouyuan") return { subject: "physics", sessions: 0 };
+            if (n.kind !== "classmate") return undefined;
+            const crng = mulberry32(seed + 777 + i * 31);
+            const t = n.traits;
+            const pComp = Math.min(0.25, 0.02 + t.ambition * 0.12 + t.diligence * 0.1);
+            if (crng() > pComp) return undefined;
+            const subjects = ["math", "physics", "chemistry", "biology"];
+            const best = subjects.reduce((a, b) => (crng() < 0.5 ? a : b));
+            return { subject: best, sessions: 0 };
+          })(),
           game:
             n.kind === "classmate"
               ? newGame(n.choice || NPC_CHOICE[n.id] || { first: "physics", second: ["chemistry", "geography"] }, seed + 101 + i * 17, "normal", false)
@@ -619,13 +625,20 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
   tickSocial(state, rng);
   for (const npc of state.npcs) {
     if (npc.competition) {
-      npc.competition.sessions += 2 + Math.floor(rng() * 3);
-      if ((state.stage === 5 || state.stage === 7) && (state.weekInStage === 3 || state.weekInStage === 15)) {
-        const z = competitionZ(npc.competition.sessions, true, 0);
-        const award = competitionAwardZ(z);
-        npc.competition.level = award.level;
-        if (["省一", "省队", "决赛金牌", "国集"].includes(award.level)) {
-          state.npcNews!.push({ week: state.week, text: NPC_MAP[npc.id].name + "竞赛拿了" + award.level + "。" });
+      // 中途放弃：进入高二后每周有小概率退出
+      if (state.stage >= 5 && rng() < 0.004) {
+        const name = NPC_MAP[npc.id] ? NPC_MAP[npc.id].name : npc.id;
+        npc.competition = undefined;
+        state.npcNews!.push({ week: state.week, text: name + "退出了竞赛训练。" });
+      } else {
+        npc.competition.sessions += 2 + Math.floor(rng() * 3);
+        if ((state.stage === 5 || state.stage === 7) && (state.weekInStage === 3 || state.weekInStage === 15)) {
+          const z = competitionZ(npc.competition.sessions, true, 0);
+          const award = competitionAwardZ(z);
+          npc.competition.level = award.level;
+          if (["省一", "省队", "决赛金牌", "国集"].includes(award.level)) {
+            state.npcNews!.push({ week: state.week, text: NPC_MAP[npc.id].name + "竞赛拿了" + award.level + "。" });
+          }
         }
       }
     }
@@ -1671,6 +1684,10 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week, sessions: 0, zBonus: 0 };
     s.flags["compOffered"] = s.week;
   }
+  if (e.competitionQuit && s.competition) {
+    delete s.competition;
+    s.flags["compQuit"] = s.week;
+  }
   if (typeof e.competitionBoost === "number" && s.competition) {
     const real = s.realMode !== false;
     const sessions = s.competition.sessions || 0;
@@ -1678,7 +1695,10 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     const zNow = competitionZ(sessions, real, s.competition.zBonus || 0);
     const target = Math.max(1, cur * (1 + e.competitionBoost));
     const zNew = (Math.log(target) - COMP_MU) / COMP_SIGMA;
-    s.competition.zBonus = (s.competition.zBonus || 0) + Math.max(0, zNew - zNow);
+    const nextBonus = (s.competition.zBonus || 0) + (zNew - zNow);
+    // 不允许把总分推到负数
+    const baseZ = competitionZ(sessions, real, 0);
+    s.competition.zBonus = Math.max(-baseZ, nextBonus);
     s.competition.progress = competitionProgress(sessions, real, s.competition.zBonus);
   }
   if (e.stats) {

@@ -367,6 +367,7 @@ export const ACTIONS: ActionMeta[] = [
   { id: "volunteer", name: "志愿服务", short: "志", energy: 12, stress: 0, mood: 1, health: 0, relation: 1, base: 0, topic: "labor", hint: "劳动与实践证据" },
   { id: "entertain", name: "玩手机", short: "玩", energy: -8, stress: -8, mood: 6, health: -1, relation: 0, base: 0, topic: "rest", hint: "爽，但第二天专注下降" },
   { id: "sleep", name: "补觉", short: "睡", energy: -22, stress: -4, mood: 2, health: 1, relation: 0, base: 0, topic: "rest", hint: "把债还掉" },
+  { id: "competition", name: "竞赛学习", short: "竞", needSubject: true, energy: 22, stress: 7, mood: -2, health: -1, relation: 0, base: 18, topic: "study", hint: "高强度集训：固定收益高、吃精力、几乎吃不到课堂加成" },
 ];
 
 export const ACTION_MAP: Record<string, ActionMeta> = ACTIONS.reduce((acc, a) => {

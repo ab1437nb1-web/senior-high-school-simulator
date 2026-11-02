@@ -786,9 +786,22 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
         if (prevGain) prevGain.amount += gain;
         else gained.push({ subject, unit: key, amount: gain });
       }
-    } else if (act.id === "study" || act.id === "review") {
+    } else if (act.id === "study" || act.id === "review" || act.id === "competition") {
       studyCount++;
-      const subject = (slot.s || "math") as SubjectId;
+      let subject = (slot.s || "math") as SubjectId;
+      const comp = state.competition;
+      const isComp = Boolean(comp && (act.id === "competition" || (act.id === "study" && subject === comp.subject)));
+      // 信息学没有对应高中科目，用数学的单元承载训练收益
+      if (isComp && comp && comp.subject === "informatics") subject = "math";
+      if (isComp) {
+        // 竞赛学习：高固定值 + 低百分比加成 + 额外精力与压力
+        state.stats.energy = clamp(state.stats.energy - 6, 0, 100);
+        state.stats.stress = clamp(state.stats.stress + 5, 0, 100);
+        if (comp) {
+          comp.progress += 1.5;
+          comp.weeks += 0; // 周数在周末统一结算
+        }
+      }
 
       const train = (key: string, scale: number) => {
         const u = state.units[key];
@@ -801,8 +814,8 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
           return d && d.subject === subject && x.relation >= 60;
         });
         const teacherBonus = teacher ? 1.05 : 1;
-        const selfBase = act.base * 0.55;
-        const fromClass = (classBonus[subject] || 0) * 0.9;
+        const selfBase = act.base * (isComp ? 1 : 0.55);
+        const fromClass = (classBonus[subject] || 0) * (isComp ? 0.2 : 0.9);
         const gain = (selfBase + fromClass) * effOf(state.stats, focusMul) * mul * state.aptitude[subject] * dim * absorb * scale * teacherBonus * seatMul;
         u.mastery = clamp(u.mastery + gain, 0, 100);
         u.lastStudied = state.week;
@@ -944,6 +957,7 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
     u.mastery = clamp(u.mastery - drop, 0, 100);
   }
 
+  if (state.competition) state.competition.weeks += 1;
   if (state.romance) {
     const partner = state.npcs.find((n) => n.id === state.romance!.npcId);
     if (partner) {
@@ -1345,6 +1359,40 @@ export function templateNarrative(report: WeekReport, state: GameState): Narrati
 const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 14, 心动: 30, 暧昧: 50, 确立: 100, 深入: 0, 收束: 0 };
 const CHAIN_GAIN: Record<string, number> = { 初识: 7, 熟悉: 8, 心动: 10, 暧昧: 0, 确立: 10, 深入: 10, 收束: 10 };
 
+// 竞赛选拔：第一次期中之后，按 3+1+2 任一组合 ≥600，且六科都不低于 95%
+export function competitionEligibility(state: GameState): string[] {
+  const exam = state.exams && state.exams[0];
+  if (!exam) return [];
+  const score: Record<string, number> = {};
+  for (const row of exam.scores) score[row.subject] = row.final;
+  const full: Record<string, number> = { chinese: 150, math: 150, english: 150 };
+  const need = (s: string) => (full[s] || 100) * 0.95;
+  const core = ["chinese", "math", "english"];
+  if (core.some((s) => (score[s] || 0) < need(s))) return [];
+
+  const out: string[] = [];
+  const firsts = ["physics", "history"];
+  const secondsPool = ["chemistry", "biology", "politics", "geography"];
+  for (const first of firsts) {
+    for (let i = 0; i < secondsPool.length; i++) {
+      for (let j = i + 1; j < secondsPool.length; j++) {
+        const seconds = [secondsPool[i], secondsPool[j]];
+        const six = [...core, first, ...seconds];
+        if (six.some((s) => (score[s] || 0) < need(s))) continue;
+        const total = six.reduce((acc, s) => acc + (score[s] || 0), 0);
+        if (total >= 600) {
+          for (const s of [first, ...seconds]) if (!out.includes(s)) out.push(s);
+        }
+      }
+    }
+  }
+  // 信息学：数学 + 物理各 ≥95%，两科合计 ≥ 237.5
+  const m = score["math"] || 0;
+  const ph = score["physics"] || 0;
+  if (m >= 142.5 && ph >= 95 && m + ph >= 237.5) out.push("informatics");
+  return out;
+}
+
 export function beyondOf(state: GameState, id: string) {
   return (state.beyond && state.beyond[id]) || 0;
 }
@@ -1453,6 +1501,32 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     );
     while (picks.length < need && fallback.length) picks.push(draw(fallback));
   }
+  // 第一次期中之后的下一周：竞赛选拔
+  let compOffer: any = null;
+  if (state.stage === 1 && weekInStage === 10 && !state.competition && !state.flags["compOffered"]) {
+    const list = competitionEligibility(state);
+    if (list.length) {
+      compOffer = {
+        id: "competition-offer",
+        kind: "main",
+        group: "main",
+        title: "参加学科竞赛？",
+        text: "竞赛教练在走廊叫住你，说这次期中的成绩，可以去试试学科竞赛。他手里拿着一张报名表，背面密密麻麻写着往届的名字。",
+        choices: [
+          ...list.map((sub) => {
+            const label = sub === "informatics" ? "信息学" : SUBJECT_MAP[sub as SubjectId].name;
+            return {
+              text: "报名" + label + "竞赛",
+              result: "你接过表，在科目那一栏写下" + label + "。教练说，从这周开始，晚自习要跟着集训队走。",
+              effects: { competition: sub },
+            };
+          }),
+          { text: "不参加，先把课内稳住", result: "你把表推回去，说自己想先把九科稳住。教练点点头，把表收进了文件夹。", effects: {} },
+        ],
+      };
+    }
+  }
+
   // 暧昧事件在链 07 之后解锁：每周保证至少一条，否则会被上百条事件稀释掉
   if (state.socialTarget && ((state.chains || {})[state.socialTarget] || 0) >= 7 && !state.romance) {
     const unlocked = EVENTS.filter((e) => e.preRomance && inWindow(e) && fitsPlan(e) && picks.indexOf(e) < 0);
@@ -1487,7 +1561,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     : null;
 
   // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
-  return [...(chainEvent ? [chainEvent] : []), ...fixed, ...picks];
+  return [...(compOffer ? [compOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...picks];
 }
 
 export function applyEventChoice(prev: GameState, ev: any, choice: any): GameState {
@@ -1512,6 +1586,10 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     }
   }
   const e = choice.effects || {};
+  if (e.competition) {
+    s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week };
+    s.flags["compOffered"] = s.week;
+  }
   if (e.stats) {
     if (typeof e.stats.energy === "number") s.stats.energy = clamp(s.stats.energy + e.stats.energy, 0, 100);
     if (typeof e.stats.stress === "number") s.stats.stress = clamp(s.stats.stress + e.stats.stress, 0, 100);

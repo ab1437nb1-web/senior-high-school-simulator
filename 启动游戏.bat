@@ -35,7 +35,7 @@ echo   正在启动本地服务器……
 start "高中生活模拟器-服务" cmd /c "npm run dev"
 
 echo   等待服务器就绪（约 6 秒）……
-timeout /t 6 /nobreak >nul
+timeout /t 8 /nobreak >nul
 
 start "" http://127.0.0.1:5180
 echo.

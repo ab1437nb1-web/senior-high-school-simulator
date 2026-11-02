@@ -25,6 +25,7 @@ export type NpcState = {
   relTrace?: { w: number; v: number }[];
   lastExam?: { kind: string; total: number; rank: number; week: number };
   competition?: { subject: string; sessions: number; level?: string };
+  compIntent?: string;
 };
 
 export type Evaluation = {

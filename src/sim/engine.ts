@@ -100,21 +100,29 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
           mood: n.start.mood,
           history: [] as string[],
           relTrace: [] as { w: number; v: number }[],
-          competition: (() => {
-            if (n.id === "zhouyuan") return { subject: "physics", sessions: 0 };
+          compIntent: (() => {
+            if (n.id === "zhouyuan") return "physics";
             if (n.kind !== "classmate") return undefined;
             const crng = mulberry32(seed + 777 + i * 31);
             const t = n.traits;
             const pComp = Math.min(0.25, 0.02 + t.ambition * 0.12 + t.diligence * 0.1);
             if (crng() > pComp) return undefined;
             const subjects = ["math", "physics", "chemistry", "biology"];
-            const best = subjects.reduce((a, b) => (crng() < 0.5 ? a : b));
-            return { subject: best, sessions: 0 };
+            return subjects.reduce((a, b) => (crng() < 0.5 ? a : b));
           })(),
-          game:
-            n.kind === "classmate"
-              ? newGame(n.choice || NPC_CHOICE[n.id] || { first: "physics", second: ["chemistry", "geography"] }, seed + 101 + i * 17, "normal", false)
-              : undefined,
+          game: (() => {
+            if (n.kind !== "classmate") return undefined;
+            const g = newGame(n.choice || NPC_CHOICE[n.id] || { first: "physics", second: ["chemistry", "geography"] }, seed + 101 + i * 17, "normal", false);
+            // 周予安是设定上的数理拔尖：物理与数学的起点更高
+            if (n.id === "zhouyuan") {
+              for (const key of Object.keys(g.units)) {
+                if (key.startsWith("physics:") || key.startsWith("math:")) {
+                  g.units[key].mastery = Math.min(100, g.units[key].mastery + 8);
+                }
+              }
+            }
+            return g;
+          })(),
         }))
       : [],
     playerName: name,
@@ -391,6 +399,24 @@ function npcPlan(npc: any, rng: () => number): Plan {
   const def = NPC_MAP[npc.id];
   const tr = def.traits;
 
+  // 竞赛意向生在期中之前要兼顾六科，否则够不到 600 的总分线
+  const prep = Boolean(npc.compIntent && g.stage === 1 && g.weekInStage <= 10);
+  if (prep) {
+    const focus: Slot[] = [
+      { a: "main", s: "physics" }, { a: "main", s: "math" }, { a: "main", s: "physics" },
+      { a: "main", s: "chemistry" }, { a: "main", s: "biology" },
+    ];
+    const evening: Slot[] = [
+      { a: "study", s: "physics" }, { a: "study", s: "math" }, { a: "study", s: "english" },
+      { a: "study", s: "chemistry" }, { a: "study", s: "biology" },
+    ];
+    const weekend: Slot[] = [
+      { a: "study", s: "physics" }, { a: "study", s: "chinese" }, { a: "study", s: "math" },
+      { a: "study", s: "chemistry" }, { a: "study", s: "biology" }, { a: "review", s: "english" },
+    ];
+    return { focus, evening, weekend };
+  }
+
   // 以"六科冲刺"为基线：这是一套被验证过能打到 600+ 的安排
   const six = ["chinese", "math", "english", g.choice.first, ...g.choice.second].slice(0, 6) as SubjectId[];
   const weakestOf = (list: SubjectId[]) => {
@@ -417,7 +443,7 @@ function npcPlan(npc: any, rng: () => number): Plan {
     id === "club" || id === "talk" ? 0.2 + tr.social * 2 : id === "sport" ? 0.2 + tr.social : id === "slack" ? 0.2 + (1 - tr.diligence) * 1.6 : 0.2 + tr.anxiety * 1.4;
   const totalW = picks.reduce((x, id) => x + weightOf(id), 0);
 
-  for (let k = 0; k < Math.min(divert, 8); k++) {
+  for (let k = 0; k < (prep ? 0 : Math.min(divert, 8)); k++) {
     const idx = 1 + Math.floor(rng() * 10); // 保留第一个晚自习，从后面挑
     let r = rng() * totalW;
     let pick = picks[0];
@@ -431,7 +457,9 @@ function npcPlan(npc: any, rng: () => number): Plan {
     slots[idx] = map[pick];
   }
 
+  const compFocus = (npc.compIntent === "informatics" ? "math" : npc.compIntent) as SubjectId;
   const focus: Slot[] = Array.from({ length: 5 }, (_, i) => {
+    if (prep) return { a: "main", s: (i % 2 === 0 ? compFocus : "math") };
     if (i === 2 && tr.diligence < 0.6) return { a: "free" };
     return { a: "main", s: six[i % six.length] };
   });
@@ -624,6 +652,14 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
   let bestScore = -1;
   tickSocial(state, rng);
   for (const npc of state.npcs) {
+    // 期中之后才按成绩决定是否真的进竞赛线
+    if (npc.compIntent && !npc.competition && state.stage === 1 && state.weekInStage >= 10) {
+      const ok = competitionEligibility(npc.game);
+      // 周予安是设定上必须走竞赛线的人（教练早就在盯他），不受门槛限制
+      if (npc.id === "zhouyuan") npc.competition = { subject: "physics", sessions: 0 };
+      else if (ok.includes(npc.compIntent)) npc.competition = { subject: npc.compIntent, sessions: 0 };
+      else if (state.weekInStage >= 17) npc.compIntent = undefined; // 没够到线，放弃
+    }
     if (npc.competition) {
       // 中途放弃：进入高二后每周有小概率退出
       if (state.stage >= 5 && rng() < 0.004) {

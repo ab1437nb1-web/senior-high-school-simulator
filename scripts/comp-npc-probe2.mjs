@@ -1,0 +1,10 @@
+import { newGame, settleWeek, competitionEligibility } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "six");
+let s = newGame({ first: "physics", second: ["chemistry", "biology"] }, 7, "normal", true, "m", "x", { col: 2, row: 2 });
+for (let i = 0; i < 10; i++) s = settleWeek(s, p.build(s.choice)).state;
+const g = s.npcs.find((n) => n.id === "zhouyuan").game;
+console.log("exams", g.exams.length);
+const e = g.exams[0];
+console.log("kind", e && e.kind, "scores", e ? e.scores.map((r) => r.subject + "=" + r.final).join(",") : "无");
+console.log("elig", competitionEligibility(g));

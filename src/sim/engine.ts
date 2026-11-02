@@ -799,10 +799,9 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
         state.stats.energy = clamp(state.stats.energy - 6, 0, 100);
         state.stats.stress = clamp(state.stats.stress + 5, 0, 100);
         if (comp) {
-          // 固定值 + 当前进度的百分比；真实模式只剩固定值
-          const fixed = 3;
-          const pct = state.realMode ? 0 : comp.progress * 0.03;
-          comp.progress = Math.min(1000, comp.progress + fixed + pct);
+          // 练习次数 → 分位数曲线 → 反推进度
+          comp.sessions = (comp.sessions || 0) + 1;
+          comp.progress = competitionProgress(comp.sessions, Boolean(state.realMode));
         }
       }
 
@@ -1403,6 +1402,27 @@ export function competitionEligibility(state: GameState): string[] {
 // 复赛线 300 分位 ≈ 2.05%；国集 ≈ 0.0037%；省一 ≈ 0.176%；省队 ≈ 0.043%
 const COMP_MU = 4.426;
 const COMP_SIGMA = 0.625;
+// 分位数（正态 z）随练习次数的增长：普通线性、真实对数
+const COMP_Z_MAX = 4.2;
+
+export function competitionZ(sessions: number, realMode: boolean) {
+  const n = Math.max(0, sessions);
+  if (realMode) return Math.min(COMP_Z_MAX, 0.85 * Math.log(1 + n / 10));
+  return Math.min(COMP_Z_MAX, 0.02 * n);
+}
+
+export function competitionProgress(sessions: number, realMode: boolean) {
+  const z = competitionZ(sessions, realMode);
+  return Math.max(1, Math.min(1000, Math.exp(COMP_MU + COMP_SIGMA * z)));
+}
+
+export function competitionAwardZ(z: number) {
+  const top = 1 - phi(z);
+  for (const cut of COMP_CUTS) {
+    if (top <= cut.top) return { level: cut.level, top };
+  }
+  return { level: "未进复赛", top };
+}
 const COMP_CUTS: { level: string; top: number }[] = [
   { level: "国集", top: 0.000037 },
   { level: "决赛金牌", top: 0.00013 },
@@ -1621,7 +1641,7 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
   }
   const e = choice.effects || {};
   if (e.competition) {
-    s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week };
+    s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week, sessions: 0 };
     s.flags["compOffered"] = s.week;
   }
   if (e.stats) {

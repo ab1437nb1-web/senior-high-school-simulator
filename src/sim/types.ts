@@ -174,7 +174,7 @@ export type GameState = {
   pairBeyond?: Record<string, number>;
   classRanking?: { id: string; name: string; total: number; rank: number }[];
   chains?: Record<string, number>;
-  competition?: { subject: string; progress: number; weeks: number; since: number };
+  competition?: { subject: string; progress: number; weeks: number; since: number; sessions?: number };
   realMode?: boolean;
   beyond?: Record<string, number>;
   gender?: "m" | "f";

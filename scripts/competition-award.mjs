@@ -1,5 +1,8 @@
-import { competitionAward, competitionPercentile } from "../.tmp/engine.mjs";
-for (const p of [0, 100, 200, 300, 350, 450, 520, 600, 680, 800, 900, 950, 1000]) {
-  const a = competitionAward(p);
-  console.log(String(p).padStart(4) + " -> " + a.level.padEnd(6) + " 全国前 " + (a.top * 100).toFixed(4) + "%");
+import { competitionZ, competitionProgress, competitionAwardZ } from "../.tmp/engine.mjs";
+const rows = [10, 30, 60, 90, 120, 200, 300, 450, 600];
+console.log("练习次数 | 普通 z/进度/奖项 | 真实 z/进度/奖项");
+for (const n of rows) {
+  const zn = competitionZ(n, false), pn = competitionProgress(n, false), an = competitionAwardZ(zn);
+  const zr = competitionZ(n, true), pr = competitionProgress(n, true), ar = competitionAwardZ(zr);
+  console.log(String(n).padStart(4) + " | " + zn.toFixed(2) + " / " + pn.toFixed(0).padStart(4) + " / " + an.level + " | " + zr.toFixed(2) + " / " + pr.toFixed(0).padStart(4) + " / " + ar.level);
 }

@@ -98,7 +98,7 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
             if (n.kind !== "classmate") return undefined;
             const crng = mulberry32(seed + 777 + i * 31);
             const t = n.traits;
-            const pComp = Math.min(0.25, 0.02 + t.ambition * 0.12 + t.diligence * 0.1);
+            const pComp = Math.min(0.15, 0.01 + t.ambition * 0.08 + t.diligence * 0.06);
             if (crng() > pComp) return undefined;
             const subjects = ["math", "physics", "chemistry", "biology"];
             return subjects.reduce((a, b) => (crng() < 0.5 ? a : b));
@@ -408,17 +408,17 @@ function npcPlan(npc: any, rng: () => number): Plan {
   // 竞赛意向生在期中之前要兼顾六科，否则够不到 600 的总分线
   const prep = Boolean(npc.compIntent && g.stage === 1 && g.weekInStage <= 10);
   if (prep) {
-    // 与实测有效的排程一致：工作日五科主攻 + 同科晚自习，周末补生物、其余休息
-    const focus: Slot[] = [
-      { a: "main", s: "chinese" }, { a: "main", s: "math" }, { a: "main", s: "english" },
-      { a: "main", s: "physics" }, { a: "main", s: "chemistry" },
-    ];
-    const evening: Slot[] = [
-      { a: "study", s: "chinese" }, { a: "study", s: "math" }, { a: "study", s: "english" },
-      { a: "study", s: "physics" }, { a: "study", s: "chemistry" },
-    ];
+    // 实测有效的排程：工作日五科主攻 + 同科晚自习，周末补两段剩余科目、其余休息
+    const focusSubj = (npc.compIntent === "informatics" ? "math" : npc.compIntent) as SubjectId;
+    const five: SubjectId[] = ["chinese", "math", "english", "physics"];
+    if (!five.includes(focusSubj)) five.push(focusSubj);
+    else five.push("chemistry");
+    const restPool = (["chemistry", "biology", "politics", "geography"] as SubjectId[]).filter((s) => !five.includes(s));
+    const wk = restPool.slice(0, 2);
+    const focus: Slot[] = five.map((s) => ({ a: "main", s }));
+    const evening: Slot[] = five.map((s) => ({ a: "study", s }));
     const weekend: Slot[] = [
-      { a: "study", s: "biology" }, { a: "study", s: "biology" }, { a: "rest" },
+      { a: "study", s: focusSubj }, { a: "study", s: wk[0] || "biology" }, { a: "rest" },
       { a: "rest" }, { a: "rest" }, { a: "rest" },
     ];
     return { focus, evening, weekend };

@@ -76,6 +76,7 @@ export type EventEffect = {
   choice?: Choice;
   penalty?: SubjectId[];
   resit?: boolean;
+  competitionBoost?: number;
   romance?: boolean;
   breakup?: boolean;
 };
@@ -89,7 +90,7 @@ export type StoryEvent = {
   text: string;
   prompt?: string;
   social?: boolean;
-  group?: "main" | "daily" | "social" | "friend" | "crush" | "love";
+  group?: "main" | "daily" | "social" | "friend" | "crush" | "love" | "competition";
   chainNpc?: string;
   chainIdx?: number;
   preRomance?: boolean;
@@ -107,6 +108,7 @@ export type StoryEvent = {
     noRomance?: boolean;
     minRelation?: number;
     friend?: boolean;
+    competition?: true | string;
     bonusCount?: number;
     lowRelWeeks?: number;
     actions?: string[];
@@ -174,7 +176,7 @@ export type GameState = {
   pairBeyond?: Record<string, number>;
   classRanking?: { id: string; name: string; total: number; rank: number }[];
   chains?: Record<string, number>;
-  competition?: { subject: string; progress: number; weeks: number; since: number; sessions?: number };
+  competition?: { subject: string; progress: number; weeks: number; since: number; sessions?: number; zBonus?: number };
   realMode?: boolean;
   beyond?: Record<string, number>;
   gender?: "m" | "f";

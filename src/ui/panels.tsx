@@ -921,7 +921,7 @@ export function Archive(props: { state: GameState; actions?: ArchiveActions }) {
             const g = e.group || "daily";
             counts[g] = (counts[g] || 0) + 1;
           }
-          const names = { main: "主线", daily: "日常", social: "社交", friend: "朋友", crush: "暧昧", love: "恋爱" };
+          const names = { main: "主线", daily: "日常", social: "社交", friend: "朋友", crush: "暧昧", love: "恋爱", competition: "竞赛" };
           return Object.entries(names).map(([k, label]) => (
             <div key={k} className="row small" style={{ justifyContent: "space-between", marginTop: 2 }}>
               <span className="muted">{label}</span>

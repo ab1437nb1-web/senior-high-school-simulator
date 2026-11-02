@@ -801,7 +801,7 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
         if (comp) {
           // 练习次数 → 分位数曲线 → 反推进度
           comp.sessions = (comp.sessions || 0) + 1;
-          comp.progress = competitionProgress(comp.sessions, Boolean(state.realMode));
+          comp.progress = competitionProgress(comp.sessions, Boolean(state.realMode), comp.zBonus || 0);
         }
       }
 
@@ -1405,14 +1405,15 @@ const COMP_SIGMA = 0.625;
 // 分位数（正态 z）随练习次数的增长：普通线性、真实对数
 const COMP_Z_MAX = 4.2;
 
-export function competitionZ(sessions: number, realMode: boolean) {
+export function competitionZ(sessions: number, realMode: boolean, bonus = 0) {
   const n = Math.max(0, sessions);
-  if (realMode) return Math.min(COMP_Z_MAX, 0.85 * Math.log(1 + n / 10));
-  return Math.min(COMP_Z_MAX, 0.02 * n);
+  const base = realMode ? 0.85 * Math.log(1 + n / 10) : 0.02 * n;
+  // 事件奖励可以突破常规上限，这也是真实模式唯一能摸到更高名次的途径
+  return Math.min(4.8, base + bonus);
 }
 
-export function competitionProgress(sessions: number, realMode: boolean) {
-  const z = competitionZ(sessions, realMode);
+export function competitionProgress(sessions: number, realMode: boolean, bonus = 0) {
+  const z = competitionZ(sessions, realMode, bonus);
   return Math.max(1, Math.min(1000, Math.exp(COMP_MU + COMP_SIGMA * z)));
 }
 
@@ -1509,6 +1510,10 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
       if (n < r.bonusCount) return false;
     }
     if (r.friend && !(socialNpc && socialNpc.friend)) return false;
+    if (r.competition) {
+      if (!state.competition) return false;
+      if (r.competition !== true && r.competition !== state.competition.subject) return false;
+    }
     if (typeof r.lowRelWeeks === "number" && (((state.flags.lowRelWeeks as number) || 0) < r.lowRelWeeks)) return false;
     if (r.actions && r.actions.length && !r.actions.some((x: string) => actions.has(x))) return false;
     if (r.focus && r.focus.length && !r.focus.some((x: string) => focus.has(x))) return false;
@@ -1641,8 +1646,18 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
   }
   const e = choice.effects || {};
   if (e.competition) {
-    s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week, sessions: 0 };
+    s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week, sessions: 0, zBonus: 0 };
     s.flags["compOffered"] = s.week;
+  }
+  if (typeof e.competitionBoost === "number" && s.competition) {
+    const real = Boolean(s.realMode);
+    const sessions = s.competition.sessions || 0;
+    const cur = competitionProgress(sessions, real, s.competition.zBonus || 0);
+    const zNow = competitionZ(sessions, real, s.competition.zBonus || 0);
+    const target = Math.max(1, cur * (1 + e.competitionBoost));
+    const zNew = (Math.log(target) - COMP_MU) / COMP_SIGMA;
+    s.competition.zBonus = (s.competition.zBonus || 0) + Math.max(0, zNew - zNow);
+    s.competition.progress = competitionProgress(sessions, real, s.competition.zBonus);
   }
   if (e.stats) {
     if (typeof e.stats.energy === "number") s.stats.energy = clamp(s.stats.energy + e.stats.energy, 0, 100);

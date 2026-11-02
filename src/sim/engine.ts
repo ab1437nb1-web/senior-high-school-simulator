@@ -92,15 +92,8 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
     ended: false,
     evaluations: [],
     npcs: withNpcs
-      ? NPCS.map((n, i) => ({
-          id: n.id,
-          kind: n.kind,
-          relation: n.start.relation,
-          last: n.kind === "classmate" ? "grind" : "idle",
-          mood: n.start.mood,
-          history: [] as string[],
-          relTrace: [] as { w: number; v: number }[],
-          compIntent: (() => {
+      ? NPCS.map((n, i) => {
+          const intent = (() => {
             if (n.id === "zhouyuan") return "physics";
             if (n.kind !== "classmate") return undefined;
             const crng = mulberry32(seed + 777 + i * 31);
@@ -109,21 +102,34 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
             if (crng() > pComp) return undefined;
             const subjects = ["math", "physics", "chemistry", "biology"];
             return subjects.reduce((a, b) => (crng() < 0.5 ? a : b));
-          })(),
-          game: (() => {
+          })();
+          const game = (() => {
             if (n.kind !== "classmate") return undefined;
             const g = newGame(n.choice || NPC_CHOICE[n.id] || { first: "physics", second: ["chemistry", "geography"] }, seed + 101 + i * 17, "normal", false);
-            // 周予安是设定上的数理拔尖：物理与数学的起点更高
             if (n.id === "zhouyuan") {
               for (const key of Object.keys(g.units)) {
-                if (key.startsWith("physics:") || key.startsWith("math:")) {
-                  g.units[key].mastery = Math.min(100, g.units[key].mastery + 8);
-                }
+                if (key.startsWith("physics:")) g.units[key].mastery = Math.min(100, g.units[key].mastery + 14);
+                else if (key.startsWith("math:")) g.units[key].mastery = Math.min(100, g.units[key].mastery + 8);
+              }
+            } else if (intent) {
+              for (const key of Object.keys(g.units)) {
+                if (key.startsWith(intent + ":")) g.units[key].mastery = Math.min(100, g.units[key].mastery + 14);
               }
             }
             return g;
-          })(),
-        }))
+          })();
+          return {
+            id: n.id,
+            kind: n.kind,
+            relation: n.start.relation,
+            last: n.kind === "classmate" ? "grind" : "idle",
+            mood: n.start.mood,
+            history: [] as string[],
+            relTrace: [] as { w: number; v: number }[],
+            compIntent: intent,
+            game,
+          };
+        })
       : [],
     playerName: name,
     playerSeat: seat,
@@ -402,17 +408,18 @@ function npcPlan(npc: any, rng: () => number): Plan {
   // 竞赛意向生在期中之前要兼顾六科，否则够不到 600 的总分线
   const prep = Boolean(npc.compIntent && g.stage === 1 && g.weekInStage <= 10);
   if (prep) {
+    // 与实测有效的排程一致：工作日五科主攻 + 同科晚自习，周末补生物、其余休息
     const focus: Slot[] = [
-      { a: "main", s: "physics" }, { a: "main", s: "math" }, { a: "main", s: "physics" },
-      { a: "main", s: "chemistry" }, { a: "main", s: "biology" },
+      { a: "main", s: "chinese" }, { a: "main", s: "math" }, { a: "main", s: "english" },
+      { a: "main", s: "physics" }, { a: "main", s: "chemistry" },
     ];
     const evening: Slot[] = [
-      { a: "study", s: "physics" }, { a: "study", s: "math" }, { a: "study", s: "english" },
-      { a: "study", s: "chemistry" }, { a: "study", s: "biology" },
+      { a: "study", s: "chinese" }, { a: "study", s: "math" }, { a: "study", s: "english" },
+      { a: "study", s: "physics" }, { a: "study", s: "chemistry" },
     ];
     const weekend: Slot[] = [
-      { a: "study", s: "physics" }, { a: "study", s: "chinese" }, { a: "study", s: "math" },
-      { a: "study", s: "chemistry" }, { a: "study", s: "biology" }, { a: "review", s: "english" },
+      { a: "study", s: "biology" }, { a: "study", s: "biology" }, { a: "rest" },
+      { a: "rest" }, { a: "rest" }, { a: "rest" },
     ];
     return { focus, evening, weekend };
   }

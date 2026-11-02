@@ -1399,6 +1399,34 @@ export function competitionEligibility(state: GameState): string[] {
   return out;
 }
 
+// 竞赛人群分布：对数正态，按 2025 物理实况拟合
+// 复赛线 300 分位 ≈ 2.05%；国集 ≈ 0.0037%；省一 ≈ 0.176%；省队 ≈ 0.043%
+const COMP_MU = 4.426;
+const COMP_SIGMA = 0.625;
+const COMP_CUTS: { level: string; top: number }[] = [
+  { level: "国集", top: 0.000037 },
+  { level: "决赛金牌", top: 0.00013 },
+  { level: "省队", top: 0.000434 },
+  { level: "省一", top: 0.001765 },
+  { level: "省二", top: 0.01004 },
+  { level: "省三", top: 0.01787 },
+  { level: "复赛", top: 0.0205 },
+];
+
+export function competitionPercentile(progress: number) {
+  const x = Math.max(1, progress);
+  const z = (Math.log(x) - COMP_MU) / COMP_SIGMA;
+  return 1 - phi(z);
+}
+
+export function competitionAward(progress: number) {
+  const top = competitionPercentile(progress);
+  for (const cut of COMP_CUTS) {
+    if (top <= cut.top) return { level: cut.level, top };
+  }
+  return { level: "未进复赛", top };
+}
+
 export function beyondOf(state: GameState, id: string) {
   return (state.beyond && state.beyond[id]) || 0;
 }

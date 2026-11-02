@@ -54,7 +54,7 @@ const NPC_CHOICE: Record<string, { first: "physics" | "history"; second: Subject
   hejia: { first: "history", second: ["politics", "chemistry"] },
 };
 
-export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "normal", withNpcs = true, gender: "m" | "f" = "f", name = "", seat?: { col: number; row: number }, realMode = false): GameState {
+export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "normal", withNpcs = true, gender: "m" | "f" = "f", name = "", seat?: { col: number; row: number }, realMode = true): GameState {
   const rng = mulberry32(seed);
   const units: Record<string, UnitState> = {};
   const aptitude = {} as Record<SubjectId, number>;
@@ -801,7 +801,7 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
         if (comp) {
           // 练习次数 → 分位数曲线 → 反推进度
           comp.sessions = (comp.sessions || 0) + 1;
-          comp.progress = competitionProgress(comp.sessions, Boolean(state.realMode), comp.zBonus || 0);
+          comp.progress = competitionProgress(comp.sessions, state.realMode !== false, comp.zBonus || 0);
         }
       }
 
@@ -1650,7 +1650,7 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     s.flags["compOffered"] = s.week;
   }
   if (typeof e.competitionBoost === "number" && s.competition) {
-    const real = Boolean(s.realMode);
+    const real = s.realMode !== false;
     const sessions = s.competition.sessions || 0;
     const cur = competitionProgress(sessions, real, s.competition.zBonus || 0);
     const zNow = competitionZ(sessions, real, s.competition.zBonus || 0);

@@ -10,11 +10,18 @@ export default function Setup(props: { onStart: (c: Choice, d: Difficulty, g: "m
   const [gender, setGender] = useState<"m" | "f">("f");
   const [difficulty, setDifficulty] = useState<Difficulty>("normal");
   const [seat, setSeat] = useState<{ col: number; row: number }>({ col: 2, row: 2 });
-  const [realMode, setRealMode] = useState(false);
+  // 默认真实模式；官方作弊入口只通过 URL 参数开启，界面上没有任何提示
+  const [easyComp] = useState(() => {
+    try {
+      return new URLSearchParams(window.location.search).has("easycomp");
+    } catch {
+      return false;
+    }
+  });
 
   const start = () => {
     // 开局不选科：高一上按九科走，选科放到高一下之前
-    props.onStart({ first: "physics", second: ["chemistry", "geography"] }, difficulty, gender, name.trim() || "你", seat, realMode);
+    props.onStart({ first: "physics", second: ["chemistry", "geography"] }, difficulty, gender, name.trim() || "你", seat, !easyComp);
   };
 
   return (
@@ -32,15 +39,6 @@ export default function Setup(props: { onStart: (c: Choice, d: Difficulty, g: "m
       <p className="small muted" style={{ marginTop: 6 }}>
         点一个空位坐下。前两排听课更稳，后排更自由；同桌和前后桌才是够得着的人。
       </p>
-
-      <h2 className="section">真实模式</h2>
-      <label className="row small" style={{ gap: 8, alignItems: "flex-start", cursor: "pointer" }}>
-        <input type="checkbox" checked={realMode} onChange={(e) => setRealMode(e.target.checked)} style={{ marginTop: 2 }} />
-        <span>
-          开启后竞赛路线按真实规则计算：多数竞赛学习不再吃百分比加成，省份难度也会影响晋级。
-          <span className="muted">（默认关闭，适合想轻松体验的人）</span>
-        </span>
-      </label>
 
       <h2 className="section">性别</h2>
       <div className="chips">

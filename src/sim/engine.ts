@@ -799,13 +799,9 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
         state.stats.energy = clamp(state.stats.energy - 6, 0, 100);
         state.stats.stress = clamp(state.stats.stress + 5, 0, 100);
         if (comp) {
-          // 固定值 + 当前加成百分比；真实模式只剩固定值
-          const idxs = unitsUpTo(subject, academicOf(state));
-          const avg = idxs.length
-            ? idxs.reduce((acc, i) => acc + state.units[unitKey(subject, i)].mastery, 0) / idxs.length
-            : 0;
-          const fixed = 4;
-          const pct = state.realMode ? 0 : (avg / 100) * 8;
+          // 固定值 + 当前进度的百分比；真实模式只剩固定值
+          const fixed = 3;
+          const pct = state.realMode ? 0 : comp.progress * 0.03;
           comp.progress = Math.min(1000, comp.progress + fixed + pct);
         }
       }

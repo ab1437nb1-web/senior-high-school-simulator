@@ -79,9 +79,9 @@ export default function App() {
     return () => { alive = false; };
   }, [ai]);
 
-  const start = (choice: Choice, difficulty: any, gender: "m" | "f" = "f", name = "", seat?: { col: number; row: number }) => {
+  const start = (choice: Choice, difficulty: any, gender: "m" | "f" = "f", name = "", seat?: { col: number; row: number }, realMode = false) => {
     const seed = (Date.now() % 100000000) + 1;
-    const g = newGame(choice, seed, difficulty, true, gender, name, seat);
+    const g = newGame(choice, seed, difficulty, true, gender, name, seat, realMode);
     setGame(g);
     setPlan(buildPlan("balanced", choice));
     setPresetId("balanced");

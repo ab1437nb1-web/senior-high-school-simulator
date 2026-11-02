@@ -54,7 +54,7 @@ const NPC_CHOICE: Record<string, { first: "physics" | "history"; second: Subject
   hejia: { first: "history", second: ["politics", "chemistry"] },
 };
 
-export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "normal", withNpcs = true, gender: "m" | "f" = "f", name = "", seat?: { col: number; row: number }): GameState {
+export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "normal", withNpcs = true, gender: "m" | "f" = "f", name = "", seat?: { col: number; row: number }, realMode = false): GameState {
   const rng = mulberry32(seed);
   const units: Record<string, UnitState> = {};
   const aptitude = {} as Record<SubjectId, number>;
@@ -108,6 +108,7 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
       : [],
     playerName: name,
     playerSeat: seat,
+    realMode,
     seats: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, c.seatPos || { col: 1, row: 1 }])) : {},
     choiceLocked: false,
     chains: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, 0])) : {},
@@ -798,8 +799,14 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
         state.stats.energy = clamp(state.stats.energy - 6, 0, 100);
         state.stats.stress = clamp(state.stats.stress + 5, 0, 100);
         if (comp) {
-          comp.progress += 1.5;
-          comp.weeks += 0; // 周数在周末统一结算
+          // 固定值 + 当前加成百分比；真实模式只剩固定值
+          const idxs = unitsUpTo(subject, academicOf(state));
+          const avg = idxs.length
+            ? idxs.reduce((acc, i) => acc + state.units[unitKey(subject, i)].mastery, 0) / idxs.length
+            : 0;
+          const fixed = 4;
+          const pct = state.realMode ? 0 : (avg / 100) * 8;
+          comp.progress = Math.min(1000, comp.progress + fixed + pct);
         }
       }
 
@@ -1359,7 +1366,7 @@ export function templateNarrative(report: WeekReport, state: GameState): Narrati
 const CHAIN_MIN: Record<string, number> = { 初识: 0, 熟悉: 14, 心动: 30, 暧昧: 50, 确立: 100, 深入: 0, 收束: 0 };
 const CHAIN_GAIN: Record<string, number> = { 初识: 7, 熟悉: 8, 心动: 10, 暧昧: 0, 确立: 10, 深入: 10, 收束: 10 };
 
-// 竞赛选拔：第一次期中之后，按 3+1+2 任一组合 ≥600，且六科都不低于 95%
+// 竞赛选拔：第一次期中之后，任一 3+1+2 组合总分 ≥600，且对应科目单科 ≥ 满分 95%
 export function competitionEligibility(state: GameState): string[] {
   const exam = state.exams && state.exams[0];
   if (!exam) return [];
@@ -1368,28 +1375,31 @@ export function competitionEligibility(state: GameState): string[] {
   const full: Record<string, number> = { chinese: 150, math: 150, english: 150 };
   const need = (s: string) => (full[s] || 100) * 0.95;
   const core = ["chinese", "math", "english"];
-  if (core.some((s) => (score[s] || 0) < need(s))) return [];
-
-  const out: string[] = [];
   const firsts = ["physics", "history"];
   const secondsPool = ["chemistry", "biology", "politics", "geography"];
+
+  const combos: string[][] = [];
   for (const first of firsts) {
     for (let i = 0; i < secondsPool.length; i++) {
       for (let j = i + 1; j < secondsPool.length; j++) {
-        const seconds = [secondsPool[i], secondsPool[j]];
-        const six = [...core, first, ...seconds];
-        if (six.some((s) => (score[s] || 0) < need(s))) continue;
-        const total = six.reduce((acc, s) => acc + (score[s] || 0), 0);
-        if (total >= 600) {
-          for (const s of [first, ...seconds]) if (!out.includes(s)) out.push(s);
-        }
+        combos.push([...core, first, secondsPool[i], secondsPool[j]]);
       }
     }
   }
-  // 信息学：数学 + 物理各 ≥95%，两科合计 ≥ 237.5
+  const comboOf = (s: string) => combos.filter((c) => c.includes(s));
+
+  const out: string[] = [];
+  for (const s of [...firsts, ...secondsPool]) {
+    if ((score[s] || 0) < need(s)) continue;
+    const ok = comboOf(s).some((six) => six.reduce((acc, x) => acc + (score[x] || 0), 0) >= 600);
+    if (ok) out.push(s);
+  }
+  // 信息学没有对应科目：数学 ≥142.5、物理 ≥95，且存在 ≥600 的组合
   const m = score["math"] || 0;
   const ph = score["physics"] || 0;
-  if (m >= 142.5 && ph >= 95 && m + ph >= 237.5) out.push("informatics");
+  if (m >= 142.5 && ph >= 95 && combos.some((six) => six.reduce((acc, x) => acc + (score[x] || 0), 0) >= 600)) {
+    out.push("informatics");
+  }
   return out;
 }
 

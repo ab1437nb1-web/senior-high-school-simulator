@@ -1,0 +1,12 @@
+import { newGame, settleWeek, playerCompetitionAward } from "../.tmp/engine.mjs";
+import { PRESETS } from "../.tmp/engine.mjs";
+const p = PRESETS.find((x) => x.id === "six");
+let s = newGame({ first: "physics", second: ["chemistry", "biology"] }, 42, "normal", true, "m", "x", { col: 2, row: 2 });
+console.log("周予安竞赛:", JSON.stringify(s.npcs.find((n) => n.id === "zhouyuan").competition));
+for (let i = 0; i < 70; i++) s = settleWeek(s, p.build(s.choice)).state;
+const z = s.npcs.find((n) => n.id === "zhouyuan");
+console.log("70 周后 sessions:", z.competition.sessions, "level:", z.competition.level || "未评");
+console.log("相关新闻:", (s.npcNews || []).filter((n) => n.text.includes("竞赛")).slice(-3).map((n) => n.text).join(" / ") || "无");
+const st = JSON.parse(JSON.stringify(s));
+st.competition = { subject: "physics", progress: 0, weeks: 0, since: 1, sessions: 210, zBonus: 0 };
+console.log("玩家 210 次训练:", playerCompetitionAward(st));

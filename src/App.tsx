@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Setup from "./ui/Setup";
 import WeekBoard from "./ui/WeekBoard";
 import { Archive, ChoiceWizard, ConfessSheet, EventSheet, ExamView, NpcPanel, Report, SeatMap, Settings, StarMap } from "./ui/panels";
-import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, romanceScene, settleWeek, stageDef, tryConfess } from "./sim/engine";
+import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, playerCompetitionAward, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, romanceScene, settleWeek, stageDef, tryConfess } from "./sim/engine";
 import { PRESETS } from "./sim/data";
 import { defaultAi, loadAi, proxyHealth, renderEventScene, rewriteReport, saveAi } from "./ai";
 import { buildEventPrompt } from "./sim/events";
@@ -226,6 +226,32 @@ export default function App() {
               </p>
               <p className="small muted">
                 五育不是五个装饰条：思想品德、学业、健康、艺术、劳动实践，任何一块长期空缺都会被记下来。
+              </p>
+            </div>
+            <Archive state={game} actions={actions} />
+            <button className="btn" style={{ marginTop: 16 }} onClick={restart}>再来一局</button>
+          </main>
+        </div>
+      );
+    }
+
+    const comp = playerCompetitionAward(game);
+    if (comp && (comp.level === "决赛金牌" || comp.level === "国集")) {
+      return (
+        <div className="app">
+          <main>
+            <h2 className="section">竞赛 · 结束</h2>
+            <div className="card">
+              <div className="serif" style={{ fontSize: 22 }}>提前结束的高三</div>
+              <p className="narr">
+                {comp.level === "国集" ? "国家集训队名单出来那天，班主任在班上念了你的名字。" : "决赛的金牌挂在脖子上，比想象中轻。"}
+                从那天起，你的高三就提前结束了：不用再刷那套永远刷不完的卷子，不用再盯着排名表。
+              </p>
+              <p className="small">
+                保送的录取通知书来得比高考早三个月。同学们还在教室里做题，你偶尔回去，坐在最后一排，听一节课。
+              </p>
+              <p className="small muted">
+                你后来才明白，这条路不是捷径，只是把三年的力气提前用完了。空下来的那些下午，比考试更难过。
               </p>
             </div>
             <Archive state={game} actions={actions} />

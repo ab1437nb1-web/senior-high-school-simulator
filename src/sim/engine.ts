@@ -100,6 +100,11 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
           mood: n.start.mood,
           history: [] as string[],
           relTrace: [] as { w: number; v: number }[],
+          competition:
+            n.id === "zhouyuan" ? { subject: "physics", sessions: 0 }
+            : n.id === "chengyiming" ? { subject: "math", sessions: 0 }
+            : n.id === "wenyining" ? { subject: "biology", sessions: 0 }
+            : undefined,
           game:
             n.kind === "classmate"
               ? newGame(n.choice || NPC_CHOICE[n.id] || { first: "physics", second: ["chemistry", "geography"] }, seed + 101 + i * 17, "normal", false)
@@ -613,6 +618,17 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
   let bestScore = -1;
   tickSocial(state, rng);
   for (const npc of state.npcs) {
+    if (npc.competition) {
+      npc.competition.sessions += 2 + Math.floor(rng() * 3);
+      if ((state.stage === 5 || state.stage === 7) && (state.weekInStage === 3 || state.weekInStage === 15)) {
+        const z = competitionZ(npc.competition.sessions, true, 0);
+        const award = competitionAwardZ(z);
+        npc.competition.level = award.level;
+        if (["省一", "省队", "决赛金牌", "国集"].includes(award.level)) {
+          state.npcNews!.push({ week: state.week, text: NPC_MAP[npc.id].name + "竞赛拿了" + award.level + "。" });
+        }
+      }
+    }
     const isSocial = npc.id === state.socialTarget || npc.id === state.socialTarget2;
     if (!isSocial) {
       const floor = npc.kind === "classmate" ? REL_FLOOR : 45;
@@ -1415,6 +1431,12 @@ export function competitionZ(sessions: number, realMode: boolean, bonus = 0) {
 export function competitionProgress(sessions: number, realMode: boolean, bonus = 0) {
   const z = competitionZ(sessions, realMode, bonus);
   return Math.max(1, Math.min(1000, Math.exp(COMP_MU + COMP_SIGMA * z)));
+}
+
+export function playerCompetitionAward(state: GameState) {
+  if (!state.competition) return null;
+  const z = competitionZ(state.competition.sessions || 0, state.realMode !== false, state.competition.zBonus || 0);
+  return competitionAwardZ(z);
 }
 
 export function competitionAwardZ(z: number) {

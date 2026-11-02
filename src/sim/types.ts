@@ -24,6 +24,7 @@ export type NpcState = {
   lowFriendWeeks?: number;
   relTrace?: { w: number; v: number }[];
   lastExam?: { kind: string; total: number; rank: number; week: number };
+  competition?: { subject: string; sessions: number; level?: string };
 };
 
 export type Evaluation = {

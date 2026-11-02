@@ -399,57 +399,6 @@
         3
       ]
     },
-    "main-contest-board": {
-      "id": "main-contest-board",
-      "kind": "main",
-      "group": "main",
-      "title": "竞赛放榜",
-      "text": "竞赛获奖名单贴在公告栏，围了三层人。你挤不进去，只听见有人念名字，有人叹气。",
-      "weeks": [
-        13,
-        13
-      ],
-      "weight": 1,
-      "choices": [
-        {
-          "text": "挤进去看清楚",
-          "result": "你从头到尾看了两遍。有人在名单上，有人不在。你记住了两种表情。",
-          "effects": {
-            "stats": {
-              "stress": 3,
-              "mood": -1
-            }
-          }
-        },
-        {
-          "text": "等人群散了再看",
-          "result": "公告栏前只剩你一个人。玻璃有点反光。",
-          "effects": {
-            "stats": {
-              "stress": 1
-            }
-          }
-        },
-        {
-          "text": "不关心，回教室",
-          "result": "你走开了。晚自习时还是向别人打听了一遍。",
-          "effects": {
-            "stats": {
-              "mood": -1
-            },
-            "mastery": [
-              {
-                "subject": "math",
-                "amount": 1
-              }
-            ]
-          }
-        }
-      ],
-      "stages": [
-        5
-      ]
-    },
     "main-farm": {
       "id": "main-farm",
       "kind": "main",
@@ -6710,5 +6659,8 @@
       }
     }
   },
-  "deleted": []
+  "deleted": [
+    "contest",
+    "main-contest-board"
+  ]
 }

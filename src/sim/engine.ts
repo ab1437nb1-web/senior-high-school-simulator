@@ -1456,7 +1456,8 @@ export function competitionEligibility(state: GameState): string[] {
   const comboOf = (s: string) => combos.filter((c) => c.includes(s));
 
   const out: string[] = [];
-  for (const s of [...firsts, ...secondsPool]) {
+  // 只有这五科有学科竞赛；语数英里只有数学有（并计入核心组合）
+  for (const s of ["math", "physics", "chemistry", "biology"]) {
     if ((score[s] || 0) < need(s)) continue;
     const ok = comboOf(s).some((six) => six.reduce((acc, x) => acc + (score[x] || 0), 0) >= 600);
     if (ok) out.push(s);

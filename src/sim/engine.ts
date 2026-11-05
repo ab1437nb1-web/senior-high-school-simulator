@@ -1528,6 +1528,32 @@ function applyJudgement(state: GameState, comp: any, isNational: boolean) {
   return level;
 }
 
+// 强基报名：二模之后，总分 >625 且有竞赛经历；文史类看语文/历史；国家级奖项免总分
+export function qiangjiOptions(state: GameState) {
+  if (state.qiangji) return [] as { subject: string; label: string; bonus: number; national: boolean }[];
+  const last = state.exams && state.exams[state.exams.length - 1];
+  const total = last ? last.total : 0;
+  const comp = state.competition;
+  const hist = (comp && comp.history) || [];
+  const national = hist.some((h) => h.national && ["决赛金牌", "国集"].includes(h.level));
+  const BEST: Record<string, number> = { 省三: 5, 省二: 8, 省一: 12, 省队: 18, 决赛金牌: 30, 国集: 40 };
+  const bestLevel = hist.reduce((acc, h) => (BEST[h.level] > (BEST[acc] || 0) ? h.level : acc), "");
+  const bonus = BEST[bestLevel] || 0;
+  const out: { subject: string; label: string; bonus: number; national: boolean }[] = [];
+  const score: Record<string, number> = {};
+  if (last) for (const r of last.scores) score[r.subject] = r.final;
+  const liberal = (score["chinese"] || 0) >= 142.5 && (score["history"] || 0) >= 95;
+
+  if (comp) {
+    const passed = national || total > 625;
+    if (passed) out.push({ subject: comp.subject, label: comp.subject === "informatics" ? "信息学" : (SUBJECT_MAP as any)[comp.subject]?.name || comp.subject, bonus, national });
+  }
+  if (liberal && (national || total > 625)) {
+    out.push({ subject: "liberal", label: "文史类", bonus: Math.max(8, bonus), national });
+  }
+  return out;
+}
+
 export function judgeCompetitionSchedule(state: GameState) {
   const comp = state.competition;
   if (!comp || comp.active === false) return;
@@ -1705,6 +1731,29 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     }
   }
 
+  // 高三下二模之后：强基报名
+  let qjOffer: any = null;
+  if (state.stage === 9 && state.weekInStage === 19 && !state.qiangji) {
+    const opts = qiangjiOptions(state);
+    if (opts.length) {
+      qjOffer = {
+        id: "qiangji-apply",
+        kind: "main",
+        group: "main",
+        title: "报名强基计划",
+        text: "二模成绩出来，班主任把一张强基计划的报名表放在你桌上，说你的情况可以试试。表上列着几所学校的名字。",
+        choices: [
+          ...opts.map((o) => ({
+            text: "报名" + o.label + "强基",
+            result: "你在报名表上填了" + o.label + "方向。交表的时候，走廊里已经没几个人了。",
+            effects: { qiangji: o.subject },
+          })),
+          { text: "不报，专心高考", result: "你把表推回去，说想先顾好眼前这一场。", effects: {} },
+        ],
+      };
+    }
+  }
+
   // 暧昧事件在链 07 之后解锁：每周保证至少一条，否则会被上百条事件稀释掉
   if (state.socialTarget && ((state.chains || {})[state.socialTarget] || 0) >= 7 && !state.romance) {
     const unlocked = EVENTS.filter((e) => e.preRomance && inWindow(e) && fitsPlan(e) && picks.indexOf(e) < 0);
@@ -1739,7 +1788,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     : null;
 
   // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
-  return [...(compOffer ? [compOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...picks];
+  return [...(compOffer ? [compOffer] : []), ...(qjOffer ? [qjOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...picks];
 }
 
 export function applyEventChoice(prev: GameState, ev: any, choice: any): GameState {
@@ -1764,6 +1813,11 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     }
   }
   const e = choice.effects || {};
+  if (e.qiangji) {
+    const opts = qiangjiOptions(s);
+    const picked = opts.find((o) => o.subject === e.qiangji) || opts[0];
+    if (picked) s.qiangji = { subject: picked.subject, bonus: picked.bonus, national: picked.national };
+  }
   if (e.competition) {
     s.competition = { subject: e.competition, progress: 0, weeks: 0, since: s.week, sessions: 0, zBonus: 0 };
     s.flags["compOffered"] = s.week;

@@ -87,6 +87,7 @@ export type EventEffect = {
   resit?: boolean;
   competitionBoost?: number;
   competitionQuit?: boolean;
+  qiangji?: string;
   romance?: boolean;
   breakup?: boolean;
 };
@@ -195,6 +196,7 @@ export type GameState = {
       history?: { week: number; level: string; national: boolean }[];
     };
   realMode?: boolean;
+  qiangji?: { subject: string; bonus: number; national: boolean };
   beyond?: Record<string, number>;
   gender?: "m" | "f";
 };

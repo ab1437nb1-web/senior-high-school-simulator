@@ -261,6 +261,37 @@ export default function App() {
       );
     }
 
+    if (game.qiangji) {
+      const lastExam = game.exams[game.exams.length - 1];
+      const base = lastExam ? lastExam.total : 0;
+      const final = base + game.qiangji.bonus;
+      const admitted = final >= 625;
+      return (
+        <div className="app">
+          <main>
+            <h2 className="section">强基计划 · 结束</h2>
+            <div className="card">
+              <div className="serif" style={{ fontSize: 22 }}>{admitted ? "基础学科的那间教室" : "差了一点"}</div>
+              <p className="narr">
+                {game.qiangji.subject === "liberal" ? "文史类" : game.qiangji.subject}方向。二模 {base} 分，
+                加上竞赛带来的 {game.qiangji.bonus} 分，折算 {final} 分。
+              </p>
+              <p className="small">
+                {admitted
+                  ? "录取通知书上写着基础学科的名字。你会在那里读很多年书，比高三还长。"
+                  : "录取线 625。你差了 " + (625 - final) + " 分，最后回到了高考的考场。"}
+              </p>
+              <p className="small muted">
+                {admitted ? "面试时老师问你为什么选这个方向，你说因为喜欢，不是因为好就业。他笑了。" : "强基没成，但那段准备并没有白费。"}
+              </p>
+            </div>
+            <Archive state={game} actions={actions} />
+            <button className="btn" style={{ marginTop: 16 }} onClick={restart}>再来一局</button>
+          </main>
+        </div>
+      );
+    }
+
     const last = game.exams[game.exams.length - 1];
     const total = last ? last.total : 0;
     const lastEval = game.evaluations[game.evaluations.length - 1];

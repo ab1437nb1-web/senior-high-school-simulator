@@ -668,9 +668,19 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
       else if (ok.includes(npc.compIntent)) npc.competition = { subject: npc.compIntent, sessions: 0 };
       else if (state.weekInStage >= 17) npc.compIntent = undefined; // 没够到线，放弃
     }
+    // 高三下二模后：拿到竞赛记录（非金牌/国集）的同学会考虑强基
+    if (!npc.qiangji && npc.competition && state.stage === 9 && state.weekInStage === 19) {
+      const hist = npc.competition.history || [];
+      const ranked = ["省三", "省二", "省一", "省队", "决赛银牌"];
+      const best = hist.reduce((acc, h) => (ranked.indexOf(h.level) > ranked.indexOf(acc) ? h.level : acc), "");
+      if (best) {
+        npc.qiangji = { subject: npc.competition.subject, level: best };
+        state.npcNews!.push({ week: state.week, text: NPC_MAP[npc.id].name + "报名了强基计划（" + best + "）。" });
+      }
+    }
     if (npc.competition) {
       // 中途放弃：进入高二后每周有小概率退出
-      if (state.stage >= 5 && rng() < 0.004) {
+      if (npc.id !== "zhouyuan" && state.stage >= 5 && rng() < 0.004) {
         const name = NPC_MAP[npc.id] ? NPC_MAP[npc.id].name : npc.id;
         npc.competition = undefined;
         state.npcNews!.push({ week: state.week, text: name + "退出了竞赛训练。" });

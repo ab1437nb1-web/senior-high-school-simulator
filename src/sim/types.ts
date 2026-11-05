@@ -33,6 +33,7 @@ export type NpcState = {
     history?: { week: number; level: string; national: boolean }[];
   };
   compIntent?: string;
+  qiangji?: { subject: string; level: string };
 };
 
 export type Evaluation = {

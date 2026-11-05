@@ -378,6 +378,7 @@ export function NpcPanel(props: { state: GameState; onConfess?: (id: string) => 
                       {isS ? <span className="pill" style={{ marginLeft: 6 }}>次要</span> : null}
                       {adj.has(n.id) ? <span className="pill cool" style={{ marginLeft: 6 }}>够得着</span> : null}
                       {n.friend ? <span className="pill" style={{ marginLeft: 6, borderColor: "#3f6b4f", color: "#3f6b4f" }}>朋友</span> : null}
+                      {n.qiangji ? <span className="pill" style={{ marginLeft: 6, borderColor: "#7a5a2c", color: "#7a5a2c" }}>强基</span> : null}
                     </strong>
                     <span className="mono small">{lastExam ? lastExam.total + " 分" : ""}</span>
                   </div>

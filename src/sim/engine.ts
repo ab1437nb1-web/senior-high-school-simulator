@@ -1535,8 +1535,9 @@ export function qiangjiOptions(state: GameState) {
   const total = last ? last.total : 0;
   const comp = state.competition;
   const hist = (comp && comp.history) || [];
-  const national = hist.some((h) => h.national && ["决赛金牌", "国集"].includes(h.level));
-  const BEST: Record<string, number> = { 省三: 5, 省二: 8, 省一: 12, 省队: 18, 决赛金牌: 30, 国集: 40 };
+  const national = hist.some((h) => h.national && ["决赛银牌", "决赛金牌", "国集"].includes(h.level));
+  // 金牌与国集已经走竞赛结局，强基能拿到的上限是决赛银牌
+  const BEST: Record<string, number> = { 省三: 5, 省二: 8, 省一: 12, 省队: 18, 决赛银牌: 24 };
   const bestLevel = hist.reduce((acc, h) => (BEST[h.level] > (BEST[acc] || 0) ? h.level : acc), "");
   const bonus = BEST[bestLevel] || 0;
   const out: { subject: string; label: string; bonus: number; national: boolean }[] = [];
@@ -1572,6 +1573,7 @@ export function competitionAwardZ(z: number) {
 const COMP_CUTS: { level: string; top: number }[] = [
   { level: "国集", top: 0.000037 },
   { level: "决赛金牌", top: 0.00013 },
+  { level: "决赛银牌", top: 0.000316 },
   { level: "省队", top: 0.000434 },
   { level: "省一", top: 0.001765 },
   { level: "省二", top: 0.01004 },

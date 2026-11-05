@@ -1529,6 +1529,16 @@ function applyJudgement(state: GameState, comp: any, isNational: boolean) {
 }
 
 // 强基报名：二模之后，总分 >625 且有竞赛经历；文史类看语文/历史；国家级奖项免总分
+// 强基折算：高考 75 分 + 校测 25 分
+export function qiangjiScore(gaokao: number, interviewSessions: number, compLevel: string) {
+  const gaokaoPart = Math.min(75, Math.max(0, (gaokao - 550) * 0.75));
+  const trainPart = Math.min(18, interviewSessions * 1.5);
+  const COMP_BONUS: Record<string, number> = { 省三: 2, 省二: 3, 省一: 4, 省队: 5, 决赛银牌: 7 };
+  const bonus = COMP_BONUS[compLevel] || 0;
+  const interview = Math.min(25, trainPart + bonus);
+  return { gaokaoPart, interview, composite: gaokaoPart + interview };
+}
+
 export function qiangjiOptions(state: GameState) {
   if (state.qiangji) return [] as { subject: string; label: string; bonus: number; national: boolean }[];
   const last = state.exams && state.exams[state.exams.length - 1];

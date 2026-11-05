@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Setup from "./ui/Setup";
 import WeekBoard from "./ui/WeekBoard";
 import { Archive, ChoiceWizard, ConfessSheet, EventSheet, ExamView, NpcPanel, Report, SeatMap, Settings, StarMap } from "./ui/panels";
-import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, playerCompetitionAward, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, romanceScene, settleWeek, stageDef, tryConfess } from "./sim/engine";
+import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, playerCompetitionAward, qiangjiScore, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, romanceScene, settleWeek, stageDef, tryConfess } from "./sim/engine";
 import { PRESETS } from "./sim/data";
 import { defaultAi, loadAi, proxyHealth, renderEventScene, rewriteReport, saveAi } from "./ai";
 import { buildEventPrompt } from "./sim/events";
@@ -46,6 +46,7 @@ export default function App() {
   const [slots, setSlots] = useState<SlotMeta[]>([]);
   const [confession, setConfession] = useState<null | { text: string; ok: boolean; chance: number }>(null);
   const [confessScene, setConfessScene] = useState<null | { npcId: string; title: string; text: string }>(null);
+  const [interview, setInterview] = useState<null | { sessions: number }>(null);
   const [resitOpen, setResitOpen] = useState(false);
   const [scene, setScene] = useState<null | { key: string; text: string; ai: boolean }>(null);
   const [pending, setPending] = useState<{ events: any[]; index: number; chosen: any } | null>(null);
@@ -263,9 +264,31 @@ export default function App() {
 
     if (game.qiangji) {
       const lastExam = game.exams[game.exams.length - 1];
-      const base = lastExam ? lastExam.total : 0;
-      const final = base + game.qiangji.bonus;
-      const admitted = final >= 625;
+      const gaokao = lastExam ? lastExam.total : 0;
+      const best = (game.competition && game.competition.history || []).reduce((acc: string, h: any) => {
+        const order = ["省三", "省二", "省一", "省队", "决赛银牌"];
+        return order.indexOf(h.level) > order.indexOf(acc) ? h.level : acc;
+      }, "");
+      if (!interview) {
+        return (
+          <div className="app">
+            <main>
+              <h2 className="section">强基 · 校测准备</h2>
+              <div className="card">
+                <p className="narr">高考结束了，强基的校测还有两周。你可以把这两周全部用来准备，也可以留一点给自己。</p>
+                <p className="small muted">高考 {gaokao} 分，按 75% 折算；校测满分 25 分，训练越多越高，竞赛奖项另加。</p>
+              </div>
+              <div className="row" style={{ gap: 8, flexWrap: "wrap", marginTop: 12 }}>
+                <button className="btn" onClick={() => setInterview({ sessions: 12 })}>两周全部训练（12 次）</button>
+                <button className="chip" onClick={() => setInterview({ sessions: 6 })}>训练一半（6 次）</button>
+                <button className="chip" onClick={() => setInterview({ sessions: 0 })}>不训练，休息</button>
+              </div>
+            </main>
+          </div>
+        );
+      }
+      const sc = qiangjiScore(gaokao, interview.sessions, best);
+      const admitted = sc.composite >= 60;
       return (
         <div className="app">
           <main>
@@ -273,16 +296,17 @@ export default function App() {
             <div className="card">
               <div className="serif" style={{ fontSize: 22 }}>{admitted ? "基础学科的那间教室" : "差了一点"}</div>
               <p className="narr">
-                {game.qiangji.subject === "liberal" ? "文史类" : game.qiangji.subject}方向。二模 {base} 分，
-                加上竞赛带来的 {game.qiangji.bonus} 分，折算 {final} 分。
+                高考 {gaokao} 分 → 折算 {sc.gaokaoPart.toFixed(1)} / 75；
+                校测 {sc.interview.toFixed(1)} / 25（训练 {interview.sessions} 次，竞赛加成 {best || "无"}）。
+                综合 {sc.composite.toFixed(1)} 分。
               </p>
               <p className="small">
                 {admitted
                   ? "录取通知书上写着基础学科的名字。你会在那里读很多年书，比高三还长。"
-                  : "录取线 625。你差了 " + (625 - final) + " 分，最后回到了高考的考场。"}
+                  : "综合分没到 60。你回到了高考的录取流程，强基这一段就此收尾。"}
               </p>
               <p className="small muted">
-                {admitted ? "面试时老师问你为什么选这个方向，你说因为喜欢，不是因为好就业。他笑了。" : "强基没成，但那段准备并没有白费。"}
+                {admitted ? "面试时老师问你为什么选这个方向，你说因为喜欢，不是因为好就业。他笑了。" : "强基没成，但那两周的准备并没有白费。"}
               </p>
             </div>
             <Archive state={game} actions={actions} />

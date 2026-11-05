@@ -24,7 +24,14 @@ export type NpcState = {
   lowFriendWeeks?: number;
   relTrace?: { w: number; v: number }[];
   lastExam?: { kind: string; total: number; rank: number; week: number };
-  competition?: { subject: string; sessions: number; level?: string };
+  competition?: {
+    subject: string;
+    sessions: number;
+    level?: string;
+    active?: boolean;
+    nationalDue?: number;
+    history?: { week: number; level: string; national: boolean }[];
+  };
   compIntent?: string;
 };
 
@@ -179,7 +186,14 @@ export type GameState = {
   pairBeyond?: Record<string, number>;
   classRanking?: { id: string; name: string; total: number; rank: number }[];
   chains?: Record<string, number>;
-  competition?: { subject: string; progress: number; weeks: number; since: number; sessions?: number; zBonus?: number };
+  competition?: { subject: string; progress: number; weeks: number; since: number;
+      sessions?: number;
+      zBonus?: number;
+      active?: boolean;
+      level?: string;
+      nationalDue?: number;
+      history?: { week: number; level: string; national: boolean }[];
+    };
   realMode?: boolean;
   beyond?: Record<string, number>;
   gender?: "m" | "f";

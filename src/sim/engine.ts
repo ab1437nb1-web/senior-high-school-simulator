@@ -658,6 +658,7 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
   let notable: { id: string; text: string } | null = null;
   let bestScore = -1;
   tickSocial(state, rng);
+  judgeCompetitionSchedule(state);
   for (const npc of state.npcs) {
     // 期中之后才按成绩决定是否真的进竞赛线
     if (npc.compIntent && !npc.competition && state.stage === 1 && state.weekInStage >= 10) {
@@ -675,12 +676,21 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
         state.npcNews!.push({ week: state.week, text: name + "退出了竞赛训练。" });
       } else {
         npc.competition.sessions += 2 + Math.floor(rng() * 3);
-        if ((state.stage === 5 || state.stage === 7) && (state.weekInStage === 3 || state.weekInStage === 15)) {
-          const z = competitionZ(npc.competition.sessions, true, 0);
-          const award = competitionAwardZ(z);
-          npc.competition.level = award.level;
-          if (["省一", "省队", "决赛金牌", "国集"].includes(award.level)) {
-            state.npcNews!.push({ week: state.week, text: NPC_MAP[npc.id].name + "竞赛拿了" + award.level + "。" });
+        const c = npc.competition;
+        const trigger = (state.stage === 5 || state.stage === 9) && state.weekInStage === 1;
+        const national = Boolean(c.nationalDue && state.week >= c.nationalDue);
+        if (trigger || national) {
+          const z = competitionZ(c.sessions, true, 0);
+          let level = competitionAwardZ(z).level;
+          if (!national && ["国集", "决赛金牌"].includes(level)) level = "省队";
+          c.history = c.history || [];
+          c.history.push({ week: state.week, level, national });
+          c.level = level;
+          if (national) c.nationalDue = undefined;
+          else if (level === "省队") c.nationalDue = state.week + 18;
+          else if (state.stage === 9) c.active = false;
+          if (["省队", "决赛金牌", "国集"].includes(level)) {
+            state.npcNews!.push({ week: state.week, text: NPC_MAP[npc.id].name + "竞赛拿了" + level + "。" });
           }
         }
       }
@@ -863,9 +873,10 @@ export function settleWeek(prev: GameState, plan: Plan, opts?: { npc?: boolean }
       studyCount++;
       let subject = (slot.s || "math") as SubjectId;
       const comp = state.competition;
-      const isComp = Boolean(comp && (act.id === "competition" || (act.id === "study" && subject === comp.subject)));
+      const isComp = Boolean(comp && comp.active !== false && (act.id === "competition" || (act.id === "study" && subject === comp.subject)));
       // 信息学没有对应高中科目，用数学的单元承载训练收益
       if (isComp && comp && comp.subject === "informatics") subject = "math";
+      if (isComp && comp && comp.active === false) { /* 竞赛记录已结束，按普通学习结算 */ }
       if (isComp) {
         // 竞赛学习：高固定值 + 低百分比加成 + 额外精力与压力
         state.stats.energy = clamp(state.stats.energy - 6, 0, 100);
@@ -1492,8 +1503,37 @@ export function competitionProgress(sessions: number, realMode: boolean, bonus =
 
 export function playerCompetitionAward(state: GameState) {
   if (!state.competition) return null;
+  const hist = state.competition.history || [];
+  if (hist.length) return { level: hist[hist.length - 1].level, top: 0 };
   const z = competitionZ(state.competition.sessions || 0, state.realMode !== false, state.competition.zBonus || 0);
   return competitionAwardZ(z);
+}
+
+const NATIONAL_LEVELS = ["国集", "决赛金牌"];
+
+function applyJudgement(state: GameState, comp: any, isNational: boolean) {
+  const z = competitionZ(comp.sessions || 0, state.realMode !== false, comp.zBonus || 0);
+  let level = competitionAwardZ(z).level;
+  // 常规判定时，国家级奖项统一归入省队级；真正的国家级留到半年后
+  if (!isNational && NATIONAL_LEVELS.includes(level)) level = "省队";
+  comp.history = comp.history || [];
+  comp.history.push({ week: state.week, level, national: isNational });
+  comp.level = level;
+  if (isNational) {
+    comp.nationalDue = undefined;
+    return level;
+  }
+  if (level === "省队") comp.nationalDue = state.week + 18;
+  if (state.stage === 9 && level !== "省队") comp.active = false;
+  return level;
+}
+
+export function judgeCompetitionSchedule(state: GameState) {
+  const comp = state.competition;
+  if (!comp || comp.active === false) return;
+  const trigger = (state.stage === 5 || state.stage === 9) && state.weekInStage === 1;
+  if (trigger) applyJudgement(state, comp, false);
+  else if (comp.nationalDue && state.week >= comp.nationalDue) applyJudgement(state, comp, true);
 }
 
 export function competitionAwardZ(z: number) {

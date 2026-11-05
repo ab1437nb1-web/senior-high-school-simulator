@@ -1532,8 +1532,9 @@ function applyJudgement(state: GameState, comp: any, isNational: boolean) {
 // 强基折算：高考 75 分 + 校测 25 分
 export function qiangjiScore(gaokao: number, interviewSessions: number, compLevel: string) {
   const gaokaoPart = Math.min(75, Math.max(0, (gaokao - 550) * 0.75));
-  const trainPart = Math.min(18, interviewSessions * 1.5);
-  const COMP_BONUS: Record<string, number> = { 省三: 2, 省二: 3, 省一: 4, 省队: 5, 决赛银牌: 7 };
+  // 竞赛生在竞赛训练里已经练过校测内容，奖项直接顶掉大部分分数（银牌 24/25）
+  const trainPart = interviewSessions === 0 ? 0 : Math.min(25, interviewSessions * 2 + 1);
+  const COMP_BONUS: Record<string, number> = { 省三: 8, 省二: 12, 省一: 16, 省队: 20, 决赛银牌: 24 };
   const bonus = COMP_BONUS[compLevel] || 0;
   const interview = Math.min(25, trainPart + bonus);
   return { gaokaoPart, interview, composite: gaokaoPart + interview };

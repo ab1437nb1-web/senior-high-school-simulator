@@ -343,7 +343,8 @@ export const EDGES: Edge[] = [
 
 // 地点：轨迹系统的基础单位
 export const PLACES = {
-  dorm: "宿舍",
+  dormM: "男生宿舍",
+  dormF: "女生宿舍",
   home: "家",
   classroom: "教室",
   library: "图书馆",
@@ -356,6 +357,16 @@ export const PLACES = {
 } as const;
 
 export type PlaceId = keyof typeof PLACES;
+
+// 宿舍按性别分开；家是每个人私有的，用 home:<id> 表示
+export const dormKey = (gender: string) => (gender === "m" ? "dormM" : "dormF");
+export const homeKey = (id: string) => "home:" + id;
+
+export function placeLabel(key: string) {
+  if (key.startsWith("home:")) return PLACES.home;
+  if (key === "dormM" || key === "dormF") return PLACES[key];
+  return (PLACES as any)[key] || key;
+}
 
 export type ActionMeta = {
   id: string;

@@ -2,7 +2,7 @@ import type {
   Choice, Difficulty, Fact, GameState, NarrativeLine, Plan, Slot, Stats, SubjectId, UnitState, WeekReport,
 } from "./types";
 import {
-  ACTION_MAP, ALL_SUBJECTS, DAY_FOCUS_MAP, EDGES, STAGES, SUBJECT_MAP, TOTAL_WEEKS,
+  ACTION_MAP, ALL_SUBJECTS, DAY_FOCUS_MAP, EDGES, PLACES, STAGES, SUBJECT_MAP, TOTAL_WEEKS,
   unitEnterWeek, unitKey, unitLabel, unitsUpTo,
 } from "./data";
 import { EVENTS } from "./events";
@@ -160,6 +160,46 @@ export function lockChoice(prev: GameState, choice: Choice): GameState {
     }
   }
   return s;
+}
+
+export type TracePoint = { time: string; place: string };
+
+function placeOfSlot(slot: any, home: string) {
+  if (!slot) return home;
+  const m = ACTION_MAP[slot.a];
+  if (!m) return home;
+  if (m.atHome) return home;
+  return m.place ? PLACES[m.place] : home;
+}
+
+// 工作日：宿舍 → 教室 → 食堂 → 教室 → 晚自习地点 → 宿舍
+export function weekdayTrace(state: GameState, plan: Plan | null, day: number): TracePoint[] {
+  const home = isHoliday(state) ? PLACES.home : PLACES.dorm;
+  if (isHoliday(state)) {
+    return [
+      { time: "上午", place: home },
+      { time: "下午", place: placeOfSlot(plan?.evening?.[day], home) },
+      { time: "晚上", place: home },
+    ];
+  }
+  return [
+    { time: "早晨", place: home },
+    { time: "白天", place: PLACES.classroom },
+    { time: "午间", place: PLACES.canteen },
+    { time: "下午", place: PLACES.classroom },
+    { time: "晚自习", place: placeOfSlot(plan?.evening?.[day], home) },
+    { time: "夜里", place: home },
+  ];
+}
+
+// 周末：家 → 这一段的地点 → 家
+export function weekendTrace(plan: Plan | null, slot: number): TracePoint[] {
+  const home = PLACES.home;
+  return [
+    { time: "出门前", place: home },
+    { time: "这一段", place: placeOfSlot(plan?.weekend?.[slot], home) },
+    { time: "回家", place: home },
+  ];
 }
 
 export function seatOf(state: GameState, id: string) {

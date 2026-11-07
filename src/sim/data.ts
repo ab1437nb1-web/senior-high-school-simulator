@@ -341,6 +341,22 @@ export const EDGES: Edge[] = [
   { a: unitKey("physics", 2), b: unitKey("physics", 4), w: 0.3, kind: "confusable" },
 ];
 
+// 地点：轨迹系统的基础单位
+export const PLACES = {
+  dorm: "宿舍",
+  home: "家",
+  classroom: "教室",
+  library: "图书馆",
+  canteen: "食堂",
+  field: "操场",
+  clubroom: "社团活动室",
+  community: "社区",
+  competition: "竞赛教室",
+  office: "办公室",
+} as const;
+
+export type PlaceId = keyof typeof PLACES;
+
 export type ActionMeta = {
   id: string;
   name: string;
@@ -354,20 +370,23 @@ export type ActionMeta = {
   base: number;
   topic: "study" | "rest" | "social" | "art" | "labor" | "sport" | "none";
   hint: string;
+  place?: PlaceId;
+  // true 表示这个动作在家里进行（工作日会显示成宿舍）
+  atHome?: boolean;
 };
 
 export const ACTIONS: ActionMeta[] = [
-  { id: "study", name: "学习", short: "学", needSubject: true, energy: 16, stress: 2, mood: -1, health: 0, relation: 0, base: 12.5, topic: "study", hint: "推进该科最薄弱的一单元" },
-  { id: "review", name: "错题复盘", short: "复", needSubject: true, energy: 12, stress: 0, mood: 0, health: 0, relation: 0, base: 7.5, topic: "study", hint: "按错因补，分数涨得更准" },
-  { id: "preview", name: "预习", short: "预", needSubject: true, energy: 14, stress: 2, mood: -1, health: 0, relation: 0, base: 4, topic: "study", hint: "假期限定：提前看下学期的内容，最多到 20" },
-  { id: "rest", name: "休息", short: "歇", energy: -16, stress: -6, mood: 3, health: 1, relation: 0, base: 0, topic: "rest", hint: "回一点精力" },
-  { id: "sport", name: "运动", short: "动", energy: 8, stress: -10, mood: 5, health: 2, relation: 0, base: 0, topic: "sport", hint: "降压力，涨健康" },
+  { id: "study", name: "学习", short: "学", needSubject: true, energy: 16, stress: 2, mood: -1, health: 0, relation: 0, base: 12.5, topic: "study", place: "library", hint: "推进该科最薄弱的一单元" },
+  { id: "review", name: "错题复盘", short: "复", needSubject: true, energy: 12, stress: 0, mood: 0, health: 0, relation: 0, base: 7.5, topic: "study", place: "library", hint: "按错因补，分数涨得更准" },
+  { id: "preview", name: "预习", short: "预", needSubject: true, energy: 14, stress: 2, mood: -1, health: 0, relation: 0, base: 4, topic: "study", place: "library", hint: "假期限定：提前看下学期的内容，最多到 20" },
+  { id: "rest", name: "休息", short: "歇", energy: -16, stress: -6, mood: 3, health: 1, relation: 0, base: 0, topic: "rest", atHome: true, hint: "回一点精力" },
+  { id: "sport", name: "运动", short: "动", energy: 8, stress: -10, mood: 5, health: 2, relation: 0, base: 0, topic: "sport", place: "field", hint: "降压力，涨健康" },
   { id: "social", name: "社交", short: "社", energy: 8, stress: -7, mood: 5, health: 0, relation: 2, base: 0, topic: "social", hint: "关系与心情" },
-  { id: "club", name: "社团", short: "团", energy: 10, stress: -4, mood: 4, health: 0, relation: 1, base: 0, topic: "art", hint: "艺术素养证据" },
-  { id: "volunteer", name: "志愿服务", short: "志", energy: 12, stress: 0, mood: 1, health: 0, relation: 1, base: 0, topic: "labor", hint: "劳动与实践证据" },
-  { id: "entertain", name: "玩手机", short: "玩", energy: -8, stress: -8, mood: 6, health: -1, relation: 0, base: 0, topic: "rest", hint: "爽，但第二天专注下降" },
-  { id: "sleep", name: "补觉", short: "睡", energy: -22, stress: -4, mood: 2, health: 1, relation: 0, base: 0, topic: "rest", hint: "把债还掉" },
-  { id: "competition", name: "竞赛学习", short: "竞", needSubject: true, energy: 22, stress: 7, mood: -2, health: -1, relation: 0, base: 18, topic: "study", hint: "高强度集训：固定收益高、吃精力、几乎吃不到课堂加成" },
+  { id: "club", name: "社团", short: "团", energy: 10, stress: -4, mood: 4, health: 0, relation: 1, base: 0, topic: "art", place: "clubroom", hint: "艺术素养证据" },
+  { id: "volunteer", name: "志愿服务", short: "志", energy: 12, stress: 0, mood: 1, health: 0, relation: 1, base: 0, topic: "labor", place: "community", hint: "劳动与实践证据" },
+  { id: "entertain", name: "玩手机", short: "玩", energy: -8, stress: -8, mood: 6, health: -1, relation: 0, base: 0, topic: "rest", atHome: true, hint: "爽，但第二天专注下降" },
+  { id: "sleep", name: "补觉", short: "睡", energy: -22, stress: -4, mood: 2, health: 1, relation: 0, base: 0, topic: "rest", atHome: true, hint: "把债还掉" },
+  { id: "competition", name: "竞赛学习", short: "竞", needSubject: true, energy: 22, stress: 7, mood: -2, health: -1, relation: 0, base: 18, topic: "study", place: "competition", hint: "高强度集训：固定收益高、吃精力、几乎吃不到课堂加成" },
 ];
 
 export const ACTION_MAP: Record<string, ActionMeta> = ACTIONS.reduce((acc, a) => {
@@ -376,17 +395,17 @@ export const ACTION_MAP: Record<string, ActionMeta> = ACTIONS.reduce((acc, a) =>
 }, {} as Record<string, ActionMeta>);
 
 export const DAY_FOCUS = [
-  { id: "listen", name: "认真听讲", hint: "全科吸收 +15%，精力 -8", absorb: 1.15 },
-  { id: "main", name: "主攻一科", hint: "该科吸收 +30%，其他 -10%", absorb: 1.3 },
-  { id: "homework", name: "补作业", hint: "作业分 +，课堂 -20%", absorb: 0.8 },
-  { id: "nap", name: "趴桌补觉", hint: "精力 +12，课堂 -30%", absorb: 0.7 },
-  { id: "slack", name: "摸鱼", hint: "心情 +6，课堂 -25%", absorb: 0.75 },
-  { id: "social", name: "社交", hint: "关系 +1，课堂 -15%", absorb: 0.85 },
-  { id: "duty", name: "值日", hint: "劳动证据，精力 -6", absorb: 0.9 },
-  { id: "free", name: "自由", hint: "没有修正", absorb: 1 },
+  { id: "listen", place: "classroom", name: "认真听讲", hint: "全科吸收 +15%，精力 -8", absorb: 1.15 },
+  { id: "main", place: "classroom", name: "主攻一科", hint: "该科吸收 +30%，其他 -10%", absorb: 1.3 },
+  { id: "homework", place: "classroom", name: "补作业", hint: "作业分 +，课堂 -20%", absorb: 0.8 },
+  { id: "nap", place: "classroom", name: "趴桌补觉", hint: "精力 +12，课堂 -30%", absorb: 0.7 },
+  { id: "slack", place: "classroom", name: "摸鱼", hint: "心情 +6，课堂 -25%", absorb: 0.75 },
+  { id: "social", place: "classroom", name: "社交", hint: "关系 +1，课堂 -15%", absorb: 0.85 },
+  { id: "duty", place: "classroom", name: "值日", hint: "劳动证据，精力 -6", absorb: 0.9 },
+  { id: "free", place: "classroom", name: "自由", hint: "没有修正", absorb: 1 },
 ];
 
-export const DAY_FOCUS_MAP: Record<string, { id: string; name: string; hint: string; absorb: number }> =
+export const DAY_FOCUS_MAP: Record<string, { id: string; place?: string; name: string; hint: string; absorb: number }> =
   DAY_FOCUS.reduce((acc, d) => { acc[d.id] = d; return acc; }, {} as any);
 
 function cyc<T>(arr: T[], n: number): T[] {

@@ -89,6 +89,7 @@ export type EventEffect = {
   competitionBoost?: number;
   competitionQuit?: boolean;
   relationNpc?: { id: string; amount: number };
+  relationAll?: { ids: string[]; amount: number };
   qiangji?: string;
   romance?: boolean;
   breakup?: boolean;

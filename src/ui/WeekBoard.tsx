@@ -66,11 +66,6 @@ export default function WeekBoard(props: {
   presetId: string;
   holiday?: boolean;
   allowPreview?: boolean;
-  npcs?: { id: string; name: string; seat: string }[];
-  socialTarget?: string;
-  socialTarget2?: string;
-  onTarget?: (id: string) => void;
-  onTarget2?: (id: string) => void;
 }) {
   const { plan, onChange, onPreset, onCopy, canCopy, presetId } = props;
   const actions = ACTIONS.filter((a) => a.id !== "preview" || (props.holiday && props.allowPreview !== false));
@@ -104,31 +99,6 @@ export default function WeekBoard(props: {
           复制上周
         </button>
       </div>
-
-      {props.npcs && props.npcs.length ? (
-        <>
-          <h2 className="section">本周找谁</h2>
-          <div className="small muted" style={{ marginBottom: 4 }}>主要</div>
-          <div className="chips">
-            {props.npcs.map((n) => (
-              <button key={"p" + n.id} className={"chip" + (props.socialTarget === n.id ? " on" : "")} onClick={() => props.onTarget && props.onTarget(n.id)}>
-                {n.name}·{n.seat}
-              </button>
-            ))}
-          </div>
-          <div className="small muted" style={{ marginBottom: 4, marginTop: 8 }}>次要（可以空着）</div>
-          <div className="chips">
-            {props.npcs.map((n) => (
-              <button key={"s" + n.id} className={"chip" + (props.socialTarget2 === n.id ? " on" : "")} onClick={() => props.onTarget2 && props.onTarget2(props.socialTarget2 === n.id ? "" : n.id)}>
-                {n.name}
-              </button>
-            ))}
-          </div>
-          <p className="small muted" style={{ marginTop: 6 }}>
-            本周的社交行动和社交事件围着「主要」转；「次要」只拿到一半。两个都没选的人，关系会慢慢淡下去。
-          </p>
-        </>
-      ) : null}
 
       <h2 className="section">工作日 · 全天重点 + 晚自习</h2>
       <div className="card">

@@ -138,8 +138,8 @@ export function newGame(choice: Choice, seed: number, difficulty: Difficulty = "
     choiceLocked: false,
     chains: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, 0])) : {},
     beyond: withNpcs ? Object.fromEntries(CLASSMATES.map((c) => [c.id, 0])) : {},
-    socialTarget: withNpcs ? CLASSMATES[0].id : undefined,
-    socialTarget2: withNpcs && CLASSMATES[1] ? CLASSMATES[1].id : undefined,
+    socialTarget: undefined,
+    socialTarget2: undefined,
     gender,
   };
 }
@@ -232,18 +232,29 @@ export function encounterOf(state: GameState, plan: Plan | null, rng: () => numb
   const mine = new Set<string>();
   for (let d = 0; d < 5; d++) mine.add(placeOfSlot(plan.evening[d], "dormM"));
   for (let s = 0; s < 6; s++) mine.add(placeOfSlot(plan.weekend[s], "home:you"));
-  const candidates: { id: string; place: string }[] = [];
+  // 按地点聚合：同一地点有几个人，就是几个人一起
+  const byPlace = new Map<string, string[]>();
   for (const npc of state.npcs) {
     if (npc.kind !== "classmate") continue;
     const place = BEHAVIOR_PLACE[npc.last || "grind"] || "classroom";
     if (!PUBLIC_PLACES.has(place)) continue;
     if (!mine.has(place)) continue;
-    candidates.push({ id: npc.id, place });
+    const arr = byPlace.get(place) || [];
+    arr.push(npc.id);
+    byPlace.set(place, arr);
   }
-  if (!candidates.length) return null;
+  const places = [...byPlace.keys()];
+  if (!places.length) return null;
   // 同一地点不代表一定碰见，给一个概率
   if (rng() > 0.3) return null;
-  return candidates[Math.floor(rng() * candidates.length)];
+  const place = places[Math.floor(rng() * places.length)];
+  const all = (byPlace.get(place) || []).slice();
+  // 一次场景最多四个人，再多就不像"几个人"了
+  for (let i = all.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  return { place, ids: all.slice(0, 4) };
 }
 
 export function seatOf(state: GameState, id: string) {
@@ -789,7 +800,7 @@ function tickNpcs(state: GameState, rng: () => number, lastId?: string) {
         }
       }
     }
-    const isSocial = npc.id === state.socialTarget || npc.id === state.socialTarget2;
+    const isSocial = false;
     if (!isSocial) {
       const floor = npc.kind === "classmate" ? REL_FLOOR : 45;
       if (npc.relation > floor) {
@@ -1750,7 +1761,9 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     for (const f of plan.focus) if (f && f.a) focus.add(f.a);
   }
 
-  const socialNpc = state.npcs.find((n) => n.id === state.socialTarget);
+  // 偶遇是社交类事件的触发器：先算出碰到谁，事件才有对象
+  const enc = encounterOf(state, plan || null, rng);
+  const socialNpc = enc ? state.npcs.find((n) => n.id === enc.ids[0]) : undefined;
   const fitsPlan = (e: any) => {
     const r = e.requires;
     if (!r) return true;
@@ -1782,8 +1795,6 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     return true;
   };
 
-  // 偶遇是社交类事件的触发器：没有遇到人，就不该出现社交事件
-  const enc = encounterOf(state, plan || null, rng);
   const isSocialEvent = (e: any) => e.social === true || ["social", "friend", "crush", "love"].includes(e.group);
 
   const fixed = EVENTS.filter((e) => e.kind === "main" && inWindow(e) && seenAt(e) === undefined && fitsPlan(e));
@@ -1867,23 +1878,37 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
 
   // 偶遇：和同学在同一地点，才可能碰见
   const encOffer: any = enc
-    ? {
-        id: "encounter-" + enc.id,
+    ? enc.ids.length >= 2
+      ? {
+          id: "encounter-group-" + enc.place,
+          kind: "npc",
+          group: "social",
+          title: "几个人",
+          text: enc.ids.map((id) => NPC_MAP[id].name).join("、") + "都在" + placeLabel(enc.place) + "。",
+          npcId: enc.ids[0],
+          choices: [
+            { text: "凑过去聊两句", result: "话题很快接上了。你插了几句，有人笑，有人没听懂也跟着笑。", effects: { relationAll: { ids: enc.ids, amount: 1 }, stats: { mood: 2, energy: -2 } } },
+            { text: "在旁边听着", result: "你没怎么说话，但把每个人的近况听了个大概。", effects: { relationAll: { ids: enc.ids, amount: 0.5 }, stats: { mood: 1 } } },
+            { text: "走开", result: "你转身走了。身后的声音小了一点，也可能没有。", effects: { relationAll: { ids: enc.ids, amount: -0.5 }, stats: { stress: 1 } } },
+          ],
+        }
+      : {
+        id: "encounter-" + enc.ids[0],
         kind: "npc",
         group: "social",
         title: "偶遇",
         text: "在" + placeLabel(enc.place) + "碰到{npc}。",
-        npcId: enc.id,
+        npcId: enc.ids[0],
         choices: [
-          { text: "打个招呼", result: "对方愣了一下，说这么巧。你们聊了两句就散了。", effects: { relationNpc: { id: enc.id, amount: 2 }, stats: { mood: 1 } } },
-          { text: "点个头就走", result: "对方也点了点头。谁都没停下。", effects: { relationNpc: { id: enc.id, amount: 0 } } },
-          { text: "假装没看见", result: "你低头走过去。走过去之后才想起来，其实没必要。", effects: { relationNpc: { id: enc.id, amount: -1 }, stats: { stress: 1 } } },
+          { text: "打个招呼", result: "对方愣了一下，说这么巧。你们聊了两句就散了。", effects: { relationNpc: { id: enc.ids[0], amount: 2 }, stats: { mood: 1 } } },
+          { text: "点个头就走", result: "对方也点了点头。谁都没停下。", effects: { relationNpc: { id: enc.ids[0], amount: 0 } } },
+          { text: "假装没看见", result: "你低头走过去。走过去之后才想起来，其实没必要。", effects: { relationNpc: { id: enc.ids[0], amount: -1 }, stats: { stress: 1 } } },
         ],
       }
     : null;
 
   // 暧昧事件在链 07 之后解锁：每周保证至少一条，否则会被上百条事件稀释掉
-  if (state.socialTarget && ((state.chains || {})[state.socialTarget] || 0) >= 7 && !state.romance) {
+  if (enc && ((state.chains || {})[enc.ids[0]] || 0) >= 7 && !state.romance) {
     const unlocked = EVENTS.filter((e) => e.preRomance && inWindow(e) && fitsPlan(e) && picks.indexOf(e) < 0);
     if (unlocked.length && !picks.some((x: any) => x.preRomance)) {
       picks.unshift(draw(unlocked));
@@ -1891,7 +1916,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
   }
 
   // 恋爱专属链：轮到这个 NPC 且关系够格时，链上下一条作为当周第一件事
-  const chain = enc ? nextChainEvent(state, enc.id) : null;
+  const chain = enc ? nextChainEvent(state, enc.ids[0]) : null;
   const chainEvent: any = chain
     ? {
         id: chain.id,
@@ -1917,7 +1942,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
 
   // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
   // 被偶遇带出来的社交事件，统一挂上 npcId，文本与关系都指向那个人
-  const tagged = picks.map((e: any) => (isSocialEvent(e) ? { ...e, npcId: enc ? enc.id : e.npcId } : e));
+  const tagged = picks.map((e: any) => (isSocialEvent(e) ? { ...e, npcId: enc ? enc.ids[0] : e.npcId } : e));
   return [...(compOffer ? [compOffer] : []), ...(qjOffer ? [qjOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...(encOffer ? [encOffer] : []), ...tagged];
 }
 
@@ -1943,6 +1968,12 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     }
   }
   const e = choice.effects || {};
+  if (e.relationAll) {
+    for (const id of e.relationAll.ids) {
+      const npc = s.npcs.find((n) => n.id === id);
+      if (npc) npc.relation = clamp(npc.relation + e.relationAll.amount, 0, 100);
+    }
+  }
   if (e.relationNpc) {
     const npc = s.npcs.find((n) => n.id === e.relationNpc!.id);
     if (npc) npc.relation = clamp(npc.relation + e.relationNpc.amount, 0, 100);
@@ -2027,8 +2058,8 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     });
   }
   if (ev.chainNpc && ev.chainIdx === 8 && s.chains) s.chains[ev.chainNpc] = 8;
-  if (e.romance && !s.romance && s.socialTarget) {
-    const npc = s.npcs.find((n) => n.id === s.socialTarget);
+  if (e.romance && !s.romance && (e.npcId || s.socialTarget)) {
+    const npc = s.npcs.find((n) => n.id === (e.npcId || s.socialTarget));
     if (npc) {
       s.romance = { npcId: npc.id, since: s.week, chance: 1 };
       npc.relation = clamp(npc.relation + 5, 0, 100);

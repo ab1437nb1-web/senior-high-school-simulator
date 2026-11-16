@@ -118,8 +118,9 @@ export default function App() {
     if (!ev || !ev.social || ev.chainNpc) return;
     const key = ev.id + "@" + pending.index + "@" + game.week;
     if (scene && scene.key === key) return;
-    const def = game.socialTarget ? NPC_MAP[game.socialTarget] : null;
-    const npc = game.npcs.find((n) => n.id === game.socialTarget);
+    const targetId = ev.npcId || game.socialTarget;
+    const def = targetId ? NPC_MAP[targetId] : null;
+    const npc = game.npcs.find((n) => n.id === targetId);
     let alive = true;
     renderEventScene(ai, buildEventPrompt(ev, {
       name: def ? def.name : "同桌",
@@ -377,17 +378,6 @@ export default function App() {
             choice={game.choice}
             presetId={presetId}
             canCopy={!!game.lastPlan}
-            npcs={game.npcs
-              .filter((n) => n.kind === "classmate")
-              .map((n) => ({
-                id: n.id,
-                name: NPC_MAP[n.id]?.name || n.id,
-                seat: NPC_MAP[n.id] ? relativeSeat(game.playerSeat, NPC_MAP[n.id]) : "",
-              }))}
-            socialTarget={game.socialTarget}
-            socialTarget2={game.socialTarget2}
-            onTarget={(id) => setGame({ ...game, socialTarget: id })}
-            onTarget2={(id) => setGame({ ...game, socialTarget2: id })}
             holiday={isHoliday(game)}
             allowPreview={stageDef(game.stage).allowPreview !== false}
             onChange={setPlan}

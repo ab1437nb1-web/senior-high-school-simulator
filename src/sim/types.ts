@@ -88,6 +88,7 @@ export type EventEffect = {
   resit?: boolean;
   competitionBoost?: number;
   competitionQuit?: boolean;
+  relationNpc?: { id: string; amount: number };
   qiangji?: string;
   romance?: boolean;
   breakup?: boolean;
@@ -104,6 +105,7 @@ export type StoryEvent = {
   social?: boolean;
   group?: "main" | "daily" | "social" | "friend" | "crush" | "love" | "competition";
   chainNpc?: string;
+  npcId?: string;
   chainIdx?: number;
   preRomance?: boolean;
   romance?: boolean;

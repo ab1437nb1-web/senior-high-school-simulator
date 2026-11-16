@@ -2,7 +2,7 @@ import type {
   Choice, Difficulty, Fact, GameState, NarrativeLine, Plan, Slot, Stats, SubjectId, UnitState, WeekReport,
 } from "./types";
 import {
-  ACTION_MAP, ALL_SUBJECTS, DAY_FOCUS_MAP, EDGES, PLACES, dormKey, homeKey, STAGES, SUBJECT_MAP, TOTAL_WEEKS,
+  ACTION_MAP, ALL_SUBJECTS, DAY_FOCUS_MAP, EDGES, PLACES, dormKey, homeKey, placeLabel, STAGES, SUBJECT_MAP, TOTAL_WEEKS,
   unitEnterWeek, unitKey, unitLabel, unitsUpTo,
 } from "./data";
 import { EVENTS } from "./events";
@@ -164,12 +164,13 @@ export function lockChoice(prev: GameState, choice: Choice): GameState {
 
 export type TracePoint = { time: string; place: string };
 
+// 返回地点键（library / classroom / home:<id> 等），显示时再转成中文
 function placeOfSlot(slot: any, home: string) {
   if (!slot) return home;
   const m = ACTION_MAP[slot.a];
   if (!m) return home;
   if (m.atHome) return home;
-  return m.place ? PLACES[m.place] : home;
+  return m.place ? m.place : home;
 }
 
 // 工作日：宿舍 → 教室 → 食堂 → 教室 → 晚自习地点 → 宿舍
@@ -182,24 +183,67 @@ export function weekdayTrace(state: GameState, plan: Plan | null, day: number): 
       { time: "晚上", place: home },
     ];
   }
+  // 周五放学回家：宿舍 → 教室 → 家
+  if (day === 4) {
+    return [
+      { time: "早晨", place: home },
+      { time: "白天", place: "classroom" },
+      { time: "放学", place: homeKey("you") },
+    ];
+  }
   return [
     { time: "早晨", place: home },
-    { time: "白天", place: PLACES.classroom },
-    { time: "午间", place: PLACES.canteen },
-    { time: "下午", place: PLACES.classroom },
+    { time: "白天", place: "classroom" },
+    { time: "午间", place: "canteen" },
+    { time: "下午", place: "classroom" },
     { time: "晚自习", place: placeOfSlot(plan?.evening?.[day], home) },
     { time: "夜里", place: home },
   ];
 }
 
 // 周末：家 → 这一段的地点 → 家
-export function weekendTrace(plan: Plan | null, slot: number, owner = "you"): TracePoint[] {
+export function weekendTrace(plan: Plan | null, slot: number, owner = "you", gender = "m"): TracePoint[] {
   const home = homeKey(owner);
+  // 周日晚回校：家 → 这一段 → 宿舍
+  const end = slot === 5 ? dormKey(gender) : home;
+  const endLabel = slot === 5 ? "回校" : "回家";
+  // 周日晚的宿舍按 owner 的性别取；这里只用于玩家，NPC 统一按异性宿舍不参与的规则处理
   return [
     { time: "出门前", place: home },
     { time: "这一段", place: placeOfSlot(plan?.weekend?.[slot], home) },
-    { time: "回家", place: home },
+    { time: endLabel, place: end },
   ];
+}
+
+// 行动/行为 → 地点（用于偶遇判定）
+const BEHAVIOR_PLACE: Record<string, string> = {
+  grind: "library",
+  cram: "classroom",
+  club: "clubroom",
+  sport: "field",
+  slack: "dormM",
+  sleep: "dormM",
+  talk: "classroom",
+};
+const PUBLIC_PLACES = new Set(["classroom", "library", "canteen", "field", "clubroom", "community"]);
+
+export function encounterOf(state: GameState, plan: Plan | null, rng: () => number) {
+  if (!plan || isHoliday(state)) return null;
+  const mine = new Set<string>();
+  for (let d = 0; d < 5; d++) mine.add(placeOfSlot(plan.evening[d], "dormM"));
+  for (let s = 0; s < 6; s++) mine.add(placeOfSlot(plan.weekend[s], "home:you"));
+  const candidates: { id: string; place: string }[] = [];
+  for (const npc of state.npcs) {
+    if (npc.kind !== "classmate") continue;
+    const place = BEHAVIOR_PLACE[npc.last || "grind"] || "classroom";
+    if (!PUBLIC_PLACES.has(place)) continue;
+    if (!mine.has(place)) continue;
+    candidates.push({ id: npc.id, place });
+  }
+  if (!candidates.length) return null;
+  // 同一地点不代表一定碰见，给一个概率
+  if (rng() > 0.3) return null;
+  return candidates[Math.floor(rng() * candidates.length)];
 }
 
 export function seatOf(state: GameState, id: string) {
@@ -1817,6 +1861,24 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     }
   }
 
+  // 偶遇：和同学在同一地点，才可能碰见
+  const enc = encounterOf(state, plan || null, rng);
+  const encOffer: any = enc
+    ? {
+        id: "encounter-" + enc.id,
+        kind: "npc",
+        group: "social",
+        title: "偶遇",
+        text: "在" + placeLabel(enc.place) + "碰到{npc}。",
+        npcId: enc.id,
+        choices: [
+          { text: "打个招呼", result: "对方愣了一下，说这么巧。你们聊了两句就散了。", effects: { relationNpc: { id: enc.id, amount: 2 }, stats: { mood: 1 } } },
+          { text: "点个头就走", result: "对方也点了点头。谁都没停下。", effects: { relationNpc: { id: enc.id, amount: 0 } } },
+          { text: "假装没看见", result: "你低头走过去。走过去之后才想起来，其实没必要。", effects: { relationNpc: { id: enc.id, amount: -1 }, stats: { stress: 1 } } },
+        ],
+      }
+    : null;
+
   // 暧昧事件在链 07 之后解锁：每周保证至少一条，否则会被上百条事件稀释掉
   if (state.socialTarget && ((state.chains || {})[state.socialTarget] || 0) >= 7 && !state.romance) {
     const unlocked = EVENTS.filter((e) => e.preRomance && inWindow(e) && fitsPlan(e) && picks.indexOf(e) < 0);
@@ -1851,7 +1913,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     : null;
 
   // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
-  return [...(compOffer ? [compOffer] : []), ...(qjOffer ? [qjOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...picks];
+  return [...(compOffer ? [compOffer] : []), ...(qjOffer ? [qjOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...(encOffer ? [encOffer] : []), ...picks];
 }
 
 export function applyEventChoice(prev: GameState, ev: any, choice: any): GameState {
@@ -1876,6 +1938,10 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     }
   }
   const e = choice.effects || {};
+  if (e.relationNpc) {
+    const npc = s.npcs.find((n) => n.id === e.relationNpc!.id);
+    if (npc) npc.relation = clamp(npc.relation + e.relationNpc.amount, 0, 100);
+  }
   if (e.qiangji) {
     const opts = qiangjiOptions(s);
     const picked = opts.find((o) => o.subject === e.qiangji) || opts[0];

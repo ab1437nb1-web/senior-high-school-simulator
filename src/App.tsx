@@ -440,7 +440,8 @@ export default function App() {
             const target = game.socialTarget ? NPC_MAP[game.socialTarget] : null;
             const partner = game.romance ? NPC_MAP[game.romance.npcId] : null;
             const byKind =
-              ev.npcKind === "parent" ? "母亲"
+              ev.npcId && NPC_MAP[ev.npcId] ? NPC_MAP[ev.npcId].name
+              : ev.npcKind === "parent" ? "母亲"
               : ev.npcKind === "teacher" ? "陈老师"
               : ev.romance && partner ? partner.name
               : target ? target.name : "同桌";

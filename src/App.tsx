@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Setup from "./ui/Setup";
 import WeekBoard from "./ui/WeekBoard";
-import { Archive, ChoiceWizard, ConfessSheet, EventSheet, ExamView, NpcPanel, Report, SeatMap, Settings, StarMap } from "./ui/panels";
+import { Archive, ChoiceWizard, ConfessSheet, EventSheet, MapPage, NpcPanel, Report, SeatMap, Settings } from "./ui/panels";
 import { applyEventChoice, buildReport, examName, isHoliday, lockChoice, mulberry32, newGame, planWeekEvents, playerCompetitionAward, qiangjiScore, relationTrend, reshuffleAfterPlayer, reshuffleBeforePlayer, romanceScene, settleWeek, stageDef, tryConfess } from "./sim/engine";
 import { PRESETS } from "./sim/data";
 import { defaultAi, loadAi, proxyHealth, renderEventScene, rewriteReport, saveAi } from "./ai";
@@ -385,8 +385,7 @@ export default function App() {
             onPreset={(id) => { setPresetId(id); setPlan(buildPlan(id, game.choice)); }}
           />
         ) : null}
-        {view === "map" && !showSettings ? <StarMap state={game} /> : null}
-        {view === "exam" && !showSettings ? <ExamView state={game} /> : null}
+        {view === "map" && !showSettings ? <MapPage state={game} /> : null}
         {view === "archive" && !showSettings ? <Archive state={game} actions={actions} /> : null}
         {view === "npc" && !showSettings ? (
           <NpcPanel
@@ -413,7 +412,7 @@ export default function App() {
       ) : null}
 
       <nav className="tabs">
-        {([["week", "本周"], ["map", "星图"], ["exam", "成绩"], ["npc", "同学"], ["archive", "档案"]] as const).map(([k, label]) => (
+        {([["week", "本周"], ["map", "地图"], ["npc", "同学"], ["archive", "档案"]] as const).map(([k, label]) => (
           <button key={k} className={"tab" + (view === k ? " on" : "")} onClick={() => { setView(k as any); setShowSettings(false); }}>
             {label}
           </button>

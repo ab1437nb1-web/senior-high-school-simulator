@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EDGES, STAGES, SUBJECTS, SUBJECT_MAP, unitKey, unitLabel, unitsUpTo, type Edge } from "../sim/data";
-import { canConfess, CRUSH_MIN, examName, fiveEdu, PASS_LINE, transferInfo } from "../sim/engine";
+import { canConfess, campusMap, CRUSH_MIN, examName, fiveEdu, PASS_LINE, transferInfo } from "../sim/engine";
 import { activateProfile, deleteProfile, listModels, listProfiles, proxyHealth, saveProfile, switchSource, testConnection } from "../ai";
 import type { AiConfig, ProxyHealth } from "../ai";
 import type { SlotMeta } from "../save";
@@ -529,6 +529,39 @@ export function useStarTween(target: Record<string, Node>, key: string) {
     return () => cancelAnimationFrame(raf);
   }, [key]);
   return lay;
+}
+
+export function MapPage(props: { state: GameState }) {
+  const [kind, setKind] = useState<"weekday" | "weekend">("weekday");
+  const rows = campusMap(props.state, kind);
+  return (
+    <div>
+      <h2 className="section">校园地图</h2>
+      <div className="chips" style={{ marginBottom: 8 }}>
+        <button className={"chip" + (kind === "weekday" ? " on" : "")} onClick={() => setKind("weekday")}>工作日</button>
+        <button className={"chip" + (kind === "weekend" ? " on" : "")} onClick={() => setKind("weekend")}>周末</button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
+        {rows.map((r) => (
+          <div key={r.place} className="card" style={{ padding: 10, borderColor: r.you ? "#3f6b4f" : undefined }}>
+            <div className="row" style={{ justifyContent: "space-between" }}>
+              <span className="serif">{r.label}</span>
+              {r.you ? <span className="pill" style={{ borderColor: "#3f6b4f", color: "#3f6b4f" }}>你在这里</span> : null}
+            </div>
+            <p className="small muted" style={{ marginTop: 6 }}>
+              {r.people.length ? r.people.join("、") : "没有人"}
+            </p>
+          </div>
+        ))}
+      </div>
+      <p className="small muted" style={{ marginTop: 8 }}>
+        这里只是"这个时段谁会在哪"。真正能不能遇到，还要看你们是不是同一时间出现在同一地点。
+      </p>
+
+      <StarMap state={props.state} />
+      <ExamView state={props.state} />
+    </div>
+  );
 }
 
 export function StarMap(props: { state: GameState }) {

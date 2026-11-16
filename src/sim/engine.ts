@@ -257,6 +257,30 @@ export function encounterOf(state: GameState, plan: Plan | null, rng: () => numb
   return { place, ids: all.slice(0, 4) };
 }
 
+// 校园地图：每个公共地点当前有谁
+export function campusMap(state: GameState, kind: "weekday" | "weekend" = "weekday") {
+  const places = ["classroom", "library", "canteen", "field", "clubroom", "community"];
+  const people: Record<string, string[]> = {};
+  for (const pl of places) people[pl] = [];
+  const mine = new Set<string>();
+  const plan = state.lastPlan;
+  if (plan) {
+    if (kind === "weekday") {
+      mine.add("classroom");
+      for (const slot of plan.evening || []) mine.add(placeOfSlot(slot, ""));
+    } else {
+      for (const slot of plan.weekend || []) mine.add(placeOfSlot(slot, ""));
+    }
+  }
+  for (const npc of state.npcs) {
+    if (npc.kind !== "classmate") continue;
+    const pl = BEHAVIOR_PLACE[npc.last || "grind"] || "classroom";
+    if (!people[pl]) continue;
+    people[pl].push(NPC_MAP[npc.id]?.name || npc.id);
+  }
+  return places.map((pl) => ({ place: pl, label: placeLabel(pl), people: people[pl], you: mine.has(pl) }));
+}
+
 export function seatOf(state: GameState, id: string) {
   return (state.seats && state.seats[id]) || (NPC_MAP[id] && NPC_MAP[id].seatPos) || null;
 }

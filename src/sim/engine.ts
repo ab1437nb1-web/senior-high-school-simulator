@@ -1717,8 +1717,8 @@ export function bumpBeyond(state: GameState, id: string, amount: number) {
   state.beyond[id] = Math.max(0, Math.min(100, (state.beyond[id] || 0) + amount));
 }
 
-export function nextChainEvent(state: GameState) {
-  const id = state.socialTarget;
+export function nextChainEvent(state: GameState, npcId?: string) {
+  const id = npcId || state.socialTarget;
   if (!id || !state.chains) return null;
   const next = (state.chains[id] || 0) + 1;
   // 第 08 条有 A/B 两个分支：NPC 主动（08a）由链自动触发，玩家主动（08b）只能在按钮里走
@@ -1782,8 +1782,12 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     return true;
   };
 
+  // 偶遇是社交类事件的触发器：没有遇到人，就不该出现社交事件
+  const enc = encounterOf(state, plan || null, rng);
+  const isSocialEvent = (e: any) => e.social === true || ["social", "friend", "crush", "love"].includes(e.group);
+
   const fixed = EVENTS.filter((e) => e.kind === "main" && inWindow(e) && seenAt(e) === undefined && fitsPlan(e));
-  const pool = EVENTS.filter((e) => { if (e.preRomance && (!state.socialTarget || ((state.chains || {})[state.socialTarget] || 0) < 7)) return false;
+  const pool = EVENTS.filter((e) => { if (isSocialEvent(e) && !enc) return false; if (e.preRomance && (!state.socialTarget || ((state.chains || {})[state.socialTarget] || 0) < 7)) return false;
     if (e.kind === "main" || !inWindow(e) || !fitsPlan(e)) return false;
     const at = seenAt(e);
     if (at === undefined) return true;
@@ -1862,7 +1866,6 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
   }
 
   // 偶遇：和同学在同一地点，才可能碰见
-  const enc = encounterOf(state, plan || null, rng);
   const encOffer: any = enc
     ? {
         id: "encounter-" + enc.id,
@@ -1888,7 +1891,7 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
   }
 
   // 恋爱专属链：轮到这个 NPC 且关系够格时，链上下一条作为当周第一件事
-  const chain = nextChainEvent(state);
+  const chain = enc ? nextChainEvent(state, enc.id) : null;
   const chainEvent: any = chain
     ? {
         id: chain.id,
@@ -1913,7 +1916,9 @@ export function planWeekEvents(state: GameState, weekInStage: number, rng: () =>
     : null;
 
   // 主线（含"对方先开口"）排在最前，避免被当成普通事件划过去
-  return [...(compOffer ? [compOffer] : []), ...(qjOffer ? [qjOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...(encOffer ? [encOffer] : []), ...picks];
+  // 被偶遇带出来的社交事件，统一挂上 npcId，文本与关系都指向那个人
+  const tagged = picks.map((e: any) => (isSocialEvent(e) ? { ...e, npcId: enc ? enc.id : e.npcId } : e));
+  return [...(compOffer ? [compOffer] : []), ...(qjOffer ? [qjOffer] : []), ...(chainEvent ? [chainEvent] : []), ...fixed, ...(encOffer ? [encOffer] : []), ...tagged];
 }
 
 export function applyEventChoice(prev: GameState, ev: any, choice: any): GameState {
@@ -1931,7 +1936,7 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
     }
   }
   if (ev.kind === "npc") {
-    const target = s.npcs.find((n) => n.id === (s.socialTarget || ""));
+    const target = s.npcs.find((n) => n.id === (ev.npcId || s.socialTarget || ""));
     if (target) {
       target.history.push("第 " + s.week + " 周「" + ev.title + "」：" + (choice.text || "") + " —— " + (choice.result || ""));
       if (target.history.length > 40) target.history.shift();
@@ -1989,7 +1994,7 @@ export function applyEventChoice(prev: GameState, ev: any, choice: any): GameSta
       s.relations[r.who] = clamp(s.relations[r.who] + r.amount, 0, 100);
       const mapped =
         r.who === "mother" ? "mother" : r.who === "teacher" ? "teacher_chen"
-        : ev.romance ? s.romance && s.romance.npcId : s.socialTarget;
+        : ev.romance ? s.romance && s.romance.npcId : (ev.npcId || s.socialTarget);
       const npc = s.npcs.find((n) => n.id === mapped);
       if (npc) {
         // 关系越近，对同一件事的反应越大

@@ -392,7 +392,7 @@ export const ACTIONS: ActionMeta[] = [
   { id: "preview", name: "预习", short: "预", needSubject: true, energy: 14, stress: 2, mood: -1, health: 0, relation: 0, base: 4, topic: "study", place: "library", hint: "假期限定：提前看下学期的内容，最多到 20" },
   { id: "rest", name: "休息", short: "歇", energy: -16, stress: -6, mood: 3, health: 1, relation: 0, base: 0, topic: "rest", atHome: true, hint: "回一点精力" },
   { id: "sport", name: "运动", short: "动", energy: 8, stress: -10, mood: 5, health: 2, relation: 0, base: 0, topic: "sport", place: "field", hint: "降压力，涨健康" },
-  { id: "social", name: "社交", short: "社", energy: 8, stress: -7, mood: 5, health: 0, relation: 2, base: 0, topic: "social", hint: "关系与心情" },
+
   { id: "club", name: "社团", short: "团", energy: 10, stress: -4, mood: 4, health: 0, relation: 1, base: 0, topic: "art", place: "clubroom", hint: "艺术素养证据" },
   { id: "volunteer", name: "志愿服务", short: "志", energy: 12, stress: 0, mood: 1, health: 0, relation: 1, base: 0, topic: "labor", place: "community", hint: "劳动与实践证据" },
   { id: "entertain", name: "玩手机", short: "玩", energy: -8, stress: -8, mood: 6, health: -1, relation: 0, base: 0, topic: "rest", atHome: true, hint: "爽，但第二天专注下降" },
@@ -473,7 +473,7 @@ export const PRESETS: Preset[] = [
   },
   {
     id: "social", name: "社交·社团", desc: "关系与艺术线",
-    build: () => ({ focus: [{ a: "social" }, { a: "social" }, { a: "listen" }, { a: "social" }, { a: "social" }], evening: [{ a: "club" }, { a: "social" }, { a: "club" }, { a: "social" }, { a: "study", s: "chinese" }], weekend: [{ a: "social" }, { a: "club" }, { a: "entertain" }, { a: "social" }, { a: "club" }, { a: "rest" }] }),
+    build: () => ({ focus: [{ a: "listen" }, { a: "listen" }, { a: "listen" }, { a: "listen" }, { a: "listen" }], evening: [{ a: "club" }, { a: "rest" }, { a: "club" }, { a: "rest" }, { a: "study", s: "chinese" }], weekend: [{ a: "club" }, { a: "club" }, { a: "entertain" }, { a: "rest" }, { a: "club" }, { a: "rest" }] }),
   },
   {
     id: "relax", name: "运动·放松", desc: "回血周",
